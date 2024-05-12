@@ -1,0 +1,92 @@
+{% extends 'frontened.html.twig' %}
+
+{% block title %}Vive tu música{% endblock %}
+
+{% block body %}
+   {% include 'nav.html.twig' %}
+  <!-- Sección del héroe con carrusel -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h1>Descubre nueva música.</h1>
+          <p>Encuentra tu próxima canción o artista favorito.</p>
+          <a href="#" class="btn-play"><i class="fas fa-play"></i></a>
+        </div>
+        <div class="col-md-6">
+          <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://via.placeholder.com/300" alt="Reproductor de música" class="img-fluid">
+              </div>
+              <div class="carousel-item">
+                <img src="https://via.placeholder.com/300" alt="Otra imagen" class="img-fluid">
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Siguiente</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <h1 class="titulo-destacado">Canciones Destacadas</h1>
+  <!-- Sección de canciones destacadas -->
+  <section class="featured-songs">
+    <div class="container" style="padding: 100px;padding-top: 0px;">
+
+      <div class="row" id="contenedorCanciones">
+        {% for c in 1..8 %}
+        <!-- Cartas de las primeras 8 canciones -->
+          <div class="col-md-3">
+            <div class="cardBtn">
+              <div class="card" onclick="abrirReproductor()"> <!-- Agrega el evento onclick -->
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
+                <div class="card-body">
+                  <h5 class="card-title">Canción {{ c }}</h5>
+                  <p class="card-text">Artista {{ c }}</p>
+                </div>
+                <!-- Contenedor del icono de reproducción -->
+                <div class="play-icon">
+                  <i class="fas fa-play"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        <div class="pagination-container d-flex justify-content-center mt-4">
+  <button id="btnAnterior" class="btn-flecha" disabled>
+    <p>Anterior <i class="fas fa-chevron-left"></i></p> <!-- Flecha izquierda -->
+  </button>
+  <button id="btnSiguiente" class="btn-flecha">
+    <p><i class="fas fa-chevron-right"></i> Siguiente</p> <!-- Flecha derecha -->
+  </button>
+</div>
+
+      </div>
+  </section>
+<!-- Contenido del reproductor emergente -->
+<div id="reproductorEmergente" class="modal">
+  <div class="modal-content">
+    <!-- Agrega el reproductor de música aquí -->
+    {% include 'reproductor.html.twig' %}
+    <!-- Botón para cerrar la ventana emergente -->
+    <button onclick="cerrarVentanaEmergente()">Cerrar Reproductor</button>
+  </div>
+</div>
+<script>
+  function abrirReproductor() {
+  var modal = document.getElementById('reproductorEmergente');
+  modal.style.display = 'block';
+}
+</script>
+{% endblock %}
+
+

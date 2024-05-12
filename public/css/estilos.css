@@ -1,0 +1,445 @@
+/* Estilos para el cuerpo */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+    font-family: 'Montserrat';
+    margin: 0;
+    color: #fff;
+
+    overflow-x: hidden;
+    background-color: rgb(48, 179, 207);
+    background-image: url("../images/pago10.jpg");
+
+    /* Ajusta el tamaño de la imagen para cubrir todo el cuerpo */
+    /* Evita que la imagen se repita */
+    background-repeat: no-repeat;
+    background-size: 70% auto;
+    background-position: center;
+    background-attachment: fixed;
+    /* Evita que la imagen se repita */
+    width: 100vw;
+    height: 100vh;
+
+}
+
+.container {
+    max-width: 1600px;
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+    background-color: #000000 !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    padding: 20px;
+    font-size: 1.5rem;
+}
+
+.navbar-toggler {
+    border-color: #fff;
+}
+
+.navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f0f0f0;
+}
+
+.user-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    /* Para hacerla circular, si lo deseas */
+    margin-right: 5px;
+    /* O cualquier otro margen que desees */
+}
+
+.imagenLogo {
+    border-radius: 45px;
+    width: 216px;
+}
+
+.rounded-circle {
+    width: 24px;
+    /* Tamaño deseado de la imagen */
+    height: 24px;
+    border-radius: 50%;
+
+
+}
+
+.btn-outline-secondary {
+    border: transparent;
+    color: #fff !important;
+}
+
+.btn-outline-secondary:hover {
+    border: transparent;
+}
+
+li,
+a {
+    color: #fff;
+}
+
+/* Estilos para la sección del héroe */
+.hero {
+    margin-top: 50px;
+    padding: 80px 0;
+    background-color: #282828bd;
+    color: #fff;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.1rem;
+}
+
+
+/* Estilos para el botón de reproducción en la sección del héroe */
+.btn-play {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 40px;
+    text-align: center;
+    color: #ffffff;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-play:hover {
+    background-color: transparent;
+    color: #e5e5e5;
+    border: none;
+    
+}
+
+.btn-play i {
+    display: block;
+}
+
+/* Estilos para el título "Canciones Destacadas" */
+.titulo-destacado {
+    margin-top: 0px;
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 4px 4px 5px rgb(0, 0, 0);
+    background-color: #00000063;
+}
+
+
+/* Estilos para la sección de canciones destacadas */
+.featured-songs {
+    padding: 50px 0;
+}
+
+.featured-songs h2 {
+    margin-bottom: 30px;
+}
+
+.card-body {
+    background-color: transparent;
+    padding: 1px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 5px;
+    text-align: center;
+    /* Añade espacio entre el título y el contenido */
+}
+
+.card-text {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.card .btn-primary {
+    color: #fff;
+    background-color: #41fcc4;
+    border-color: #01764a;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card .btn-primary:hover {
+    background-color: #01754a;
+}
+
+.card-container {
+    background-image: url('foto1.jpg');
+    /* Ajusta la configuración de la imagen de fondo según sea necesario */
+    background-size: cover;
+    /* Ajusta el tamaño de la imagen */
+    background-position: center;
+    /* Centra la imagen */
+    /* Ajusta otros estilos según sea necesario */
+}
+
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: rgba(13, 13, 13, 0.44);
+    background-clip: border-box;
+    border-radius: .25rem;
+    padding: 17px;
+    margin-top: 30px;
+    border: none;
+}
+
+.card:hover {
+    background-color: rgba(0, 0, 0, 0.744);
+    /* Cambia el color de fondo de la tarjeta al pasar el ratón por encima */
+
+    /* Cambia el color del borde de la tarjeta al pasar el ratón por encima */
+}
+
+.card:hover .card-body {
+    background-color: transparent;
+    /* Cambia el color de fondo del cuerpo de la tarjeta al pasar el ratón por encima */
+}
+
+.cardBtn a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Estilos para el contenedor de los botones de paginación */
+.pagination-container {
+    text-align: center;
+  }
+  
+  .pagination-container button {
+    margin: 0 5px; /* Ajusta el espacio entre los botones si es necesario */
+  }
+
+/* Estilos para los botones de flecha de paginación */
+.btn-flecha {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #ffffff;
+    text-shadow: 4px 4px 5px rgb(0, 0, 0);
+    /* Color de las flechas */
+    transition: color 0.3s ease;
+}
+
+.btn-flecha:hover {
+    color: rgba(0, 0, 0, 0.977);
+    /* Cambia el color al pasar el ratón sobre las flechas */
+}
+
+
+/* Estilos para el pie de página */
+.footer {
+    opacity: 60%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.fa-circle-play {
+    font-size: 50px;
+}
+
+.btn-light {
+    color: #ffffff;
+    background-color: transparent;
+    border: none;
+}
+
+.btn-light:hover {
+    background-color: transparent;
+    /* Cambia el color de fondo al pasar el mouse sobre el botón */
+
+
+}
+
+.bg-dark {
+    background-color: #000000f5 !important;
+}
+
+
+
+.player-controls .btn {
+    font-size: 1.25rem;
+    border-radius: 50% !important;
+    margin: 10px;
+
+}
+
+
+.playback-bar input[type="range"] {
+    width: 100%;
+    height: 50% !important;
+}
+
+.player-controls .btn:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: #d7d566;
+    ;
+}
+
+/* Estilos para la barra de progreso */
+.form-range {
+    background-color: transparent;
+    width: 100%;
+    margin: 11.5px 0;
+    /* Cambia el margen según sea necesario */
+}
+
+/* Estilos específicos para navegadores WebKit (Chrome, Safari, etc.) */
+.form-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: #ffffff;
+    /* Color de la parte no progresada de la barra de progreso */
+    border-radius: 25px;
+    border: 0.2px solid #010101;
+}
+
+/* Estilos para la parte progresada de la barra de progreso en WebKit */
+.form-range::-webkit-slider-runnable-track::-webkit-progress-value {
+    height: 8.4px;
+    background-color: #30b3cf;
+    /* Color de la parte progresada de la barra de progreso */
+}
+
+/* Estilos para el pulgar del rango en navegadores WebKit */
+.form-range::-webkit-slider-thumb {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -8.5px;
+    /* Ajusta el margen superior según sea necesario */
+
+}
+
+/* Estilos específicos para navegadores Mozilla Firefox */
+.form-range::-moz-range-track {
+    width: 100%;
+    cursor: pointer;
+    background: #ffffff;
+    /* Color de la parte no progresada de la barra de progreso */
+    border-radius: 25px;
+    border: 0.2px solid #010101;
+}
+
+/* Estilos para la parte progresada de la barra de progreso en Firefox */
+.form-range::-moz-range-progress {
+    background-color: #30b3cf;
+    /* Color de la parte progresada de la barra de progreso en Firefox */
+}
+
+/* Estilos para el pulgar del rango en navegadores Mozilla Firefox */
+.form-range::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: #ffffff;
+    /* Cambia este color al que desees para hacer el pulgar blanco */
+    cursor: pointer;
+    margin-top: -8.5px;
+    /* Ajusta el margen superior según sea necesario */
+    border: 0.2px solid #010101;
+}
+
+/* Estilos específicos para navegadores Microsoft Edge e Internet Explorer */
+.form-range::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: #ffffff;
+    /* Color de la parte no progresada de la barra de progreso */
+    border-radius: 25px;
+    border: 0.2px solid #010101;
+}
+
+/* Estilos para la parte progresada de la barra de progreso en Microsoft Edge e Internet Explorer */
+.form-range::-ms-fill-lower {
+    background-color: #30b3cf;
+    /* Color de la parte progresada de la barra de progreso en Microsoft Edge e Internet Explorer */
+}
+
+/* Estilos para el pulgar del rango en navegadores Microsoft Edge e Internet Explorer */
+.form-range::-ms-thumb {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background: #ffffff;
+    /* Cambia este color al que desees para hacer el pulgar blanco */
+    cursor: pointer;
+    border: 0.2px solid #010101;
+}
+
+
+.fa-heart {
+    width: 24px;
+    height: 24px;
+}
+.volume-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto; /* Esto centra horizontalmente el contenedor */
+}
+.fa-volume-down{
+    margin: 20px;
+}
+.fa-volume-high::before, .fa-volume-up::before {
+    content: "\f028";
+    margin: 20px;
+  }
+
+.text-custom {
+    color: #d975d7;
+    /* Cambia este valor por el color que desees */
+}

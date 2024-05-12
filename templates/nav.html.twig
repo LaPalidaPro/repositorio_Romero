@@ -1,0 +1,41 @@
+<!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container">
+      <a href="{{ path('app_home') }}">  
+      <img class="imagenLogo" src="{{ asset('images/HHLogo.png') }}" alt="HHLogo">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <!-- Barra de búsqueda -->
+        <form class="form-inline my-2 my-lg-0 ml-auto">
+          <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">
+              <img src="{{ asset('images/perfil/yo.jpg') }}" alt="Usuario" class="user-icon">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa-solid fa-power-off"></i></a>
+          </li>
+          <!-- Menú desplegable de cambio de idioma -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img src="{{ asset('spanish-flag.png') }}" alt="Español" class="rounded-circle">
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#"><img src="{{ asset('english-flag.png') }}" alt="Inglés" class="rounded-circle"></a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
