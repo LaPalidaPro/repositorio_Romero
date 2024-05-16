@@ -1,0 +1,48 @@
+.btnAdmin {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+.btnAdmin:hover {
+    background: transparent;
+    color: rgb(154, 245, 250);
+    border-color: rgb(154, 245, 250);
+}
+
+.container-admin {
+    background-color: #000000d9;
+    padding: 129px;
+}
+
+/*gestion de contenido*/
+.breadcrumb{
+    background-color: transparent;
+}
+/* barra de busqueda */
+#searchForm{
+    margin-top: 60px;
+}
+.btn-outline-secondary:hover{
+    background-color: transparent;
+    border-color: transparent;
+}
+.btn-outline-secondary:active{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+
+.table td{
+    color:white;
+}
+.table th {
+    color: aqua;
+}
+
+/* Estilo para el título de la tabla */
+caption {
+    caption-side: top;
+    font-weight: bold;
+    color: rgb(248, 99, 251);
+}

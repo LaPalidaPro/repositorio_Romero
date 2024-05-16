@@ -1,0 +1,15 @@
+{% extends 'frontened.html.twig' %}
+
+{% block title %}Administración
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+	{% include 'nav.html.twig' %}
+
+	<h1>Borrar Artista</h1>
+{% endblock %}

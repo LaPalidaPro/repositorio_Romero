@@ -34,6 +34,9 @@ class Album
     #[ORM\Column(length: 500)]
     private ?string $fotoPortada = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $nombre = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +117,18 @@ class Album
     public function setFotoPortada(string $fotoPortada): static
     {
         $this->fotoPortada = $fotoPortada;
+
+        return $this;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre): static
+    {
+        $this->nombre = $nombre;
 
         return $this;
     }

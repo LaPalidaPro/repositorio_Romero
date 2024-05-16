@@ -1,18 +1,3 @@
- // Simulación de datos de canciones
- const canciones = [
-    { titulo: 'Canción 1', artista: 'Artista 1' },
-    { titulo: 'Canción 2', artista: 'Artista 2' },
-    { titulo: 'Canción 3', artista: 'Artista 3' },
-    { titulo: 'Canción 4', artista: 'Artista 4' },
-    { titulo: 'Canción 5', artista: 'Artista 5' },
-    { titulo: 'Canción 6', artista: 'Artista 6' },
-    { titulo: 'Canción 7', artista: 'Artista 7' },
-    { titulo: 'Canción 8', artista: 'Artista 8' },
-    // Agrega más canciones aquí...
-  ];
-
-  // Agregar una nueva canción al final de la matriz canciones
-  canciones.push({ titulo: 'Nueva Canción', artista: 'Nuevo Artista' });
 
   // Variables para controlar la paginación
   let paginaActual = 1;

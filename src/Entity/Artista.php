@@ -17,7 +17,7 @@ class Artista
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $NombreArtistico = null;
+    private ?string $nombre = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $anoDebut = null;
@@ -50,14 +50,14 @@ class Artista
         return $this;
     }
 
-    public function getNombreArtistico(): ?string
+    public function getNombre(): ?string
     {
-        return $this->NombreArtistico;
+        return $this->nombre;
     }
 
-    public function setNombreArtistico(string $NombreArtistico): static
+    public function setNombre(string $nombre): static
     {
-        $this->NombreArtistico = $NombreArtistico;
+        $this->nombre = $nombre;
 
         return $this;
     }

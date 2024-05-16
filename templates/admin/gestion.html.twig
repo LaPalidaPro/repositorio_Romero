@@ -1,0 +1,91 @@
+{% extends 'frontened.html.twig' %}
+
+{% block title %}Administración
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+	{% include 'nav.html.twig' %}
+
+	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+    <h1>Gestión de contenido</h1>
+		<div class="container">
+			<form id="searchForm" class="input-group mb-3">
+				<input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de artista...">
+				<button type="submit" class="btn btn-outline-secondary">
+					<i class="fas fa-search lupa"></i>
+				</button>
+			</form>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-hover">
+				<caption>Artistas</caption>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Año Debut</th>
+						<th>País de Origen</th>
+						<th>Biografía</th>
+						<th>Imagen del Artista</th>
+						<th>Álbums</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dato in datos %}
+						<tr>
+							<td>{{dato.id}}</td>
+							<td>{{dato.nombre}}</td>
+							<td>{{dato.anoDebut|date('Y')}}</td>
+							<td>{{dato.paisOrigen}}</td>
+							<td>{{dato.biografia}}</td>
+							<td>{{dato.imgArtista}}</td>
+							<td>
+								<a href="{{ path('app_gestionAlbums', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-regular fa-eye"></i>
+									</button>
+								</td>
+							</td>
+							<td>
+								<a href="{{ path('app_editarArtista', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-regular fa-pen-to-square"></i>
+									</button>
+								</a>
+								<a href="{{ path('app_borrarArtista', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-solid fa-trash"></i>
+									</button>
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<script>
+		$(document).ready(function () {
+$('#searchForm').submit(function (event) {
+event.preventDefault();
+var searchText = $('#searchInput').val().toLowerCase();
+$('table tbody tr').each(function () {
+var artistName = $(this).find('td:eq(1)').text().toLowerCase();
+if (artistName.indexOf(searchText) === -1) {
+$(this).hide();
+} else {
+$(this).show();
+}
+});
+});
+});
+	</script>
+{% endblock %}

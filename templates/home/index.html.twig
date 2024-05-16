@@ -43,20 +43,17 @@
     <div class="container" style="padding: 100px;padding-top: 0px;">
 
       <div class="row" id="contenedorCanciones">
-        {% for c in 1..8 %}
+        {% for cancion in datosCanciones %}
         <!-- Cartas de las primeras 8 canciones -->
           <div class="col-md-3">
             <div class="cardBtn">
               <div class="card" onclick="abrirReproductor()"> <!-- Agrega el evento onclick -->
                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
                 <div class="card-body">
-                  <h5 class="card-title">Canción {{ c }}</h5>
-                  <p class="card-text">Artista {{ c }}</p>
+                  <h5 class="card-title">Canción {{ cancion.titulo }}</h5>
+                  <p class="card-text">Artista {{ cancion.idArtista}}</p>
                 </div>
-                <!-- Contenedor del icono de reproducción -->
-                <div class="play-icon">
-                  <i class="fas fa-play"></i>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -77,8 +74,7 @@
   <div class="modal-content">
     <!-- Agrega el reproductor de música aquí -->
     {% include 'reproductor.html.twig' %}
-    <!-- Botón para cerrar la ventana emergente -->
-    <button onclick="cerrarVentanaEmergente()">Cerrar Reproductor</button>
+    
   </div>
 </div>
 <script>
