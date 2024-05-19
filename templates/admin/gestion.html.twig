@@ -9,10 +9,13 @@
 {% endblock %}
 
 {% block body %}
-	{% include 'nav.html.twig' %}
+	
 
 	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
     <h1>Gestión de contenido</h1>
+
+		{% include 'mensajesFlash.html.twig' %}
+
 		<div class="container">
 			<form id="searchForm" class="input-group mb-3">
 				<input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de artista...">
@@ -59,11 +62,12 @@
 										<i class="fa-regular fa-pen-to-square"></i>
 									</button>
 								</a>
-								<a href="{{ path('app_borrarArtista', {'id': dato.id}) }}">
-									<button type="button" class="btn btn-outline-secondary">
-										<i class="fa-solid fa-trash"></i>
-									</button>
-								</a>
+								<form action="{{ path('app_borrarArtista', {'id': dato.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dato.id) }}">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
 							</td>
 						</tr>
 					{% endfor %}

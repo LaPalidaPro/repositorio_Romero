@@ -14,11 +14,13 @@ class Cancion
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idArtista = null;
+    #[ORM\ManyToOne(targetEntity: Artista::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Artista $artista = null;
 
-    #[ORM\Column]
-    private ?int $idAlbum = null;
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'canciones')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Album $album = null;
 
     #[ORM\Column(length: 255)]
     private ?string $titulo = null;
@@ -47,27 +49,26 @@ class Cancion
         return $this;
     }
 
-    public function getIdArtista(): ?int
+    public function getArtista(): ?Artista
     {
-        return $this->idArtista;
+        return $this->artista;
     }
 
-    public function setIdArtista(int $idArtista): static
+    public function setArtista(Artista $artista): static
     {
-        $this->idArtista = $idArtista;
+        $this->artista = $artista;
 
         return $this;
     }
 
-    public function getIdAlbum(): ?int
+    public function getAlbum(): ?Album
     {
-        return $this->idAlbum;
+        return $this->album;
     }
 
-    public function setIdAlbum(int $idAlbum): static
+    public function setAlbum(?Album $album): self
     {
-        $this->idAlbum = $idAlbum;
-
+        $this->album = $album;
         return $this;
     }
 

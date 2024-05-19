@@ -97,16 +97,6 @@
   });
 
 
-    document.getElementById("heart-icon").addEventListener("click", function () {
-      // Cambia el icono del corazón y su color al hacer clic
-      var heartIcon = document.getElementById("heart-icon").querySelector("i");
-      if (heartIcon.classList.contains("far")) {
-        heartIcon.classList.remove("far");
-        heartIcon.classList.add("fas", "text-custom"); // Cambia el color del corazón a tu color personalizado
-      } else {
-        heartIcon.classList.remove("fas", "text-custom");
-        heartIcon.classList.add("far"); // Cambia el color del corazón a su estado original
-      }
-    });
+
 
 

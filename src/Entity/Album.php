@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Artista;
 use App\Repository\AlbumRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,8 +17,8 @@ class Album
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Artista::class)]
-    #[ORM\JoinColumn(name: 'id_artista', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Artista::class, inversedBy: 'albums')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Artista $artista = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -28,14 +30,17 @@ class Album
     #[ORM\Column(type: Types::DECIMAL, precision: 50, scale: 0)]
     private ?string $duracionTotal = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $generoMusical = null;
+    #[ORM\Column(type: 'json')]
+    private array $generosMusicales = [];
 
     #[ORM\Column(length: 500)]
     private ?string $fotoPortada = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
+
+    #[ORM\OneToMany(mappedBy: 'album', targetEntity: Cancion::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $canciones;
 
     public function getId(): ?int
     {
@@ -97,14 +102,14 @@ class Album
         return $this;
     }
 
-    public function getGeneroMusical(): ?string
+    public function getGenerosMusicales(): array
     {
-        return $this->generoMusical;
+        return $this->generosMusicales;
     }
 
-    public function setGeneroMusical(string $generoMusical): static
+    public function setGenerosMusicales(array $generosMusicales): static
     {
-        $this->generoMusical = $generoMusical;
+        $this->generosMusicales = $generosMusicales;
 
         return $this;
     }
@@ -129,6 +134,32 @@ class Album
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
+
+        return $this;
+    }
+    public function getCanciones(): Collection
+    {
+        return $this->canciones;
+    }
+
+    public function addCancion(Cancion $cancion): self
+    {
+        if (!$this->canciones->contains($cancion)) {
+            $this->canciones[] = $cancion;
+            $cancion->setAlbum($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCancion(Cancion $cancion): self
+    {
+        if ($this->canciones->removeElement($cancion)) {
+            // Set the owning side to null (unless already changed)
+            if ($cancion->getAlbum() === $this) {
+                $cancion->setAlbum(null);
+            }
+        }
 
         return $this;
     }

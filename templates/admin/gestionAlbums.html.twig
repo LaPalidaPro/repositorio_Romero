@@ -56,7 +56,11 @@
 							<td>{{ album.fechaLanzamiento|date('Y-m-d') }}</td>
 							<td>{{ album.numPistas }}</td>
 							<td>{{ album.duracionTotal }}</td>
-							<td>{{ album.generoMusical }}</td>
+								<td>
+									{% for genero in album.generosMusicales %}
+										{{ genero }}{% if not loop.last %}, {% endif %}
+									{% endfor %}
+								</td>
 							<td>{{ album.fotoPortada }}</td>
 							<td>
 								<a href="">

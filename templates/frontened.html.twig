@@ -1,132 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="{{asset('images/HHLogo.png')}}">
-        <link rel="icon" href= "{{asset('images/HH_logoNegro.png')}}">
-        <title>HarmonyHub- {% block title %} {% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="icon" href="{{asset('images/HHLogo.png')}}">
+		<link rel="icon" href="{{asset('images/HH_logoNegro.png')}}">
+		<title>HarmonyHub-
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    </head>
-    <body>
-    
-        {% block body %}{% endblock %}
-    </body>
-    <script src="{{asset('js/funciones.js')}}"></script>
-    <script>
-  //eSTO NO FUNCIONA SIRVE PPARA CLICAR EN LA CARTA PERO NO APARECE EL PLAY
-  var audio = document.getElementById("audio");
-  var playPauseBtn = document.getElementById("playPauseBtn");
-  var seekSlider = document.getElementById("seekSlider");
-  var volumeSlider = document.getElementById("volumeSlider");
-  var currentTime = document.getElementById("currentTime");
-  var totalTime = document.getElementById("totalTime");
+		{% block styles %}
+			<link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+		{% endblock %}
 
-  // Función para ajustar el volumen
-  function adjustVolume() {
-    audio.volume = volumeSlider.value;
-  }
-</script>
+	</head>
+	<body>
 
+		{% block body %}{% endblock %}
+	</body>
 
-<audio id="audio" src="/music/GATOS_PARDOS.wav" ontimeupdate="updateTime()"></audio>
-
-<script>
-  var audio = document.getElementById("audio");
-
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }
-</script>
-
-<script>
-  var audio = document.getElementById("audio");
-  var playPauseBtn = document.getElementById("playPauseBtn");
-  var seekSlider = document.getElementById("seekSlider");
-  var currentTime = document.getElementById("currentTime");
-  var totalTime = document.getElementById("totalTime");
-
-  function playPause() {
-    if (audio.paused) {
-      audio.play();
-      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      audio.pause();
-      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  }
-
-  function backward() {
-    audio.currentTime -= 10;
-  }
-
-  function forward() {
-    audio.currentTime += 10;
-  }
-
-  function seek() {
-    var seekto = audio.duration * (seekSlider.value / 100);
-    audio.currentTime = seekto;
-  }
-
-  function updateTime() {
-    var currentMinutes = Math.floor(audio.currentTime / 60);
-    var currentSeconds = Math.floor(audio.currentTime - currentMinutes * 60);
-    var durationMinutes = Math.floor(audio.duration / 60);
-    var durationSeconds = Math.floor(audio.duration - durationMinutes * 60);
-
-    if (currentSeconds < 10) {
-      currentSeconds = "0" + currentSeconds;
-    }
-    if (durationSeconds < 10) {
-      durationSeconds = "0" + durationSeconds;
-    }
-
-    currentTime.innerHTML = currentMinutes + ":" + currentSeconds;
-    totalTime.innerHTML = durationMinutes + ":" + durationSeconds;
-
-    var seekPosition = 0;
-    if (audio.currentTime > 0) {
-      seekPosition = audio.currentTime / audio.duration * 100;
-    }
-    seekSlider.value = seekPosition;
-  }
-</script>
-<!-- Script para cambiar el color y el icono del corazón al hacer clic -->
-<script>
-  document.getElementById("heart-icon").addEventListener("click", function () {
-    event.preventDefault();
-    // Cambia el icono del corazón y su color al hacer clic
-    var heartIcon = document.getElementById("heart-icon").querySelector("i");
-    if (heartIcon.classList.contains("far")) {
-      heartIcon.classList.remove("far");
-      heartIcon.classList.add("fas", "text-custom"); // Cambia el color del corazón a tu color personalizado
-    } else {
-      heartIcon.classList.remove("fas", "text-custom");
-      heartIcon.classList.add("far"); // Cambia el color del corazón a su estado original
-    }
-  });
-</script>
-
-
-
-
-
-
-  <!-- Bootstrap JS (jQuery y Popper.js requeridos) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
+	{% block javascripts %}
+		<!-- Incluye tus enlaces JavaScript aquí -->
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<script src="{{ asset('js/frontal.js') }}"></script>
+		<!-- Añade tus otros enlaces JavaScript aquí -->
+		{% block custom_javascripts %}{% endblock %}
+	{% endblock %}
 </html>

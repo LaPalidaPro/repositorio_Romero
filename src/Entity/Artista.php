@@ -31,7 +31,7 @@ class Artista
     #[ORM\Column(length: 500)]
     private ?string $imgArtista = null;
 
-    #[ORM\OneToMany(mappedBy: 'artista', targetEntity: Album::class)]
+    #[ORM\OneToMany(mappedBy: 'artista', targetEntity: Album::class, cascade: ['remove'])]
     private Collection $albums;
     public function __construct()
     {
@@ -109,7 +109,7 @@ class Artista
 
         return $this;
     }
-     /**
+    /**
      * @return Collection|Album[]
      */
     public function getAlbums(): Collection

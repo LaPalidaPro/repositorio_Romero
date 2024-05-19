@@ -1,6 +1,10 @@
 {% extends 'frontened.html.twig' %}
 
 {% block title %}Vive tu música{% endblock %}
+{% block styles %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
+{% endblock %}
 
 {% block body %}
    {% include 'nav.html.twig' %}
@@ -40,49 +44,45 @@
   <h1 class="titulo-destacado">Canciones Destacadas</h1>
   <!-- Sección de canciones destacadas -->
   <section class="featured-songs">
-    <div class="container" style="padding: 100px;padding-top: 0px;">
+       <div class="container" style="padding: 100px;padding-top: 0px;">
 
-      <div class="row" id="contenedorCanciones">
-        {% for cancion in datosCanciones %}
-        <!-- Cartas de las primeras 8 canciones -->
-          <div class="col-md-3">
-            <div class="cardBtn">
-              <div class="card" onclick="abrirReproductor()"> <!-- Agrega el evento onclick -->
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
-                <div class="card-body">
-                  <h5 class="card-title">Canción {{ cancion.titulo }}</h5>
-                  <p class="card-text">Artista {{ cancion.idArtista}}</p>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-        <div class="pagination-container d-flex justify-content-center mt-4">
-  <button id="btnAnterior" class="btn-flecha" disabled>
-    <p>Anterior <i class="fas fa-chevron-left"></i></p> <!-- Flecha izquierda -->
-  </button>
-  <button id="btnSiguiente" class="btn-flecha">
-    <p><i class="fas fa-chevron-right"></i> Siguiente</p> <!-- Flecha derecha -->
-  </button>
-</div>
+           <div class="row" id="contenedorCanciones">
+           {% for cancion in datosCanciones %}
+           <div class="col-md-3">
+               <div class="cardBtn">
+                   <div class="card" onclick="abrirReproductor(this)" data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" data-cancion="{{ cancion.titulo }}" data-artista="{{ cancion.artista.nombre }}">
+                       <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
+                       <div class="card-body">
+                           <h5 class="card-title">{{ cancion.titulo }}</h5>
+                           <p class="card-text">{{ cancion.artista.nombre }}</p>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           {% endfor %}
+           </div>
 
-      </div>
-  </section>
-<!-- Contenido del reproductor emergente -->
-<div id="reproductorEmergente" class="modal">
-  <div class="modal-content">
-    <!-- Agrega el reproductor de música aquí -->
-    {% include 'reproductor.html.twig' %}
-    
-  </div>
-</div>
-<script>
-  function abrirReproductor() {
-  var modal = document.getElementById('reproductorEmergente');
-  modal.style.display = 'block';
-}
-</script>
+           <div class="pagination-container d-flex justify-content-center mt-4">
+               {% if paginaActual > 1 %}
+                   <a href="{{ path('app_home', {'pagina': paginaActual - 1}) }}" class="btn-flecha">
+                       <p>Anterior <i class="fas fa-chevron-left"></i></p>
+                   </a>
+               {% endif %}
+               {% if paginaActual < totalPaginas %}
+                   <a href="{{ path('app_home', {'pagina': paginaActual + 1}) }}" class="btn-flecha">
+                       <p>Siguiente <i class="fas fa-chevron-right"></i></p>
+                   </a>
+               {% endif %}
+           </div>
+
+       </div>
+   </section>
+
+<!-- Reproductor de audio -->
+{% include 'reproductor.html.twig' %}
+
+{% block custom_javascripts %}
+    <script src="{{ asset('js/frontal.js') }}"></script>
+    <script src="{{ asset('js/reproductor.js') }}"></script>
 {% endblock %}
-
-
+{% endblock %}
