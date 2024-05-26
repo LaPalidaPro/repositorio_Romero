@@ -13,15 +13,36 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 		{% block styles %}
-			<link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
-			<link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
 			<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+			<link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
 		{% endblock %}
 
 	</head>
 	<body>
-
+		{% block nav %}{% endblock %}
 		{% block body %}{% endblock %}
+		{% block footer %}
+			<footer class="pie" style="background-color: #0000003d; padding: 15px 0;">
+				<div class="container text-center">
+					<p>&copy; 2023 HarmonyHub.
+						{{ 'all_rights_reserved'|trans }}.</p>
+					<p>{{ 'created_by'|trans }}.</p>
+					<ul class="list-inline">
+						<li class="list-inline-item">
+							<a href="/">{{ 'home'|trans }}</a>
+						</li>
+						<li class="list-inline-item">
+							<a href="/about">{{ 'about'|trans }}</a>
+						</li>
+						<li class="list-inline-item">
+							<a href="/contact">{{ 'contact'|trans }}</a>
+						</li>
+					</ul>
+				</div>
+			</footer>
+		{% endblock %}
 	</body>
 
 	{% block javascripts %}

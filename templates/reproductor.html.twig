@@ -1,58 +1,61 @@
 <div class="reproductor container-fluid bg-dark text-white py-3 fixed-bottom">
-    <div class="row align-items-center">
-        <div class="col-md-4 d-flex justify-content-center justify-content-md-start align-items-center">
-            <div class="song-info text-center text-md-start d-flex align-items-center">
-                <div class="song-details">
-                    <a href="{{ path('app_cancion') }}">
-                        <img src="https://via.placeholder.com/100" alt="Canción" class="song-image">
-                    </a>
-                </div>
-                <div class="text-info ms-3">
-                    <div class="now-playing" id="nowPlaying">
-                        <span id="songTitle"></span>
-                    </div>
-                    <div id="artistName"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-center align-items-center">
-            <div class="player-controls-container position-relative">
-                <div class="player-controls d-flex justify-content-center">
-                    <button class="btn btn-light me-3" id="btnBackward">
-                        <i class="fas fa-backward"></i>
-                    </button>
-                    <button id="playPauseBtn" class="btn btn-light me-3">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button class="btn btn-light" id="btnForward">
-                        <i class="fas fa-forward"></i>
-                    </button>
-                </div>
-                <div class="playback-bar mt-3">
-                    <input id="seekSlider" type="range" class="form-range" min="0" max="100" value="0">
-                    <div class="d-flex justify-content-between">
-                        <span id="currentTime">0:00</span>
-                        <span id="totalTime">-:--</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mt-3 mt-md-0 d-flex justify-content-center justify-content-md-end align-items-center">
-            <div class="volume-bar d-flex align-items-center">
-                <i class="fas fa-volume-down me-2" id="volumeIcon"></i>
-                <input id="volumeSlider" type="range" class="form-range" min="0" max="1" step="0.01" value="1" style="display: none;">
-                <a id="heart-icon" class="nav-link ms-2" href="#">
-                    <i class="far fa-heart"></i>
-                </a>
-            </div>
-        </div>
-        <button type="button" class="toggle-visibility-btn position-absolute" style="top: 0; right: 0; z-index: 1;">
-            <i class="fas fa-eye"></i>
-        </button>
-    </div>
+	<div class="row align-items-center">
+		<div class="col-md-4 d-flex justify-content-center justify-content-md-start align-items-center">
+			<div class="song-info text-center text-md-start">
+
+				<div class="song-details d-flex align-items-center">
+                <a id="enlaceDetallesCancion" href="#">
+						<img src="https://via.placeholder.com/50" alt="Canción" class="song-image">
+					</a>
+				</div>
+
+				<div class="artist-info ms-3">
+					<div class="now-playing" id="nowPlaying">
+						<span id="songTitle"></span>
+					</div>
+					<div id="artistName"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 d-flex justify-content-center align-items-center">
+			<div class="player-controls-container position-relative">
+				<div class="player-controls d-flex justify-content-center">
+					<button class="btn btn-light me-3" id="btnBackward">
+						<i class="fas fa-backward"></i>
+					</button>
+					<button id="playPauseBtn" class="btn btn-light me-3">
+						<i class="fas fa-play"></i>
+					</button>
+					<button class="btn btn-light" id="btnForward">
+						<i class="fas fa-forward"></i>
+					</button>
+				</div>
+				<div class="playback-bar mt-1">
+					<input id="seekSlider" type="range" class="form-range" min="0" max="100" value="0">
+					<div class="d-flex justify-content-between w-100">
+						<span id="currentTime">0:00</span>
+						<span id="totalTime">-:--</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mt-3 mt-md-0 d-flex justify-content-center justify-content-md-end align-items-center">
+			<div class="volume-bar d-flex align-items-center">
+				<i class="fas fa-volume-down me-2" id="volumeIcon"></i>
+				<input id="volumeSlider" type="range" class="form-range" min="0" max="1" step="0.01" value="1" style="display: none;">
+				<a id="heart-icon" class="nav-link ms-2" href="#">
+					<i class="far fa-heart"></i>
+				</a>
+			</div>
+		</div>
+		<button id="closeBtn" type="button" class="toggle-visibility-btn position-absolute" style="top: 0; right: 0; z-index: 1;">
+			<i class="fas fa-times"></i>
+		</button>
+
+	</div>
 </div>
 <audio id="audio" ontimeupdate="updateTime()"></audio>
 
 {% block custom_javascripts %}
-    <script src="{{ asset('js/reproductor.js') }}"></script>
+	<script src="{{ asset('js/reproductor.js') }}"></script>
 {% endblock %}

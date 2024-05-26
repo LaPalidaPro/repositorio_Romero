@@ -1,10 +1,14 @@
 {% extends 'frontened.html.twig' %}
 
-{% block title %}Vive tu música{% endblock %}
+{% block title %}{{ cancion.titulo }}{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
+    <style>
+        .body {
+            color: black;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -13,31 +17,130 @@
     <section class="container container-cancion mt-5">
         <div class="row">
             <div class="col-md-6 offset-md-3 text-center cancion-imagen">
-                <a href="#">
-                    <img src="https://via.placeholder.com/400" class="card-img-top" alt="Canción">
-                    <h2 class="mb-3 tituloCancion">{{cancion.titulo}}/h2>
-                    <p class="mb-4">{{cancion.idArtista}}</p>
-                </a>
+                <img src="https://via.placeholder.com/400" class="card-img-top" alt="Canción">
+                <h2 class="mb-3">{{ cancion.titulo }}</h2>
+                <p class="mb-4">{{ cancion.artista.nombre }}</p>
                 <div class="d-flex justify-content-end">
-                    <a id="heart-icon" class="nav-link" href="#"><i class="far fa-heart"></i></a>
+                    <a id="heart-icon" class="nav-link" href="#">
+                        <i class="far fa-heart"></i>
+                    </a>
                 </div>
                 <div class="player-controls d-flex justify-content-center">
-                    <button class="btn btn-light me-3" onclick="playAudio()"><i class="fas fa-backward"></i></button>
-                    <button class="btn btn-light me-3" onclick="playAudio()"><i class="fas fa-play"></i></button>
-                    <button class="btn btn-light" onclick="playAudio()"><i class="fas fa-forward"></i></button>
+                    <button class="btn btn-light me-3" id="btnRetroceder">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button class="btn btn-light me-3" id="btnReproducirPausar">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn btn-light" id="btnAvanzar">
+                        <i class="fas fa-forward"></i>
+                    </button>
                 </div>
                 <div class="playback-bar mt-3">
-                    <input type="range" class="form-range" min="0" max="100" value="0">
+                    <input id="barraBusqueda" type="range" class="form-range" min="0" max="100" value="0">
                     <div class="d-flex justify-content-between">
-                        <span>0:00</span>
-                        <span>-:--</span>
+                        <span id="tiempoActual">0:00</span>
+                        <span id="tiempoTotal">-:--</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <audio id="audio" src="{{ asset('canciones/nombre_de_la_cancion.mp3') }}"></audio>
+    <audio id="audio" 
+           data-tiempo="{{ tiempo }}" 
+           data-volumen="{{ volumen }}" 
+           data-corazon="{{ corazon }}" 
+           src="{{ asset('music/' ~ cancion.titulo) }}" 
+           ontimeupdate="actualizarTiempo()"></audio>
+
+    {% block custom_javascripts %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const audio = document.getElementById("audio");
+                const playPauseBtn = document.getElementById("btnReproducirPausar");
+                const seekSlider = document.getElementById("barraBusqueda");
+                const currentTimeElem = document.getElementById("tiempoActual");
+                const totalTimeElem = document.getElementById("tiempoTotal");
+                const btnBackward = document.getElementById("btnRetroceder");
+                const btnForward = document.getElementById("btnAvanzar");
+                const heartIcon = document.getElementById("heart-icon");
+
+                // Establecer los valores iniciales
+                audio.currentTime = parseFloat(audio.dataset.tiempo);
+                audio.volume = parseFloat(audio.dataset.volumen);
+                if (parseInt(audio.dataset.corazon) === 1) {
+                    heartIcon.querySelector("i").classList.remove("far");
+                    heartIcon.querySelector("i").classList.add("fas", "text-custom");
+                }
+
+                // Controlar la reproducción de audio
+                playPauseBtn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play().catch(error => {
+                            console.error("Error al intentar reproducir el audio:", error);
+                        });
+                        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        audio.pause();
+                        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                });
+
+                // Retroceder en el audio
+                btnBackward.addEventListener('click', function() {
+                    audio.currentTime -= 10; // Retrocede 10 segundos
+                });
+
+                // Avanzar en el audio
+                btnForward.addEventListener('click', function() {
+                    audio.currentTime += 10; // Avanza 10 segundos
+                });
+
+                // Buscar en el audio
+                seekSlider.addEventListener('input', function() {
+                    const seekTo = audio.duration * (seekSlider.value / 100);
+                    audio.currentTime = seekTo;
+                });
+
+                // Actualizar el tiempo de reproducción
+                audio.ontimeupdate = function() {
+                    const currentMins = Math.floor(audio.currentTime / 60);
+                    const currentSecs = Math.floor(audio.currentTime % 60);
+                    currentTimeElem.innerHTML = `${currentMins}:${currentSecs < 10 ? '0' : ''}${currentSecs}`;
+                    seekSlider.value = (audio.currentTime / audio.duration) * 100;
+                };
+
+                // Ajustar el tiempo total cuando los metadatos se cargan
+                audio.onloadedmetadata = function() {
+                    const totalMins = Math.floor(audio.duration / 60);
+                    const totalSecs = Math.floor(audio.duration % 60);
+                    totalTimeElem.innerHTML = `${totalMins}:${totalSecs < 10 ? '0' : ''}${totalSecs}`;
+                };
+
+                // Manejo de errores en la reproducción
+                audio.onerror = function(e) {
+                    console.error("Error al intentar reproducir el audio:", e);
+                };
+
+                // Reproducir automáticamente al cargar
+                audio.play().catch(error => {
+                    console.error("Error al intentar reproducir el audio:", error);
+                });
+
+                // Cambiar el icono del corazón
+                heartIcon.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const icono = this.querySelector("i");
+                    if (icono.classList.contains("far")) {
+                        icono.classList.remove("far");
+                        icono.classList.add("fas", "text-custom");
+                    } else {
+                        icono.classList.remove("fas", "text-custom");
+                        icono.classList.add("far");
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
 {% endblock %}
-
-

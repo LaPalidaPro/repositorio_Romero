@@ -9,7 +9,7 @@
   color: #fff;
   text-align: center;
   padding: 10px 0;
-  background: 000000f5 ;
+  background: #000000f5;
   opacity: inherit;
 }
 .fa-circle-play {
@@ -34,11 +34,11 @@
   font-size: 1.25rem;
   border-radius: 50% !important;
   margin: 10px;
+  font-size: 0.9rem;
 }
-
-.playback-bar input[type="range"] {
-  width: 100%;
-  height: 50% !important;
+.mt-1,
+.my-1 {
+  margin-top: -1rem !important;
 }
 
 .player-controls .btn:hover {
@@ -51,7 +51,7 @@
 .form-range {
   background-color: transparent;
   width: 100%;
-  margin: 11.5px 0;
+  margin: 5px 0;
   /* Cambia el margen según sea necesario */
 }
 
@@ -74,12 +74,12 @@
 
 /* Estilos para el pulgar del rango en navegadores WebKit */
 .form-range::-webkit-slider-thumb {
-  height: 25px;
-  width: 25px;
+  height: 15px;
+  width: 15px;
   border-radius: 50%;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -8.5px;
+  margin-top: -5px;
   /* Ajusta el margen superior según sea necesario */
 }
 
@@ -101,13 +101,13 @@
 
 /* Estilos para el pulgar del rango en navegadores Mozilla Firefox */
 .form-range::-moz-range-thumb {
-  height: 14px;
-  width: 14px;
+  height: 15px;
+  width: 15px;
   border-radius: 50%;
   background: #ffffff;
   /* Cambia este color al que desees para hacer el pulgar blanco */
   cursor: pointer;
-  margin-top: -8.5px;
+  margin-top: -5px;
   /* Ajusta el margen superior según sea necesario */
   border: 0.2px solid #010101;
 }
@@ -131,8 +131,8 @@
 
 /* Estilos para el pulgar del rango en navegadores Microsoft Edge e Internet Explorer */
 .form-range::-ms-thumb {
-  height: 25px;
-  width: 25px;
+  height: 15px;
+  width: 15px;
   border-radius: 50%;
   background: #ffffff;
   /* Cambia este color al que desees para hacer el pulgar blanco */
@@ -173,101 +173,111 @@
   text-shadow: none;
   opacity: 0.6;
 }
+
 .close:hover {
   color: #eae6e6;
 }
-.song-info{
-    margin-left: 20px;
+.song-info {
+  margin-left: 20px;
 }
 
 .reproductor {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #343a40; /* Mantén el fondo oscuro */
-    color: white; /* Asegura que el texto sea blanco */
-    transition: all 0.3s ease;
-    z-index: 1000; /* Asegura que esté encima de otros elementos */
-    padding: 15px; /* Añade algo de padding para hacer que el contenido sea visible */
-    display: none; /* Inicialmente oculto */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #343a40; /* Mantén el fondo oscuro */
+  color: white; /* Asegura que el texto sea blanco */
+  transition: all 0.3s ease;
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
+  padding: 10px; /* Ajusta el padding según sea necesario */
+  display: none; /* Inicialmente oculto */
 }
 
 .reproductor.minimized {
-    height: 85px;
-    overflow: hidden;
-}
-#artistName {
-    margin: 20px;
+  height: 85px;
+  overflow: hidden;
 }
 
-.reproductor.minimized .player-controls-container,
-.reproductor.minimized .volume-bar,
-.reproductor.minimized .song-info .now-playing,
-.reproductor.minimized .song-info .song-artist {
-    display: none;
-}
-
-.reproductor.minimized .song-info .song-details img {
-    height: 50px; /* Ajusta el tamaño de la imagen en el estado minimizado */
-    width: 50px; /* Ajusta el tamaño de la imagen en el estado minimizado */
-}
-
-.reproductor.minimized .song-info .song-details {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.toggle-visibility-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-}
-
-.reproductor.minimized .toggle-visibility-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
 .reproductor .song-info {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .reproductor .song-details {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .reproductor .song-details .song-image {
-    width: 100px;
-    height: auto;
+  width: 50px;
+  height: auto;
 }
 
 .reproductor .text-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 200px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #songTitle {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    margin: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 20px;
 }
 
 #artistName {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: -1px;
 }
 .text-info {
-    color: #ffffff !important;
-  }
+  color: #ffffff !important;
+}
 
+.reproductor .player-controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reproductor .playback-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#currentTime,
+#totalTime {
+  font-size: 0.8rem;
+  margin: 5px;
+  font-size: 0.7rem;
+  margin: -1px;
+}
+.form-range {
+  width: 100%;
+  margin: 5px 0;
+  width: 123%;
+  margin: 0;
+}
+#volumeSlider {
+  width: 30%;
+}
+
+/* reproductor.css | http://127.0.0.1:8000/css/reproductor.css */
+
+#artistName {
+  margin: -1px;
+}
+#closeBtn {
+  border: none;
+  background: none;
+  color: white;
+}

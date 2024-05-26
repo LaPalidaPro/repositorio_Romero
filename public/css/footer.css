@@ -1,0 +1,36 @@
+/* Estilos para el footer */
+.pie {
+    background-color: #333; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    padding: 20px 0; /* Espaciado interno */
+  }
+  
+  .pie .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  .pie p {
+    margin: 0;
+  }
+  
+  .pie ul {
+    padding: 0;
+    list-style: none;
+    margin: 10px 0 0;
+  }
+  
+  .pie ul li {
+    display: inline;
+    margin-right: 15px;
+  }
+  
+  .pie ul li a {
+    color: #fff; /* Color del texto de los enlaces */
+    text-decoration: none;
+  }
+  
+  .pie ul li a:hover {
+    text-decoration: underline;
+  }
+  
