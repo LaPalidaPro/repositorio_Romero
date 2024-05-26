@@ -255,3 +255,16 @@ a:hover {
   color: rgba(0, 0, 0, 0.977);
   /* Cambia el color al pasar el ratón sobre las flechas */
 }
+
+
+.registro > p:nth-child(1) > a:nth-child(1) {
+  display: none;
+}
+
+/* Elemento | http://127.0.0.1:8000/harmonyhub/principal */
+
+#search-form {
+  /* justify-content: flex-start; */
+  width: 100%;
+  justify-content: end;
+}

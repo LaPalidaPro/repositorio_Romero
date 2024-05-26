@@ -34,7 +34,7 @@ class HomeController extends AbstractController
     {
         return $this->redirectToRoute('app_home');
     }
-    #[Route('/harmonyhub/{pagina}', name: 'app_home', defaults: ['pagina' => 1])]
+    #[Route('/harmonyhub/principal/{pagina}', name: 'app_home', defaults: ['pagina' => 1])]
     public function index(int $pagina, Request $request): Response
     {
         $limite = 8; // Número de canciones por página
