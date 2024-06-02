@@ -15,7 +15,7 @@ li.nav-item:nth-child(1) > a:nth-child(1) {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-  height: 100%;
+  height: 150%;
 }
 .login-form {
   max-width: 415px;
@@ -47,13 +47,13 @@ li.nav-item:nth-child(1) > a:nth-child(1) {
   width: 108%;
 }
 .btn-primary {
-  margin-top: 20px;
+  margin-top: 0px;
   background-color: #30b3cf;
   border-color: #30b3cf;
 }
 
 .btn-primary:hover {
-  margin-top: 20px;
+  margin-top: 0px;
   background-color: #2998b1;
   border-color: #2998b1;
 }
@@ -89,4 +89,14 @@ div.container:nth-child(2) {
 
 .login > p:nth-child(1) {
   margin: 0px;
+}
+.modal-content {
+  background-color: #fff;
+  background-color: #000c;
+}
+.close {
+  color: #fff;
+  justify-content: end;
+  display: flex;
+  margin-right: 10px;
 }

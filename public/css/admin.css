@@ -1,48 +1,161 @@
 .btnAdmin {
-    background: transparent;
-    color: white;
-    border-color: white;
+  background: transparent;
+  color: white;
+  border-color: white;
 }
 
 .btnAdmin:hover {
-    background: transparent;
-    color: rgb(154, 245, 250);
-    border-color: rgb(154, 245, 250);
+  background: transparent;
+  color: rgb(154, 245, 250);
+  border-color: rgb(154, 245, 250);
 }
-
+.container-fluid > h1:nth-child(1) {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
 .container-admin {
-    background-color: #000000d9;
-    padding: 129px;
+  background-color: #000000d9;
+  padding: 129px;
 }
-
-/*gestion de contenido*/
-.breadcrumb{
-    background-color: transparent;
+.contenedor-botones {
+  margin-top: 15%;
+}
+.breadcrumb {
+  background-color: transparent;
 }
 /* barra de busqueda */
-#searchForm{
-    margin-top: 60px;
+#searchForm {
+  margin-top: 60px;
 }
-.btn-outline-secondary:hover{
-    background-color: transparent;
-    border-color: transparent;
+.btn-outline-secondary:hover {
+  background-color: transparent;
+  border-color: transparent;
 }
-.btn-outline-secondary:active{
-    background-color: transparent;
-    border-color: transparent;
+.btn-outline-secondary:active {
+  background-color: transparent;
+  border-color: transparent;
 }
 
-
-.table td{
-    color:white;
+.table td {
+  color: white;
 }
 .table th {
-    color: aqua;
+  color: aqua;
 }
 
 /* Estilo para el título de la tabla */
-caption {
-    caption-side: top;
-    font-weight: bold;
-    color: rgb(248, 99, 251);
+.caption {
+  caption-side: top;
+  font-weight: bold;
+  color: rgb(248, 99, 251);
+  font-size: xx-large;
+}
+/* bootstrap.min.css | https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css */
+
+.modal-content {
+  /* background-color: #fff; */
+  background-color: #000000ab;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.text-center {
+  /* text-align: center !important; */
+  text-align: end;
+}
+
+.close {
+  /* color: #000; */
+  color: #fff;
+}
+
+
+#editArtistaModal-1 {
+  background-color: #ffffff2e;
+}
+
+.boton {
+  display: flex;
+  justify-content: center;
+  width: 108%;
+}
+.btn-primary {
+  margin-top: 0px;
+  background-color: #30b3cf;
+  border-color: #30b3cf;
+}
+
+.btn-primary:hover {
+  margin-top: 0px;
+  background-color: #2998b1;
+  border-color: #2998b1;
+}
+.btn-primary.focus,
+.btn-primary:focus {
+  color: #fff;
+  background-color: #df6dcc;
+  border-color: #df6dcc;
+  box-shadow: 0 0 0 0.2rem rgb(239, 187, 249);
+}
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #df6dcc;
+  border-color: #df6dcc;
+}
+
+.custom-file-label {
+  background-color: none;
+  position: revert;
+}
+.custom-file-label::after {
+  /* color: #495057; */
+  background-color: transparent;
+  position: absolute;
+  color: #49505700;
+}
+
+.custom-file-label {
+  background-color: none;
+  position: revert;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-outline-secondary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-secondary.dropdown-toggle {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-outline-secondary.focus,
+.btn-outline-secondary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.botonImagen {
+  color: #df6dcc !important;
+}
+.custom-file-input {
+  position: absolute;
+  z-index: 2;
+  width: 16%;
+  height: calc(1.5em + .75rem + 2px);
+  margin: 0;
+  opacity: 0;
+}
+.img-thumbnail {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  max-width: 24%;
+  height: auto;
 }

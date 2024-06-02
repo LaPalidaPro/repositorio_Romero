@@ -1,15 +1,95 @@
-{% extends 'frontened.html.twig' %}
-
-{% block title %}Administración
+{# templates/admin/editarArtista.html.twig #}
+{% extends 'frontend.html.twig' %}
+{% block title %}
+    Editar Artista
 {% endblock %}
-
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 {% endblock %}
-
 {% block body %}
-	{% include 'nav.html.twig' %}
-
-	<h1>Editar Artista</h1>
+{% include 'nav.html.twig' %}
+    <section class="container container-admin min-vh-100 d-flex justify-content-center align-items-center text-center">
+        <div class="card shadow-sm w-100" style="max-width: 800px;">
+            <div class="card-header  text-white">
+                <h1 class="mb-0">Editando {{artista.nombre}}</h1>
+            </div>
+            <div class="card-body">
+                {% include 'mensajesFlash.html.twig' %}
+                {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'edit-artist-form' }}) }}
+                <div class="form-group">
+                    {{ form_label(form.user, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.user, {'attr': {'class': 'form-control' }}) }}
+                    {{ form_errors(form.user, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.nombre, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.nombre, {'attr': {'class': 'form-control' }}) }}
+                    {{ form_errors(form.nombre, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.anoDebut, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.anoDebut, {'attr': {'class': 'form-control' }}) }}
+                    {{ form_errors(form.anoDebut, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.paisOrigen, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.paisOrigen, {'attr': {'class': 'form-control' }}) }}
+                    {{ form_errors(form.paisOrigen, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.biografia, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {{ form_widget(form.biografia, {'attr': {'class': 'form-control' }}) }}
+                    {{ form_errors(form.biografia, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.imgArtista, null, {'label_attr': {'class': 'font-weight-bold'}}) }}
+                    {% if artista.imgArtista %}
+                        <div class="mb-3 image-edit-container text-center">
+                            <img src="{{ asset('images/grupos/' ~ artista.imgArtista) }}" alt="Imagen del Artista" id="current-img-{{ artista.id }}" class="img-thumbnail">
+                        </div>
+                    {% else %}
+                        <div class="mb-3 image-edit-container text-center">
+                            <img src="{{ asset('images/default-image.jpg') }}" alt="Imagen del Artista" id="current-img-{{ artista.id }}" class="img-thumbnail">
+                        </div>
+                    {% endif %}
+                    <div class="custom-file">
+                        {{ form_widget(form.imgArtista, {'attr': {'class': 'custom-file-input', 'id': 'imgArtista-' ~ artista.id, 'data-target': 'current-img-' ~ artista.id }}) }}
+                        <label class="custom botonImagen" for="imgArtista-{{ artista.id }}">
+                            Seleccionar Imagen
+                        </label>
+                        {{ form_errors(form.imgArtista, {'attr': {'class': 'text-danger'}}) }}
+                    </div>
+                </div>
+			<button type="submit" class="btn btn-primary  mt-3">Guardar</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.custom-file-input').forEach(function(input) {
+                input.addEventListener('change', function(event) {
+                    const targetId = event.target.getAttribute('data-target');
+                    const imgElement = document.getElementById(targetId);
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        imgElement.src = e.target.result;
+                    }
+                    
+                    if (file) {
+                        reader.readAsDataURL(file);
+                        // Actualizar etiqueta del input file con el nombre del archivo
+                        input.nextElementSibling.innerText = file.name;
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

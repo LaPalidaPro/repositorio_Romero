@@ -1,0 +1,36 @@
+/* bootstrap.min.css | https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css */
+
+.modal-content {
+    /* background-color: #fff; */
+    background-color: #000000ab;
+  }
+  
+  .modal-header {
+     border-bottom: none;
+  }
+  
+  .text-center {
+    /* text-align: center !important; */
+    text-align:end ;
+  }
+  
+  .close {
+    /* color: #000; */
+    color: #fff;
+  }
+  
+  /* Elemento | http://localhost:8000/harmonyhub/admin/gestionContenido */
+  
+  #editArtistaModal-1 {
+    background-color: #ffffff2e;
+  }
+  
+  /* Elemento | http://localhost:8000/harmonyhub/admin/gestionContenido */
+  
+  #editArtistaModalLabel-1 {
+    text-align: center !important;
+  }
+  .modal-footer {
+    border-top: transparent;
+    }
+  

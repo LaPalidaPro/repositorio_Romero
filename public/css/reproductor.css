@@ -281,3 +281,27 @@
   background: none;
   color: white;
 }
+.btn-light.focus,
+.btn-light:focus {
+  color: #212529;
+  background-color: transparent;
+  box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5);
+  color: #7f7f80;
+}
+.btn.focus,
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+}
+
+/* bootstrap.min.css | https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css */
+
+.btn-light:not(:disabled):not(.disabled).active, .btn-light:not(:disabled):not(.disabled):active, .show > .btn-light.dropdown-toggle {
+
+  color: #fff;
+}
+
+.btn-light:not(:disabled):not(.disabled).active, .btn-light:not(:disabled):not(.disabled):active, .show > .btn-light.dropdown-toggle {
+  background-color: transparent;
+  border-color: transparent;
+  }
+

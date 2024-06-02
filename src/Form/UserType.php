@@ -3,11 +3,14 @@
 namespace App\Form;
 
 use App\Entity\User;
+use PHPUnit\Framework\Test;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 
 class UserType extends AbstractType
@@ -17,7 +20,8 @@ class UserType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
-            ->add('nombre');
+            ->add('nombre', TextType::class)
+            ->add('apellidos', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,0 +1,14 @@
+.img-thumbnail {
+    max-width: 16%;
+    }
+    .table td {
+    justify-content: center;
+    text-align: center;
+    }
+    bootstrap.min.css
+    .img-thumbnail {
+    background-color: #fff;
+    }
+    .table td, .table th {
+    vertical-align: top;
+    }

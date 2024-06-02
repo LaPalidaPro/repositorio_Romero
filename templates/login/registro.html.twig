@@ -1,52 +1,69 @@
-{% extends 'frontened.html.twig' %}
+{# templates/login/registro.html.twig #}
+
+{% extends 'frontend.html.twig' %}
 
 {% block title %}
-	Login
+    Registro
 {% endblock %}
 
 {% block styles %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/registro.css') }}">
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/registro.css') }}">
 {% endblock %}
 
 {% block body %}
-	{% include 'nav.html.twig' %}
+    {% include 'nav.html.twig' %}
 
-	<div class="container">
-		<h1>Registro</h1>
-		{% if errors %}
-			<ul>
-				{% for error in errors %}
-					<li>{{ error.message }}</li>
-				{% endfor %}
-			</ul>
-		{% endif %}
-		<div class="login-form">
-			<h2>Registro</h2>
-			{{ form_start(form, {'attr': {'class': 'form'}}) }}
-			<div class="form-group">
-				<label for="nombre">Nombre</label>
-				{{ form_widget(form.nombre, {'attr': {'class': 'form-control', 'id': 'nombre'}}) }}
-			</div>
-			<div class="form-group">
-				<label for="email">Email</label>
-				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'email'}}) }}
-			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				{{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'password'}}) }}
-			</div>
-			<input type="hidden" name="token" value="{{ csrf_token('miToken') }}">
-			<div class="form-group">
-				<div class="container boton">
-					<button type="submit" class="btn btn-primary">Registrarse</button>
-				</div>
-			</div>
-			{{ form_end(form) }}
-		</div>
-	</div>
+    <div class="container">
+        <h1>Registro</h1>
+        {% include 'mensajesFlash.html.twig' %}
+        <div class="login-form">
+            <h2>Registro</h2>
+            {{ form_start(form, {'attr': {'class': 'form'}}) }}
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                {{ form_widget(form.nombre, {'attr': {'class': 'form-control', 'id': 'nombre'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                {{ form_widget(form.apellidos, {'attr': {'class': 'form-control', 'id': 'apellidos'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'id': 'email'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'id': 'password'}}) }}
+            </div>
+            <input type="hidden" name="_token" value="{{ csrf_token('miToken') }}">
+            <div class="form-group">
+                <div class="container boton">
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block custom_javascripts %}
-	{{ parent() }}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Verificar si hay mensajes de éxito
+            if ($('#flashMessageModal .alert.alert-success').length) {
+                // Mostrar el modal si hay mensajes de éxito
+                $('#flashMessageModal').modal('show');
+
+                // Redirigir al login cuando el modal se cierra
+                $('#flashMessageModal').on('hidden.bs.modal', function () {
+                    window.location.href = "{{ path('app_login') }}";
+                });
+            } else if ($('#flashMessageModal .alert').length) {
+                // Mostrar el modal si hay cualquier mensaje flash (error o éxito)
+                $('#flashMessageModal').modal('show');
+            }
+        });
+    </script>
 {% endblock %}

@@ -133,20 +133,19 @@ a {
 
 /* Estilos para el título "Canciones Destacadas" */
 .titulo-destacado {
-  margin-top: 0px;
-  font-size: 32px;
-  font-weight: bold;
-  color: #ffffff;
-  padding: 10px;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 4px 4px 5px rgb(0, 0, 0);
-  background-color: #00000063;
+  font-size: 28px;
+  padding: 20px;
+  margin-bottom: 0px;
+  background-color: #00000085;
+  display: flex;
+  justify-content: center;
 }
 
 /* Estilos para la sección de canciones destacadas */
 .featured-songs {
-  padding: 50px 0;
+  background-color: #00000078;
+  margin-top: 0px;
+  height: inherit;
 }
 
 .featured-songs h2 {
@@ -169,20 +168,6 @@ a {
 .card-text {
   font-size: 1rem;
   text-align: center;
-}
-
-.card .btn-primary {
-  color: #fff;
-  background-color: #41fcc4;
-  border-color: #01764a;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.card .btn-primary:hover {
-  background-color: #01754a;
 }
 
 .card-container {
@@ -256,7 +241,6 @@ a:hover {
   /* Cambia el color al pasar el ratón sobre las flechas */
 }
 
-
 .registro > p:nth-child(1) > a:nth-child(1) {
   display: none;
 }
@@ -267,4 +251,41 @@ a:hover {
   /* justify-content: flex-start; */
   width: 100%;
   justify-content: end;
+}
+
+/* bootstrap.min.css | https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css */
+
+.modal-content {
+  /* background-color: #fff; */
+  background-color: #000000e0;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.text-center {
+  /* text-align: center !important; */
+  text-align: end;
+}
+
+.close {
+  /* color: #000; */
+  color: #fff;
+}
+
+/* Elemento | http://localhost:8000/harmonyhub/admin/gestionContenido */
+
+#editArtistaModal-1 {
+  background-color: #ffffff2e;
+}
+
+/* Elemento | http://localhost:8000/harmonyhub/admin/gestionContenido */
+
+#editArtistaModalLabel-1 {
+  text-align: center !important;
+}
+
+.artist-info {
+  margin: 20px;
 }

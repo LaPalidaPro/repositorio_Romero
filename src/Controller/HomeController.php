@@ -70,7 +70,6 @@ class HomeController extends AbstractController
             'corazon_actual' => $corazon,
         ]);
     }
-
     #[Route('/obtener-detalles-cancion', name: 'obtener_detalles_cancion')]
     public function obtenerDetallesCancion(Request $request): JsonResponse
     {
@@ -85,7 +84,7 @@ class HomeController extends AbstractController
         $songDetails = [
             'audioSrc' => '/music/' . $cancion->getNombre(),
             'titulo' => $cancion->getTitulo(),
-            'artista' => $cancion->getArtista()->getNombre(),  // Asumiendo relación con Artista
+            'artista' => $cancion->getArtista()->getNombre(),  
         ];
 
         return new JsonResponse($songDetails);
@@ -128,14 +127,15 @@ class HomeController extends AbstractController
         $datos = [];
         foreach ($canciones as $cancion) {
             $datos[] = [
+                'id' => $cancion->getId(),
                 'titulo' => $cancion->getTitulo(),
                 'artista' => $cancion->getArtista()->getNombre(),
+                'audio_path' => '/music/' . $cancion->getTitulo()
             ];
         }
 
         return new JsonResponse($datos);
     }
-    // src/Controller/YourController.php
 
     #[Route('/harmonyhub/reproductor', name: 'app_reproductor')]
     public function reproductor(Request $request): Response

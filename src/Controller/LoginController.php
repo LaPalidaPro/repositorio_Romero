@@ -11,6 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UserType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
@@ -20,10 +21,17 @@ class LoginController extends AbstractController
         $this->em = $em;
     }
     #[Route('/harmonyhub/login', name: 'app_login')]
-    public function index(): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        
-        return $this->render('login/login.html.twig');
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // Último nombre de usuario ingresado por el usuario
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('login/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
     }
     #[Route('/harmonyhub/registro', name: 'app_registro')]
     public function registro(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): Response
@@ -31,46 +39,45 @@ class LoginController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        $submittedToken = $request->request->get('token');
+        $csrfToken = $request->request->get('_token');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($this->isCsrfTokenValid('miToken', $submittedToken)) {
-                // Validar los datos del usuario
+        if ($form->isSubmitted()) {
+            if ($this->isCsrfTokenValid('miToken', $csrfToken)) {
                 $errors = $validator->validate($user);
 
                 if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        $this->addFlash('error', $error->getMessage());
+                    }
+
                     return $this->render('login/registro.html.twig', [
                         'form' => $form->createView(),
-                        'errors' => $errors,
                     ]);
                 } else {
-                    // Hashear la contraseña
                     $user->setPassword(
                         $passwordHasher->hashPassword($user, $user->getPassword())
                     );
 
-                    // Guardar el usuario en la base de datos
                     $this->em->persist($user);
                     $this->em->flush();
+                    $this->addFlash('success', 'Registro completado con éxito.');
 
-                    // Redirigir o mostrar un mensaje de éxito
-                    return $this->redirectToRoute('app_login');
+                    return $this->redirectToRoute('app_registro');
                 }
             } else {
-                $this->addFlash('warning', 'Ocurrió un error inesperado');
+
+                $this->addFlash('error', 'Token CSRF no válido.');
+
                 return $this->redirectToRoute('app_registro');
             }
         }
 
         return $this->render('login/registro.html.twig', [
             'form' => $form->createView(),
-            'errors' => [],
         ]);
     }
-
     #[Route('/harmonyhub/logout', name: 'app_logout')]
     public function logout()
     {
-        
     }
 }

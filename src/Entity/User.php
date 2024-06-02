@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -61,6 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 500)]
     private ?string $sid = null;
 
+    /**
+     * @var Collection<int, Artista>
+     */
+    #[ORM\OneToMany(targetEntity: Artista::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $artistas;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +84,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+    public function __construct()
+    {
+        $this->fechaRegistro = new \DateTime(); // Asignar la fecha actual al crear la entidad
+        $this->sid = bin2hex(random_bytes(16)); // Generar un valor por defecto para 'sid'
+        $this->roles = ['ROLE_USER']; // Asignar el rol por defecto
+        $this->artistas = new ArrayCollection();
     }
 
     /**
@@ -96,8 +111,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // Garantizar que todos los usuarios tengan al menos el rol ROLE_USER
+        if (!in_array('ROLE_USER', $roles, true)) {
+            $roles[] = 'ROLE_USER';
+        }
 
         return array_unique($roles);
     }
@@ -192,6 +209,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSid(string $sid): static
     {
         $this->sid = $sid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artista>
+     */
+    public function getArtistas(): Collection
+    {
+        return $this->artistas;
+    }
+
+    public function addArtista(Artista $artista): static
+    {
+        if (!$this->artistas->contains($artista)) {
+            $this->artistas->add($artista);
+            $artista->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtista(Artista $artista): static
+    {
+        if ($this->artistas->removeElement($artista)) {
+            // set the owning side to null (unless already changed)
+            if ($artista->getUser() === $this) {
+                $artista->setUser(null);
+            }
+        }
 
         return $this;
     }

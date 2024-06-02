@@ -11,10 +11,14 @@
 			class="collapse navbar-collapse justify-content-between" id="navbarNav">
 			<!-- Barra de búsqueda -->
 			<div class="container login">
-				<p><a href="{{ path('app_login') }}">Login</a></p>
+				<p>
+					<a href="{{ path('app_login') }}">Login</a>
+				</p>
 			</div>
 			<div class="container registro">
-				<p><a href="{{ path('app_registro') }}">Regístrate</a></p>
+				<p>
+					<a href="{{ path('app_registro') }}">Regístrate</a>
+				</p>
 			</div>
 			<form id="search-form" class="form-inline my-2 my-lg-0 ml-auto" method="GET">
 				<input class="form-control mr-sm-2" type="search" name="query" id="search-input" placeholder="Buscar..." aria-label="Buscar" required>
@@ -73,43 +77,37 @@ location.reload();
 });
 
 document.getElementById('search-form').addEventListener('submit', function (event) {
-event.preventDefault();
-const query = document.getElementById('search-input').value;
+    event.preventDefault();
+    const query = document.getElementById('search-input').value;
 
-fetch('/buscarCancion?query=' + encodeURIComponent(query)).then(response => response.json()).then(data => {
-const resultsContainer = document.getElementById('contenedorCanciones');
-resultsContainer.innerHTML = '';
+    fetch('/buscarCancion?query=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            const resultsContainer = document.getElementById('contenedorCanciones');
+            resultsContainer.innerHTML = '';
 
-if (data.length > 0) {
-data.forEach(cancion => {
-const col = document.createElement('div');
-col.className = 'col-md-3';
-col.innerHTML = `
-                            <div class="cardBtn">
-                                <div class="card" onclick="abrirReproductor(this)" data-audio-src="/music/${
-cancion.titulo
-}" data-cancion="${
-cancion.titulo
-}" data-artista="${
-cancion.artista
-}">
-                                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${
-cancion.titulo
-}</h5>
-                                        <p class="card-text">${
-cancion.artista
-}</p>
-                                    </div>
+            if (data.length > 0) {
+                data.forEach(cancion => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-3';
+                    col.innerHTML = `
+                        <div class="cardBtn">
+                            <div class="card" onclick="abrirReproductor(this)" data-audio-src="/music/${cancion.titulo}" data-cancion="${cancion.titulo}" data-artista="${cancion.artista} data-id="${ cancion.id }">
+                                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
+                                <div class="card-body">
+                                    <h5 class="card-title">${cancion.titulo}</h5>
+                                    <p class="card-text">${cancion.artista}</p>
                                 </div>
                             </div>
-                        `;
-resultsContainer.appendChild(col);
+                        </div>
+                    `;
+                    resultsContainer.appendChild(col);
+                });
+            } else {
+                resultsContainer.innerHTML = '<p>No se encontraron resultados</p>';
+            }
+        })
+        .catch(error => console.error('Error:', error));
 });
-} else {
-resultsContainer.innerHTML = '<p>No se encontraron resultados</p>';
-}
-});
-});
+
 </script>

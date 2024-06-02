@@ -33,6 +33,10 @@ class Artista
 
     #[ORM\OneToMany(mappedBy: 'artista', targetEntity: Album::class, cascade: ['remove'])]
     private Collection $albums;
+
+    #[ORM\ManyToOne(inversedBy: 'artistas')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
     public function __construct()
     {
         $this->albums = new ArrayCollection();
@@ -135,6 +139,18 @@ class Artista
                 $album->setArtista(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

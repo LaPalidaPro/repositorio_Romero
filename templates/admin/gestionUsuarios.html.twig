@@ -1,0 +1,105 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}Administración
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+	
+
+	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+    <h1>Gestión de Usuarios</h1>
+
+		{% include 'mensajesFlash.html.twig' %}
+
+		<div class="container">
+			<form id="searchForm" class="input-group mb-3">
+				<input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de usuario...">
+				<button type="submit" class="btn btn-outline-secondary">
+					<i class="fas fa-search lupa"></i>
+				</button>
+			</form>
+		</div>
+
+		<div class="table-responsive">
+		<div class="d-flex justify-content-between align-items-center mb-2">
+                            <caption>
+                                <h2 class="caption">
+								Usuarios
+                                </h2>
+                            </caption>
+                            <a href="{{ path('app_crearArtista') }}" class="btn btn-primary">
+                                <i class="fa-solid fa-plus"></i>
+                                Crear Usuario
+                            </a>
+                        </div>
+			<table class="table table-bordered table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Apellidos</th>
+						<th>Email</th>
+						<th>Fecha Registro</th>
+						<th>Foto</th>
+						<th>Sid</th>
+						<th>Roles</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dato in datos %}
+						<tr>
+							<td>{{dato.id}}</td>
+							<td>{{dato.nombre}}</td>
+							<td>{{dato.apellidos}}</td>
+							<td>{{dato.email}}</td>
+							<td>{{dato.fechaRegistro|date('Y')}}</td>
+							<td>{{dato.foto}}</td>
+							<td>{{dato.sid}}</td>
+							<td>
+								{% for rol in dato.roles %}
+							{{ rol }}{% if not loop.last %}, {% endif %}
+						{% endfor %}
+							</td>
+							<td>
+								<a href="{{ path('app_editarArtista', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-regular fa-pen-to-square"></i>
+									</button>
+								</a>
+								<form action="{{ path('app_borrarArtista', {'id': dato.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dato.id) }}">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
+
+	<script>
+		$(document).ready(function () {
+$('#searchForm').submit(function (event) {
+event.preventDefault();
+var searchText = $('#searchInput').val().toLowerCase();
+$('table tbody tr').each(function () {
+var artistName = $(this).find('td:eq(1)').text().toLowerCase();
+if (artistName.indexOf(searchText) === -1) {
+$(this).hide();
+} else {
+$(this).show();
+}
+});
+});
+});
+	</script>
+{% endblock %}

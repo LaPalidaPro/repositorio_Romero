@@ -42,6 +42,11 @@ class Album
     #[ORM\OneToMany(mappedBy: 'album', targetEntity: Cancion::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $canciones;
 
+    public function __construct()
+    {
+        $this->canciones = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -142,11 +147,21 @@ class Album
         return $this->canciones;
     }
 
+    public function calculateDuracionTotal(): void
+    {
+        $totalDuration = 0;
+        foreach ($this->canciones as $cancion) {
+            $totalDuration += $cancion->getDuracion();
+        }
+        $this->duracionTotal = $totalDuration;
+    }
+
     public function addCancion(Cancion $cancion): self
     {
         if (!$this->canciones->contains($cancion)) {
             $this->canciones[] = $cancion;
             $cancion->setAlbum($this);
+            $this->calculateDuracionTotal();
         }
 
         return $this;
@@ -155,9 +170,10 @@ class Album
     public function removeCancion(Cancion $cancion): self
     {
         if ($this->canciones->removeElement($cancion)) {
-            // Set the owning side to null (unless already changed)
+            // set the owning side to null (unless already changed)
             if ($cancion->getAlbum() === $this) {
                 $cancion->setAlbum(null);
+                $this->calculateDuracionTotal();
             }
         }
 
