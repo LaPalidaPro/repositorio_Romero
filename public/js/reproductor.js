@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const pauseBtn = document.getElementById("pauseBtn");
   const seekSlider = document.getElementById("seekSlider");
   const volumeSlider = document.getElementById("volumeSlider");
-  const volumeIcon = document.getElementById("volumeIcon");
+  const volumenIcono = document.getElementById("volumenIcono");
   const currentTime = document.getElementById("currentTime");
   const totalTime = document.getElementById("totalTime");
   const heartIcon = document.getElementById("heart-icon");
@@ -13,16 +13,36 @@ document.addEventListener("DOMContentLoaded", function () {
   const songCards = document.querySelectorAll(".cardBtn .card");
   const songTitle = document.getElementById("songTitle");
   const artistName = document.getElementById("artistName");
-  const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
+  const enlaceDetallesCancion = document.getElementById(
+    "enlaceDetallesCancion"
+  );
   let currentSongId = null;
 
-  if (!audio || !playBtn || !pauseBtn || !seekSlider || !volumeSlider || !volumeIcon || !currentTime || !totalTime || !heartIcon || !btnBackward || !btnForward || !songCards.length || !songTitle || !artistName || !enlaceDetallesCancion) {
+  if (
+    !audio ||
+    !playBtn ||
+    !pauseBtn ||
+    !seekSlider ||
+    !volumeSlider ||
+    !volumenIcono ||
+    !currentTime ||
+    !totalTime ||
+    !heartIcon ||
+    !btnBackward ||
+    !btnForward ||
+    !songCards.length ||
+    !songTitle ||
+    !artistName ||
+    !enlaceDetallesCancion
+  ) {
     console.error("Algunos elementos del DOM no fueron encontrados");
     return;
   }
 
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute('content') : null;
+  const csrfToken = csrfTokenElement
+    ? csrfTokenElement.getAttribute("content")
+    : null;
 
   if (!csrfToken) {
     console.error("Token CSRF no encontrado");
@@ -39,12 +59,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Funciones para manejar el botón de play/pause
   playBtn.addEventListener("click", function () {
-    audio.play().then(() => {
-      playBtn.style.display = "none";
-      pauseBtn.style.display = "block";
-    }).catch(error => {
-      console.error("Error al intentar reproducir el audio:", error);
-    });
+    audio
+      .play()
+      .then(() => {
+        playBtn.style.display = "none";
+        pauseBtn.style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error al intentar reproducir el audio:", error);
+      });
   });
 
   pauseBtn.addEventListener("click", function () {
@@ -80,21 +103,25 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Alternar la visibilidad de la barra de volumen
-  volumeIcon.addEventListener("click", function () {
+  volumenIcono.addEventListener("click", function () {
     alternarBarraSonido();
   });
 
   function alternarBarraSonido() {
-    volumeSlider.style.display = volumeSlider.style.display === "none" || volumeSlider.style.display === "" ? "block" : "none";
+    if (volumeSlider.style.display === "none") {
+      volumeSlider.style.display = "block";
+    } else {
+      volumeSlider.style.display = "none";
+    }
   }
 
   function actualizarIconoVolumen(volumen) {
     if (volumen === 0) {
-      volumeIcon.className = "fas fa-volume-mute";
+      volumenIcono.className = "fas fa-volume-mute";
     } else if (volumen <= 0.5) {
-      volumeIcon.className = "fas fa-volume-down";
+      volumenIcono.className = "fas fa-volume-down";
     } else {
-      volumeIcon.className = "fas fa-volume-up";
+      volumenIcono.className = "fas fa-volume-up";
     }
   }
 
@@ -104,8 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentSecs = Math.floor(audio.currentTime % 60);
     const durationMins = Math.floor(audio.duration / 60);
     const durationSecs = Math.floor(audio.duration % 60);
-    currentTime.innerHTML = `${currentMins}:${currentSecs < 10 ? "0" : ""}${currentSecs}`;
-    totalTime.innerHTML = `${durationMins}:${durationSecs < 10 ? "0" : ""}${durationSecs}`;
+    currentTime.innerHTML = `${currentMins}:${
+      currentSecs < 10 ? "0" : ""
+    }${currentSecs}`;
+    totalTime.innerHTML = `${durationMins}:${
+      durationSecs < 10 ? "0" : ""
+    }${durationSecs}`;
     seekSlider.value = (audio.currentTime / audio.duration) * 100;
     actualizarEnlaceDetallesCancion();
   };
@@ -129,30 +160,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     heartIcon.setAttribute("data-clicked", "true"); // Marcar como clicado
 
-    toggleFavorito(currentSongId).then(response => {
-      heartIcon.setAttribute("data-clicked", "false"); // Desmarcar después de la respuesta
-      if (response.status === 'added') {
-        actualizarIconoFavorito(true);
-        actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, true);
-        mostrarMensaje("Canción añadida a tu lista de favoritos", heartIcon);
-      } else if (response.status === 'removed') {
-        actualizarIconoFavorito(false);
-        actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, false);
-        mostrarMensaje("Canción eliminada de tu lista de favoritos", heartIcon);
-      } else if (response.status === 'error' && response.redirect) {
-        window.location.href = response.redirect;
-      }
-      actualizarEnlaceDetallesCancion();
-    }).catch(error => {
-      heartIcon.setAttribute("data-clicked", "false"); // Desmarcar en caso de error
-      console.error("Error al cambiar el estado de favorito:", error);
-    });
+    toggleFavorito(currentSongId)
+      .then((response) => {
+        heartIcon.setAttribute("data-clicked", "false"); // Desmarcar después de la respuesta
+        if (response.status === "added") {
+          actualizarIconoFavorito(true);
+          actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, true);
+          mostrarMensaje("Canción añadida a tu lista de favoritos", heartIcon);
+        } else if (response.status === "removed") {
+          actualizarIconoFavorito(false);
+          actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, false);
+          mostrarMensaje(
+            "Canción eliminada de tu lista de favoritos",
+            heartIcon
+          );
+        } else if (response.status === "error" && response.redirect) {
+          window.location.href = response.redirect;
+        }
+        actualizarEnlaceDetallesCancion();
+      })
+      .catch((error) => {
+        heartIcon.setAttribute("data-clicked", "false"); // Desmarcar en caso de error
+        console.error("Error al cambiar el estado de favorito:", error);
+      });
   });
 
   function actualizarIconoFavoritoEnTodasLasInstancias(songId, esFavorito) {
-    songCards.forEach(card => {
+    songCards.forEach((card) => {
       if (card.getAttribute("data-id") === songId) {
-        card.setAttribute("data-favorito", esFavorito ? 'true' : 'false');
+        card.setAttribute("data-favorito", esFavorito ? "true" : "false");
         const iconoCard = card.querySelector(".fa-heart");
         if (iconoCard) {
           if (esFavorito) {
@@ -169,26 +205,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function toggleFavorito(cancionId) {
     return fetch(`/favoritos/toggle/${cancionId}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-Token': csrfToken
-      }
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-Token": csrfToken,
+      },
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      console.error('Error al intentar cambiar el estado de favorito:', error);
-      return { status: 'error' };
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        console.error(
+          "Error al intentar cambiar el estado de favorito:",
+          error
+        );
+        return { status: "error" };
+      });
   }
 
   function mostrarMensaje(mensaje, elemento) {
@@ -226,16 +265,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const songTitleText = card.querySelector(".card-title").textContent;
       const artistNameText = card.querySelector(".card-text").textContent;
       const songId = card.getAttribute("data-id");
-      const esFavorito = card.getAttribute("data-favorito") === 'true';
+      const esFavorito = card.getAttribute("data-favorito") === "true";
 
       if (songSrc) {
         audio.src = songSrc;
-        audio.play().then(() => {
-          playBtn.style.display = "none";
-          pauseBtn.style.display = "block";
-        }).catch(error => {
-          console.error("Error al intentar reproducir el audio:", error);
-        });
+        audio
+          .play()
+          .then(() => {
+            playBtn.style.display = "none";
+            pauseBtn.style.display = "block";
+          })
+          .catch((error) => {
+            console.error("Error al intentar reproducir el audio:", error);
+          });
 
         const cleanTitle = songTitleText.replace(/\.[^/.]+$/, "");
         songTitle.textContent = cleanTitle;
@@ -254,7 +296,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function actualizarEnlaceDetallesCancion() {
     if (currentSongId) {
       const isHearted = heartIcon.querySelector("i").classList.contains("fas");
-      enlaceDetallesCancion.href = `/harmonyhub/cancion/${currentSongId}?tiempo=${audio.currentTime}&volumen=${audio.volume}&corazon=${isHearted ? 1 : 0}`;
+      enlaceDetallesCancion.href = `/harmonyhub/cancion/${currentSongId}?tiempo=${
+        audio.currentTime
+      }&volumen=${audio.volume}&corazon=${isHearted ? 1 : 0}`;
     }
   }
 
