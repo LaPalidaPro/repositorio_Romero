@@ -69,6 +69,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Artista::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $artistas;
 
+    /**
+     * @var Collection<int, Favorito>
+     */
+    #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'usuario')]
+    private Collection $favoritos;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sid = bin2hex(random_bytes(16)); // Generar un valor por defecto para 'sid'
         $this->roles = ['ROLE_USER']; // Asignar el rol por defecto
         $this->artistas = new ArrayCollection();
+        $this->favoritos = new ArrayCollection();
     }
 
     /**
@@ -242,4 +250,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Favorito>
+     */
+    public function getFavoritos(): Collection
+    {
+        return $this->favoritos;
+    }
+
+    public function addFavorito(Favorito $favorito): static
+    {
+        if (!$this->favoritos->contains($favorito)) {
+            $this->favoritos->add($favorito);
+            $favorito->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorito(Favorito $favorito): static
+    {
+        if ($this->favoritos->removeElement($favorito)) {
+            // set the owning side to null (unless already changed)
+            if ($favorito->getUsuario() === $this) {
+                $favorito->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

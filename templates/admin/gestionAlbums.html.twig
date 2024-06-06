@@ -1,101 +1,135 @@
 {% extends 'frontend.html.twig' %}
-
-{% block title %}Administración
+{% block title %}
+	Administración
 {% endblock %}
-
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/tabla.css') }}">
-
-	
-{% endblock %}
-
-{% block body %}
-	{% include 'nav.html.twig' %}
-
-	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item">
-				<a href="{{path('app_gestionContenido')}}">Gestión de Artistas</a>
-			</li>
-			<li class="breadcrumb-item active" aria-current="page">Gestión de Albums</li>
-		</ol>
-	</nav>
-		<h1>Gestión de albums
-			{{artista.nombre}}</h1>
-		<div class="container">
-			<form id="searchForm" class="input-group mb-3">
-				<input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de album...">
-				<button type="submit" class="btn btn-outline-secondary">
-					<i class="fas fa-search lupa"></i>
-				</button>
-			</form>
-		</div>
-
-		<div class="table-responsive">
-		<div class="d-flex justify-content-between align-items-center mb-2">
-                            <caption>
-                                <h2 class="caption">
-                                    Albums
-                                </h2>
-                            </caption>
-                            <a href="{{path('app_crearAlbum')}}" class="btn btn-primary">
-                                <i class="fa-solid fa-plus"></i>
-                                Crear Album
-                            </a>
-                        </div>
-			<table class="table table-bordered table-striped table-hover">
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Nombre del Album</th>
-						<th scope="col">Artista</th>
-						<th scope="col">Fecha Lanzamiento</th>
-						<th scope="col">Número de Pistas</th>
-						<th scope="col">Duración Total</th>
-						<th scope="col">Género Musical</th>
-						<th scope="col">Foto de Portada</th>
-						<th scope="col">Acciones</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for album in albumes %}
-						<tr>
-							<td>{{ album.id }}</td>
-							<td>{{ album.nombre }}</td>
-							<td>{{ album.artista.nombre }}</td>
-							<td>{{ album.fechaLanzamiento|date('Y-m-d') }}</td>
-							<td>{{ album.numPistas }}</td>
-							<td>{{ album.duracionTotal }}</td>
-								<td>
-									{% for genero in album.generosMusicales %}
-										{{ genero }}{% if not loop.last %}, {% endif %}
-									{% endfor %}
-								</td>
-							<td><img src="{{ asset('images/grupos/' ~ album.fotoPortada) }}" class="img-thumbnail" alt="Imagen del Álbum"></td>
-
-							<td>
-								<a href="">
-									<button type="button" class="btn btn-outline-secondary">
-										<i class="fa-regular fa-pen-to-square"></i>
-									</button>
-								</a>
-								<a href="">
-									<button type="button" class="btn btn-outline-secondary">
-										<i class="fa-solid fa-trash"></i>
-									</button>
-								</a>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</section>
-
-	<script>
+	<link	rel="stylesheet"	href="{{ asset('css/admin.css') }}">
+		<link	rel="stylesheet"	href="{{ asset('css/tabla.css') }}">
+		{% endblock %}
+		{% block body %}
+			{% include 'nav.html.twig' %}
+			<section	class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+				<nav	aria-label="breadcrumb">
+					<ol	class="breadcrumb">
+						<li	class="breadcrumb-item">
+							<a	href="{{ path('app_gestionContenido') }}">
+								Gestión de Artistas
+							</a>
+						</li>
+						<li	class="breadcrumb-item active"	aria-current="page">
+							Gestión de Albums
+						</li>
+					</ol>
+				</nav>
+				<h1>
+					Gestión de albums
+					{{ artista.nombre }}
+				</h1>
+				{% include 'mensajesFlash.html.twig' %}
+				<div	class="container">
+					<form	id="searchForm"	class="input-group mb-3">
+						<input	type="text"	id="searchInput"	class="form-control"	placeholder="Buscar por nombre de album...">
+							<button	type="submit"	class="btn btn-outline-secondary">
+								<i	class="fas fa-search lupa"></i>
+							</button>
+						</form>
+					</div>
+					<div	class="table-responsive">
+						<div	class="d-flex justify-content-between align-items-center mb-2">
+							<caption>
+								<h2	class="caption">
+									Albums
+								</h2>
+							</caption>
+							<a	href="{{ path('app_crearAlbum') }}"	class="btn btn-primary">
+								<i	class="fa-solid fa-plus"></i>
+								Crear Album
+							</a>
+						</div>
+						<table	class="table table-bordered table-striped table-hover">
+							<thead>
+								<tr>
+									<th	scope="col">
+										ID
+									</th>
+									<th	scope="col">
+										Nombre del Album
+									</th>
+									<th	scope="col">
+										Artista
+									</th>
+									<th	scope="col">
+										Fecha Lanzamiento
+									</th>
+									<th	scope="col">
+										Número de Pistas
+									</th>
+									<th	scope="col">
+										Duración Total
+									</th>
+									<th	scope="col">
+										Género Musical
+									</th>
+									<th	scope="col">
+										Foto de Portada
+									</th>
+									<th	scope="col">
+										Acciones
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for album in albumes %}
+									<tr>
+										<td>
+											{{ album.id }}
+										</td>
+										<td>
+											{{ album.nombre }}
+										</td>
+										<td>
+											{{ album.artista.nombre }}
+										</td>
+										<td>
+											{{ album.fechaLanzamiento|date('Y-m-d') }}
+										</td>
+										<td>
+											{{ album.numPistas }}
+										</td>
+										<td>
+											{{ album.duracionTotal }}
+										</td>
+										<td>
+											{% for genero in album.generosMusicales %}
+												{{ genero }}
+												{% if not loop.last %}
+													,
+												{% endif %}
+											{% endfor %}
+										</td>
+										<td>
+											<img	src="{{ asset('images/grupos/' ~ album.fotoPortada) }}"	class="img-thumbnail"	alt="Imagen del Álbum"></td>
+											<td>
+												<a href="{{ path('app_editarAlbum', {'id': album.id}) }}">
+													<button	type="button"	class="btn btn-outline-secondary">
+														<i	class="fa-regular fa-pen-to-square"></i>
+													</button>
+												</a>
+												<form	action="{{ path('app_eliminarAlbum', {'id': album.id}) }}"	method="post"	style="display:inline;">
+													<input	type="hidden"	name="_token"	value="{{ csrf_token('delete' ~ album.id) }}">
+														<button	type="submit"	class="btn btn-outline-secondary"	onclick="return confirm('¿Estás seguro de que deseas eliminar este álbum?');">
+															<i	class="fa-solid fa-trash"></i>
+														</button>
+													</form>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</section>
+						<script>
 		$(document).ready(function () {
 $('#searchForm').submit(function (event) {
 event.preventDefault();
@@ -111,4 +145,5 @@ $(this).show();
 });
 });
 	</script>
-{% endblock %}
+					{% endblock %}
+					

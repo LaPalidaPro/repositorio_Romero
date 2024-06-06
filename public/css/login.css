@@ -18,7 +18,7 @@ li.nav-item:nth-child(1) > a:nth-child(1) {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-  height: 100%;
+  height: auto;
 }
 .login-form {
   max-width: 376px;

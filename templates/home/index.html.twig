@@ -6,12 +6,10 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
 <link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
-
 {% endblock %}
 
 {% block body %}
     {% include 'nav.html.twig' %}
-    <!-- Sección del héroe con carrusel -->
     <section class="hero">
         <div class="container">
             <div class="row align-items-center">
@@ -45,14 +43,13 @@
     </section>
 
     <h1 class="titulo-destacado">{{ 'highlighted_songs'|trans }}</h1>
-    <!-- Sección de canciones destacadas -->
-    <section class="featured-songs">
-        <div class="container" style="padding: 100px;padding-top: 0px;">
+    <section class="featured-songs container-fluid">
+        <div class="container" style="padding: 100px; padding-top: 0;">
             <div class="row" id="contenedorCanciones">
                 {% for cancion in datosCanciones %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 mb-4">
                         <div class="cardBtn">
-                            <div class="card" onclick="abrirReproductor(this)" data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" data-cancion="{{ cancion.titulo }}" data-artista="{{ cancion.artista.nombre }}" data-id="{{ cancion.id }}">
+                            <div class="card" onclick="abrirReproductor(this)" data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" data-cancion="{{ cancion.titulo }}" data-artista="{{ cancion.artista.nombre }}" data-id="{{ cancion.id }}" data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
                                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ cancion.titulo }}</h5>
@@ -62,34 +59,31 @@
                         </div>
                     </div>
                 {% endfor %}
+                <div class="pagination-container d-flex justify-content-center mt-4 w-100">
+                    {% if paginaActual > 1 %}
+                        <a href="{{ path('app_home', {'pagina': paginaActual - 1}) }}" class="btn-flecha">
+                            <p><i class="fas fa-chevron-left"></i> Anterior</p>
+                        </a>
+                    {% endif %}
+                    {% if paginaActual < totalPaginas %}
+                        <a href="{{ path('app_home', {'pagina': paginaActual + 1}) }}" class="btn-flecha">
+                            <p style="margin-left: 20px;">Siguiente <i class="fas fa-chevron-right"></i></p>
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-
-            <div class="pagination-container d-flex justify-content-center mt-4">
-                {% if paginaActual > 1 %}
-                    <a href="{{ path('app_home', {'pagina': paginaActual - 1}) }}" class="btn-flecha">
-                        <p>Anterior <i class="fas fa-chevron-left"></i></p>
-                    </a>
-                {% endif %}
-                {% if paginaActual < totalPaginas %}
-                    <a href="{{ path('app_home', {'pagina': paginaActual + 1}) }}" class="btn-flecha">
-                        <p>Siguiente <i class="fas fa-chevron-right"></i></p>
-                    </a>
-                {% endif %}
-            </div>
-
         </div>
     </section>
 
-    <!-- Reproductor de audio -->
     {% include 'reproductor.html.twig' with {
         cancion: cancion_actual,
         tiempo: tiempo_actual,
         volumen: volumen_actual,
         corazon: corazon_actual
     } only %}
+{% endblock %}
 
 {% block custom_javascripts %}
     <script src="{{ asset('js/frontal.js') }}"></script>
     <script src="{{ asset('js/reproductor.js') }}"></script>
-{% endblock %}
 {% endblock %}

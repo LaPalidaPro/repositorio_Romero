@@ -27,7 +27,7 @@ class Album
     #[ORM\Column]
     private ?int $numPistas = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 50, scale: 0)]
+    #[ORM\Column(type: Types::STRING, precision: 50, scale: 0)]
     private ?string $duracionTotal = null;
 
     #[ORM\Column(type: 'json')]
@@ -151,17 +151,31 @@ class Album
     {
         $totalDuration = 0;
         foreach ($this->canciones as $cancion) {
-            $totalDuration += $cancion->getDuracion();
+            list($hours, $minutes, $seconds) = sscanf($cancion->getDuracion(), "%d:%d:%d");
+            $totalDuration += $hours * 3600 + $minutes * 60 + $seconds;
         }
-        $this->duracionTotal = $totalDuration;
+        
+        $this->duracionTotal = $this->formatDuration($totalDuration);
+        print_r($this->duracionTotal."formateada");
+    }
+
+    private function formatDuration($seconds): string
+    {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $seconds = $seconds % 60;
+
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
 
     public function addCancion(Cancion $cancion): self
     {
+        print($cancion->getTitulo());
         if (!$this->canciones->contains($cancion)) {
             $this->canciones[] = $cancion;
             $cancion->setAlbum($this);
             $this->calculateDuracionTotal();
+            dump($this->canciones);
         }
 
         return $this;

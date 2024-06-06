@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const volumeIcon = elements["volumeIcon"];
     const volumeSlider = elements["volumeSlider"];
 
+    const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute('content') : null;
+
+    if (!csrfToken) {
+        console.error("Token CSRF no encontrado");
+        return;
+    }
+
     // Función para actualizar el icono del volumen
     function actualizarIconoVolumen(volumen) {
         if (volumen === 0) {
@@ -62,17 +70,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const playClick = () => {
-        audio.play().then(() => {
+            audio.play().then(() => {
             console.log("Audio reproducido.");
             playBtn.style.display = "none";
             pauseBtn.style.display = "block";
-        }).catch(error => {
-            console.error("Error al intentar reproducir el audio:", error);
-        });
+            }).catch(error => {
+                console.error("Error al intentar reproducir el audio:", error);
+            });
     };
 
     const pauseClick = () => {
-        audio.pause();
+            audio.pause();
         pauseBtn.style.display = "none";
         playBtn.style.display = "block";
     };
@@ -118,6 +126,49 @@ document.addEventListener('DOMContentLoaded', function () {
     audio.onerror = function (e) {
         console.error("Error al intentar reproducir el audio:", e);
     };
+
+    // Función para mostrar mensaje emergente
+    function mostrarMensaje(mensaje, elemento) {
+        const mensajeElemento = document.createElement("div");
+        mensajeElemento.className = "mensaje-emergente";
+        mensajeElemento.innerText = mensaje;
+
+        const rect = elemento.getBoundingClientRect();
+        mensajeElemento.style.position = "absolute";
+        mensajeElemento.style.left = `${rect.left + window.scrollX}px`;
+        mensajeElemento.style.top = `${rect.top + window.scrollY - 30}px`;
+
+        document.body.appendChild(mensajeElemento);
+
+        setTimeout(() => {
+            mensajeElemento.remove();
+        }, 3000);
+    }
+
+    // Función para alternar favorito
+    function toggleFavorito(cancionId) {
+        return fetch(`/favoritos/toggle/${cancionId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': csrfToken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.error('Error al intentar cambiar el estado de favorito:', error);
+            return { status: 'error' };
+        });
+    }
 
     // Cambiar el icono del corazón
     heartIconEmpty.addEventListener("click", function (event) {

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CancionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,7 +27,7 @@ class Cancion
     #[ORM\Column(length: 255)]
     private ?string $titulo = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(type: Types::STRING, precision: 10, scale: 0)]
     private ?string $duracion = null;
 
     #[ORM\Column(length: 255)]
@@ -36,6 +38,17 @@ class Cancion
 
     #[ORM\Column]
     private ?int $numeroReproducciones = null;
+
+    /**
+     * @var Collection<int, Favorito>
+     */
+    #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'cancion')]
+    private Collection $favoritos;
+
+    public function __construct()
+    {
+        $this->favoritos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -128,6 +141,36 @@ class Cancion
     public function setNumeroReproducciones(int $numeroReproducciones): static
     {
         $this->numeroReproducciones = $numeroReproducciones;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorito>
+     */
+    public function getFavoritos(): Collection
+    {
+        return $this->favoritos;
+    }
+
+    public function addFavorito(Favorito $favorito): static
+    {
+        if (!$this->favoritos->contains($favorito)) {
+            $this->favoritos->add($favorito);
+            $favorito->setCancion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorito(Favorito $favorito): static
+    {
+        if ($this->favoritos->removeElement($favorito)) {
+            // set the owning side to null (unless already changed)
+            if ($favorito->getCancion() === $this) {
+                $favorito->setCancion(null);
+            }
+        }
 
         return $this;
     }

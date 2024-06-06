@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="csrf-token" content="{{ csrf_token('favorito') }}">
 		<link rel="icon" href="{{asset('images/HHLogo.png')}}">
 		<link rel="icon" href="{{asset('images/HH_logoNegro.png')}}">
 		<title>HarmonyHub-
@@ -20,29 +21,28 @@
 
 	</head>
 	<body>
-		{% block nav %}{% endblock %}
-		{% block body %}{% endblock %}
-		{% block footer %}
-			<footer class="pie">
-				<div class="container text-center">
-					<p>&copy; 2023 HarmonyHub.
-						{{ 'all_rights_reserved'|trans }}.</p>
-					<p>{{ 'created_by'|trans }}.</p>
-					<ul class="list-inline">
-						<li class="list-inline-item">
-							<a href="/">{{ 'home'|trans }}</a>
-						</li>
-						<li class="list-inline-item">
-							<a href="/about">{{ 'about'|trans }}</a>
-						</li>
-						<li class="list-inline-item">
-							<a href="/contact">{{ 'contact'|trans }}</a>
-						</li>
-					</ul>
-				</div>
-			</footer>
-		{% endblock %}
-	</body>
+    {% block nav %}{% endblock %}
+    {% block body %}{% endblock %}
+    {% block footer %}
+        <footer class="pie">
+            <div class="container text-center">
+                <p>&copy; 2023 HarmonyHub. {{ 'all_rights_reserved'|trans }}.</p>
+                <p>{{ 'created_by'|trans }}.</p>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="/">{{ 'home'|trans }}</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="/sobremi">{{ 'about_me'|trans }}</a>
+                    </li>
+					<li class="list-inline-item">
+                        <a href="https://www.linkedin.com/in/celia-romero-punz%C3%B3n-22a0a1194/"><i class="fa-brands fa-linkedin"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
+    {% endblock %}
+</body>
 
 	{% block javascripts %}
 		<!-- Incluye tus enlaces JavaScript aquí -->

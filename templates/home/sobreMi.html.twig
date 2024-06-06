@@ -1,0 +1,29 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}Sobre mí{% endblock %}
+{% block styles %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
+
+{% endblock %}
+
+{% block body %}
+{% include 'nav.html.twig' %}
+    <section class="container min-vh-100 d-flex flex-column justify-content-center align-items-center text-center" style="background-color: #00000091;margin-top: 70px;">
+        <h1 class="mb-4">Sobre mí</h1>
+        <div>
+            <img src="{{ image_path }}" alt="Mi Foto" class="img-thumbnail mb-4" style="max-width: 200px;">
+        </div>
+        <div class="card mb-4" style="max-width: 800px;">
+            <div class="card-body">
+                <h2 class="card-title">Carta de Presentación</h2>
+                <p class="card-text">
+                    {{ carta_presentacion }}
+                </p>
+            </div>
+        </div>
+        <div>
+            <a href="{{ cv_path }}" class="btn btn-primary" download>Descargar Curriculum Vitae</a>
+        </div>
+    </section>
+{% endblock %}
