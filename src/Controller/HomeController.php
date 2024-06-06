@@ -216,7 +216,7 @@ class HomeController extends AbstractController
 
         $esFavorito = $favorito ? 1 : 0;
 
-        return $this->render('home/cancion.html.twig', [
+        return $this->render('home/detalleCancion.html.twig', [
             'cancion' => $cancion,
             'tiempo' => $request->query->get('tiempo', 0),
             'volumen' => $request->query->get('volumen', 1),
