@@ -15,10 +15,21 @@ document.addEventListener("DOMContentLoaded", function() {
                         alert(data.error);
                     } else if (data.html) {
                         contenedorCanciones.innerHTML = data.html;
+                        attachCardEventListeners();
                     }
                 })
                 .catch(error => console.error('Error:', error));
         });
     }
-});
 
+    function attachCardEventListeners() {
+        const cards = document.querySelectorAll(".cardBtn .card");
+        cards.forEach(card => {
+            card.addEventListener("click", function() {
+                abrirReproductor(this);
+            });
+        });
+    }
+
+    attachCardEventListeners();
+});
