@@ -20,6 +20,14 @@ class CancionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Cancion::class);
     }
+    public function findByNombre($nombre)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.titulo LIKE :nombre')
+            ->setParameter('nombre', '%' . $nombre . '%')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Cancion[] Returns an array of Cancion objects

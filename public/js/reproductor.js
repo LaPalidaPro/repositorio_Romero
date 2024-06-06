@@ -13,9 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const songCards = document.querySelectorAll(".cardBtn .card");
   const songTitle = document.getElementById("songTitle");
   const artistName = document.getElementById("artistName");
-  const enlaceDetallesCancion = document.getElementById(
-    "enlaceDetallesCancion"
-  );
+  const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
   let currentSongId = null;
 
   if (
@@ -40,9 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = csrfTokenElement
-    ? csrfTokenElement.getAttribute("content")
-    : null;
+  const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute("content") : null;
 
   if (!csrfToken) {
     console.error("Token CSRF no encontrado");
@@ -161,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     heartIcon.setAttribute("data-clicked", "true"); // Marcar como clicado
 
     toggleFavorito(currentSongId)
-      .then((response) => {
+      .then(response => {
         heartIcon.setAttribute("data-clicked", "false"); // Desmarcar después de la respuesta
         if (response.status === "added") {
           actualizarIconoFavorito(true);
@@ -170,23 +166,20 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (response.status === "removed") {
           actualizarIconoFavorito(false);
           actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, false);
-          mostrarMensaje(
-            "Canción eliminada de tu lista de favoritos",
-            heartIcon
-          );
+          mostrarMensaje("Canción eliminada de tu lista de favoritos", heartIcon);
         } else if (response.status === "error" && response.redirect) {
           window.location.href = response.redirect;
         }
         actualizarEnlaceDetallesCancion();
       })
-      .catch((error) => {
+      .catch(error => {
         heartIcon.setAttribute("data-clicked", "false"); // Desmarcar en caso de error
         console.error("Error al cambiar el estado de favorito:", error);
       });
   });
 
   function actualizarIconoFavoritoEnTodasLasInstancias(songId, esFavorito) {
-    songCards.forEach((card) => {
+    songCards.forEach(card => {
       if (card.getAttribute("data-id") === songId) {
         card.setAttribute("data-favorito", esFavorito ? "true" : "false");
         const iconoCard = card.querySelector(".fa-heart");
@@ -212,20 +205,17 @@ document.addEventListener("DOMContentLoaded", function () {
         "X-CSRF-Token": csrfToken,
       },
     })
-      .then((response) => {
+      .then(response => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         return data;
       })
-      .catch((error) => {
-        console.error(
-          "Error al intentar cambiar el estado de favorito:",
-          error
-        );
+      .catch(error => {
+        console.error("Error al intentar cambiar el estado de favorito:", error);
         return { status: "error" };
       });
   }
@@ -269,15 +259,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (songSrc) {
         audio.src = songSrc;
-        audio
-          .play()
-          .then(() => {
-            playBtn.style.display = "none";
-            pauseBtn.style.display = "block";
-          })
-          .catch((error) => {
-            console.error("Error al intentar reproducir el audio:", error);
-          });
+        audio.play().then(() => {
+          playBtn.style.display = "none";
+          pauseBtn.style.display = "block";
+        }).catch(error => {
+          console.error("Error al intentar reproducir el audio:", error);
+        });
 
         const cleanTitle = songTitleText.replace(/\.[^/.]+$/, "");
         songTitle.textContent = cleanTitle;

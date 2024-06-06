@@ -1,113 +1,65 @@
 <!-- Barra de navegación -->
-<nav class="navbar navbar-expand-lg bg-dark">
-	<div class="container">
-		<a href="{{ path('app_home') }}">
-			<img class="imagenLogo" src="{{ asset('images/HHLogo.png') }}" alt="HHLogo">
-		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div
-			class="collapse navbar-collapse justify-content-between" id="navbarNav">
-			<!-- Barra de búsqueda -->
-			<div class="container login">
-				<p>
-					<a href="{{ path('app_login') }}">Login</a>
-				</p>
-			</div>
-			<div class="container registro">
-				<p>
-					<a href="{{ path('app_registro') }}">Regístrate</a>
-				</p>
-			</div>
-			<form id="search-form" class="form-inline my-2 my-lg-0 ml-auto" method="GET">
-				<input class="form-control mr-sm-2" type="search" name="query" id="search-input" placeholder="Buscar..." aria-label="Buscar" required>
-				<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">
-					<i class="fas fa-search"></i>
-				</button>
-			</form>
-
-			<ul class="navbar-nav">
-				<li class="nav-item active">
-					<a class="nav-link" href="{{ path('app_home') }}">
-						<img src="{{ asset('images/perfil/yo.jpg') }}" alt="Usuario" class="user-icon">
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{path('app_logout')}}">
-						<i class="fa-solid fa-power-off"></i>
-					</a>
-				</li>
-				<!-- Menú desplegable de cambio de idioma -->
+<nav	class="navbar navbar-expand-lg bg-dark">
+	<div	class="container">
+		<a	href="{{ path('app_home') }}">
+			<img	class="imagenLogo"	src="{{ asset('images/HHLogo.png') }}"	alt="HHLogo"></a>
+			<button	class="navbar-toggler"	type="button"	data-toggle="collapse"	data-target="#navbarNav"	aria-controls="navbarNav"	aria-expanded="false"	aria-label="Toggle navigation">
+				<span	class="navbar-toggler-icon"></span>
+			</button>
+			<div	class="collapse navbar-collapse justify-content-between"	id="navbarNav">
+				<!-- Barra de búsqueda -->
+				<div	class="container login">
+					<p>
+						<a	href="{{ path('app_login') }}">
+							Login
+						</a>
+					</p>
+				</div>
+				<div	class="container registro">
+					<p>
+						<a	href="{{ path('app_registro') }}">
+							Regístrate
+						</a>
+					</p>
+				</div>
+				<form	id="search-form"	class="form-inline my-2 my-lg-0 ml-auto"	method="GET"	action="{{ path('buscar_canciones') }}">
+					<input	class="form-control mr-sm-2"	type="search"	name="query"	id="search-input"	placeholder="Buscar..."	aria-label="Buscar"	required>
+						<button	class="btn btn-outline-secondary my-2 my-sm-0"	type="submit">
+							<i	class="fas fa-search"></i>
+						</button>
+					</form>
+					<ul	class="navbar-nav">
+						<li	class="nav-item active">
+							<a	class="nav-link"	href="{{ path('app_home') }}">
+								<img	src="{{ asset('images/perfil/yo.jpg') }}"	alt="Usuario"	class="user-icon"></a>
+							</li>
+							<li	class="nav-item">
+								<a	class="nav-link"	href="{{ path('app_logout') }}">
+									<i	class="fa-solid fa-power-off"></i>
+								</a>
+							</li>
+							<!-- Menú desplegable de cambio de idioma -->
 				<li class="nav-item dropdown">
-					<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						{% if app.request.locale == 'es' %}
-							<img src="{{ asset('images/spanish-flag.png') }}" alt="Español" class="rounded-circle">
-						{% else %}
-							<img src="{{ asset('images/english-flag.png') }}" alt="Inglés" class="rounded-circle">
-						{% endif %}
-					</button>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item change-locale" href="#" data-locale="es">
-							<img src="{{ asset('images/spanish-flag.png') }}" alt="Español" class="rounded-circle">
-							Español
-						</a>
-						<a class="dropdown-item change-locale" href="#" data-locale="en">
-							<img src="{{ asset('images/english-flag.png') }}" alt="Inglés" class="rounded-circle">
-							Inglés
-						</a>
-					</div>
-				</li>
-			</ul>
-		</div>
+				<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{% if app.request.locale == 'es' %}
+						<img src="{{ asset('images/spanish-flag.png') }}" alt="Español" class="rounded-circle">
+					{% else %}
+						<img src="{{ asset('images/english-flag.png') }}" alt="Inglés" class="rounded-circle">
+					{% endif %}
+				</button>
+				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item change-locale" href="#" data-locale="es">
+						<img src="{{ asset('images/spanish-flag.png') }}" alt="Español" class="rounded-circle">
+						Español
+					</a>
+					<a class="dropdown-item change-locale" href="#" data-locale="en">
+						<img src="{{ asset('images/english-flag.png') }}" alt="Inglés" class="rounded-circle">
+						Inglés
+					</a>
+				</div>
+			</li>
+		</ul>
 	</div>
+</div>
 </nav>
-
-<script>
-	document.querySelectorAll('.change-locale').forEach(item => {
-item.addEventListener('click', event => {
-event.preventDefault();
-const locale = event.currentTarget.getAttribute('data-locale');
-fetch(`/harmonyhub/cambioIdioma/${locale}`).then(response => response.json()).then(data => {
-if (data.status === 'success') {
-location.reload();
-}
-}).catch(error => console.error('Error:', error));
-});
-});
-
-document.getElementById('search-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const query = document.getElementById('search-input').value;
-
-    fetch('/buscarCancion?query=' + encodeURIComponent(query))
-        .then(response => response.json())
-        .then(data => {
-            const resultsContainer = document.getElementById('contenedorCanciones');
-            resultsContainer.innerHTML = '';
-
-            if (data.length > 0) {
-                data.forEach(cancion => {
-                    const col = document.createElement('div');
-                    col.className = 'col-md-3';
-                    col.innerHTML = `
-                        <div class="cardBtn">
-                            <div class="card" onclick="abrirReproductor(this)" data-audio-src="/music/${cancion.titulo}" data-cancion="${cancion.titulo}" data-artista="${cancion.artista} data-id="${ cancion.id }">
-                                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
-                                <div class="card-body">
-                                    <h5 class="card-title">${cancion.titulo}</h5>
-                                    <p class="card-text">${cancion.artista}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    resultsContainer.appendChild(col);
-                });
-            } else {
-                resultsContainer.innerHTML = '<p>No se encontraron resultados</p>';
-            }
-        })
-        .catch(error => console.error('Error:', error));
-});
-
-</script>
+						

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Cancion;
 use App\Entity\Favorito;
 use App\Entity\User;
+use App\Repository\CancionRepository;
+use App\Repository\FavoritoRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,14 +31,14 @@ class HomeController extends AbstractController
         $this->em = $em;
         $this->csrfTokenManager = $csrfTokenManager;
     }
-    
+
     #[Route('/harmonyhub/cambioIdioma/{locale}', name: 'cambio_idioma')]
     public function cambioIdioma($locale, Request $request, SessionInterface $session): JsonResponse
     {
         $session->set('_locale', $locale);
         return new JsonResponse(['status' => 'success']);
     }
-    
+
     #[Route('/', name: 'app_index')]
     public function irIndex(): RedirectResponse
     {
@@ -86,7 +88,8 @@ class HomeController extends AbstractController
             'tiempo_actual' => $tiempo,
             'volumen_actual' => $volumen,
             'corazon_actual' => $corazon,
-            'favoritos' => $favoritos
+            'favoritos' => $favoritos,
+            'isSearch' => false,
         ]);
     }
 
@@ -169,7 +172,7 @@ class HomeController extends AbstractController
                 ->setParameter('user', $user)
                 ->getQuery()
                 ->getResult();
-            
+
             $favoritos = array_column($favoritos, 'cancion_id');
         }
 
@@ -222,30 +225,47 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/buscarCancion', name: 'buscar_cancion')]
-    public function buscarCancion(Request $request): JsonResponse
+    #[Route('/buscador', name: 'buscar_canciones', methods: ['GET'])]
+    public function buscarCancion(Request $request, CancionRepository $cancionRepository, FavoritoRepository $favoritoRepository): JsonResponse
     {
-        $consulta = $request->query->get('query');
-        $canciones = $this->em->getRepository(Cancion::class)->createQueryBuilder('c')
-            ->join('c.artista', 'a')
-            ->where('c.titulo LIKE :consulta')
-            ->orWhere('a.nombre LIKE :consulta')
-            ->setParameter('consulta', '%' . $consulta . '%')
-            ->getQuery()
-            ->getResult();
+        $query = $request->query->get('query');
 
-        $datos = [];
-        foreach ($canciones as $cancion) {
-            $datos[] = [
-                'id' => $cancion->getId(),
-                'titulo' => $cancion->getTitulo(),
-                'artista' => $cancion->getArtista()->getNombre(),
-                'audio_path' => '/music/' . $cancion->getTitulo()
-            ];
+        if (!$query) {
+            return new JsonResponse(['error' => 'La consulta de búsqueda está vacía'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($datos);
+        $canciones = $cancionRepository->findByNombre($query);
+
+        if (!$canciones) {
+            return new JsonResponse(['error' => 'No se encontraron canciones'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $usuario = $this->getUser();
+        $favoritos = $usuario ? $favoritoRepository->findBy(['usuario' => $usuario]) : [];
+        $favoritosIds = array_map(function ($favorito) {
+            return $favorito->getCancion()->getId();
+        }, $favoritos);
+
+        $html = '';
+        foreach ($canciones as $cancion) {
+            $isFavorito = in_array($cancion->getId(), $favoritosIds) ? 'true' : 'false';
+            $html .= '
+        <div class="col-md-3 mb-4">
+            <div class="cardBtn">
+                <div class="card" onclick="abrirReproductor(this)" data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
+                    <div class="card-body">
+                        <h5 class="card-title">' . $cancion->getTitulo() . '</h5>
+                        <p class="card-text">' . $cancion->getArtista()->getNombre() . '</p>
+                    </div>
+                </div>
+            </div>
+        </div>';
+        }
+
+        return new JsonResponse(['html' => $html]);
     }
+
 
     #[Route('/sobremi', name: 'app_sobremi')]
     public function sobreMi(): Response

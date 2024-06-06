@@ -1,3 +1,39 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const contenedorCanciones = document.getElementById('contenedorCanciones');
+
+    if (searchForm && searchInput && contenedorCanciones) {
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = searchInput.value;
+
+            fetch(`/buscador?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else if (data.html) {
+                        contenedorCanciones.innerHTML = data.html;
+                        attachCardEventListeners();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    }
+
+    function attachCardEventListeners() {
+        const cards = document.querySelectorAll(".cardBtn .card");
+        cards.forEach(card => {
+            card.addEventListener("click", function() {
+                abrirReproductor(this);
+            });
+        });
+    }
+
+    attachCardEventListeners();
+});
+
 var audio = document.getElementById("audio");
 var playPauseBtn = document.getElementById("playPauseBtn");
 var seekSlider = document.getElementById("seekSlider");
@@ -6,10 +42,7 @@ var currentTime = document.getElementById("currentTime");
 var totalTime = document.getElementById("totalTime");
 
 function abrirReproductor(cardElement) {
-    var audioSource = cardElement.getAttribute('data-audio-src');
-    var player = document.getElementById('audio');
-    player.src = audioSource;
-    player.play(); // Comienza la reproducción automáticamente
+    cambiarCancion(cardElement);
 
     // Muestra el reproductor si está oculto
     var reproductorEmergente = document.querySelector('.reproductor');
@@ -18,31 +51,41 @@ function abrirReproductor(cardElement) {
 
 function cambiarCancion(cardElement) {
     var audioSrc = cardElement.getAttribute('data-audio-src');
+    var titulo = cardElement.getAttribute('data-cancion');
+    var artista = cardElement.getAttribute('data-artista');
+    var favorito = cardElement.getAttribute('data-favorito') === 'true';
 
-    // Crear una solicitud XMLHttpRequest
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/get-song-info?file=' + encodeURIComponent(audioSrc), true);
-    xhr.onload = function() {
-        if (this.status === 200) {
-            var response = JSON.parse(this.responseText);
-            var player = document.getElementById('audio');
-            player.src = response.audioSrc; // URL del archivo de música
-            player.load();
-            player.play();
+    var player = document.getElementById('audio');
+    player.src = audioSrc;
+    player.load();
+    player.play();
 
-            // Actualizar metadatos del reproductor
-            document.getElementById('tituloCancion').innerText = response.titulo;
-            document.getElementById('nombreArtista').innerText = response.artista;
+    // Actualizar metadatos del reproductor
+    document.getElementById('songTitle').innerText = titulo;
+    document.getElementById('artistName').innerText = artista;
 
-            // Asegurarse de mostrar el reproductor si está oculto
-            var reproductorEmergente = document.querySelector('.reproductor');
-            reproductorEmergente.style.display = 'block';
-        }
-    };
-    xhr.onerror = function() {
-        console.error('Error al cargar la canción.');
-    };
-    xhr.send();
+    // Actualizar icono de favorito
+    actualizarIconoFavorito(favorito);
+
+    // Actualizar el enlace de detalles de la canción
+    actualizarEnlaceDetallesCancion(cardElement.getAttribute('data-id'), player.currentTime, player.volume, favorito);
+}
+
+function actualizarIconoFavorito(esFavorito) {
+    var heartIcon = document.getElementById("heart-icon");
+    var icono = heartIcon.querySelector("i");
+    if (esFavorito) {
+        icono.classList.remove("far");
+        icono.classList.add("fas", "text-custom");
+    } else {
+        icono.classList.remove("fas", "text-custom");
+        icono.classList.add("far");
+    }
+}
+
+function actualizarEnlaceDetallesCancion(id, tiempo, volumen, corazon) {
+    var enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
+    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${corazon ? 1 : 0}`;
 }
 
 function togglePlayPause(player) {
@@ -52,4 +95,3 @@ function togglePlayPause(player) {
         player.pause();
     }
 }
-
