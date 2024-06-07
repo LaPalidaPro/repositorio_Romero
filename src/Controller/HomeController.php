@@ -252,7 +252,7 @@ class HomeController extends AbstractController
             $html .= '
         <div class="col-md-3 mb-4">
             <div class="cardBtn">
-                <div class="card" onclick="abrirReproductor(this)" data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
+                <div class="card"  data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
                     <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
                     <div class="card-body">
                         <h5 class="card-title">' . $cancion->getTitulo() . '</h5>

@@ -49,7 +49,7 @@
                 {% for cancion in datosCanciones %}
                     <div class="col-md-3 mb-4">
                         <div class="cardBtn">
-                            <div class="card" onclick="abrirReproductor(this)" data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" data-cancion="{{ cancion.titulo }}" data-artista="{{ cancion.artista.nombre }}" data-id="{{ cancion.id }}" data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
+                            <div class="card" data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" data-cancion="{{ cancion.titulo }}" data-artista="{{ cancion.artista.nombre }}" data-id="{{ cancion.id }}" data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
                                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ cancion.titulo }}</h5>
@@ -84,8 +84,5 @@
 {% endblock %}
 
 {% block custom_javascripts %}
-    <script src="{{ asset('js/frontal.js') }}"></script>
-    <script src="{{ asset('js/reproductor.js') }}"></script>
-    <script src="{{ asset('js/buscador.js') }}"></script>
-
+    <script src="{{ asset('js/main.js') }}"></script>
 {% endblock %}

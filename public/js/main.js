@@ -1,21 +1,34 @@
+// evento DOM cargado
 document.addEventListener("DOMContentLoaded", function () {
-  const audio = document.getElementById("audio");
+  // variables de buscador.
+  const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-input");
+  const contenedorCanciones = document.getElementById("contenedorCanciones");
+
+  // variables de frontal
+  var audio = document.getElementById("audio");
+  var playPauseBtn = document.getElementById("playPauseBtn");
+  var seekSlider = document.getElementById("seekSlider");
+  var volumeSlider = document.getElementById("volumeSlider");
+  var currentTime = document.getElementById("currentTime");
+  var totalTime = document.getElementById("totalTime");
+
+  // variables de reproductor
   const playBtn = document.getElementById("playBtn");
   const pauseBtn = document.getElementById("pauseBtn");
-  const seekSlider = document.getElementById("seekSlider");
-  const volumeSlider = document.getElementById("volumeSlider");
   const volumenIcono = document.getElementById("volumenIcono");
-  const currentTime = document.getElementById("currentTime");
-  const totalTime = document.getElementById("totalTime");
   const heartIcon = document.getElementById("heart-icon");
   const btnBackward = document.getElementById("btnBackward");
   const btnForward = document.getElementById("btnForward");
   const songCards = document.querySelectorAll(".cardBtn .card");
   const songTitle = document.getElementById("songTitle");
   const artistName = document.getElementById("artistName");
-  const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
+  const enlaceDetallesCancion = document.getElementById(
+    "enlaceDetallesCancion"
+  );
   let currentSongId = null;
 
+  // validacion de reproductor.
   if (
     !audio ||
     !playBtn ||
@@ -37,8 +50,113 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  // eventos de buscador
+  if (searchForm && searchInput && contenedorCanciones) {
+    searchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const query = searchInput.value;
+
+      fetch(`/buscador?query=${query}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.error);
+          } else if (data.html) {
+            contenedorCanciones.innerHTML = data.html;
+            attachCardEventListeners();
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+  }
+
+  function attachCardEventListeners() {
+    const cards = document.querySelectorAll(".cardBtn .card");
+    cards.forEach((card) => {
+      card.addEventListener("click", function () {
+        abrirReproductor(card);
+      });
+    });
+  }
+
+  attachCardEventListeners();
+
+  // funciones de frontal
+  function abrirReproductor(cardElement) {
+    cambiarCancion(cardElement);
+    // Muestra el reproductor si está oculto
+    var reproductorEmergente = document.querySelector(".reproductor");
+    reproductorEmergente.style.display = "block";
+  }
+
+  function cambiarCancion(cardElement) {
+    var audioSrc = cardElement.getAttribute("data-audio-src");
+    var titulo = cardElement.getAttribute("data-cancion");
+    var artista = cardElement.getAttribute("data-artista");
+    var favorito = cardElement.getAttribute("data-favorito") === "true";
+    const songId = cardElement.getAttribute("data-id");
+    currentSongId = songId;
+    var player = document.getElementById("audio");
+
+    player.src = audioSrc;
+    player.load();
+    player.play();
+
+    // Actualizar metadatos del reproductor
+    document.getElementById("songTitle").innerText = titulo;
+    document.getElementById("artistName").innerText = artista;
+
+    // actualizar icono play
+    playBtn.style.display = "none";
+    pauseBtn.style.display = "block";
+
+    // Actualizar icono de favorito
+    actualizarIconoFavorito(favorito);
+
+    // Actualizar el enlace de detalles de la canción
+    actualizarEnlaceDetallesCancion(
+      cardElement.getAttribute("data-id"),
+      player.currentTime,
+      player.volume,
+      favorito
+    );
+  }
+
+  function actualizarIconoFavorito(esFavorito) {
+    var heartIcon = document.getElementById("heart-icon");
+    var icono = heartIcon.querySelector("i");
+    if (esFavorito) {
+      icono.classList.remove("far");
+      icono.classList.add("fas", "text-custom");
+    } else {
+      icono.classList.remove("fas", "text-custom");
+      icono.classList.add("far");
+    }
+  }
+
+  function actualizarEnlaceDetallesCancion(id, tiempo, volumen, corazon) {
+    var enlaceDetallesCancion = document.getElementById(
+      "enlaceDetallesCancion"
+    );
+    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${
+      corazon ? 1 : 0
+    }`;
+  }
+
+  function togglePlayPause(player) {
+    if (player.paused) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  }
+
+  // funciones de reproductor
+
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute("content") : null;
+  const csrfToken = csrfTokenElement
+    ? csrfTokenElement.getAttribute("content")
+    : null;
 
   if (!csrfToken) {
     console.error("Token CSRF no encontrado");
@@ -151,13 +269,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // Cambiar el icono del corazón y manejar el estado de favorito
   heartIcon.addEventListener("click", function (event) {
     event.preventDefault();
+
+    // obtenemos elemento card padre de elemento icon que desencadena el evento.
+
     if (heartIcon.getAttribute("data-clicked") === "true") {
       return; // Salir si ya se ha hecho clic recientemente
     }
     heartIcon.setAttribute("data-clicked", "true"); // Marcar como clicado
 
     toggleFavorito(currentSongId)
-      .then(response => {
+      .then((response) => {
         heartIcon.setAttribute("data-clicked", "false"); // Desmarcar después de la respuesta
         if (response.status === "added") {
           actualizarIconoFavorito(true);
@@ -166,34 +287,42 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (response.status === "removed") {
           actualizarIconoFavorito(false);
           actualizarIconoFavoritoEnTodasLasInstancias(currentSongId, false);
-          mostrarMensaje("Canción eliminada de tu lista de favoritos", heartIcon);
+          mostrarMensaje(
+            "Canción eliminada de tu lista de favoritos",
+            heartIcon
+          );
         } else if (response.status === "error" && response.redirect) {
           window.location.href = response.redirect;
         }
         actualizarEnlaceDetallesCancion();
       })
-      .catch(error => {
+      .catch((error) => {
         heartIcon.setAttribute("data-clicked", "false"); // Desmarcar en caso de error
         console.error("Error al cambiar el estado de favorito:", error);
       });
   });
 
   function actualizarIconoFavoritoEnTodasLasInstancias(songId, esFavorito) {
-    songCards.forEach(card => {
-      if (card.getAttribute("data-id") === songId) {
-        card.setAttribute("data-favorito", esFavorito ? "true" : "false");
-        const iconoCard = card.querySelector(".fa-heart");
-        if (iconoCard) {
-          if (esFavorito) {
-            iconoCard.classList.remove("far");
-            iconoCard.classList.add("fas", "text-custom");
-          } else {
-            iconoCard.classList.remove("fas", "text-custom");
-            iconoCard.classList.add("far");
-          }
-        }
+    const actualSongCards = document.querySelectorAll(".cardBtn .card");
+    for (const card of actualSongCards) {
+      if (card.getAttribute("data-id") !== songId) {
+        continue;
       }
-    });
+
+      card.setAttribute("data-favorito", esFavorito ? "true" : "false");
+      const iconoCard = card.querySelector(".fa-heart");
+      if (!iconoCard) {
+        continue;
+      }
+
+      if (esFavorito) {
+        iconoCard.classList.remove("far");
+        iconoCard.classList.add("fas", "text-custom");
+      } else {
+        iconoCard.classList.remove("fas", "text-custom");
+        iconoCard.classList.add("far");
+      }
+    }
   }
 
   function toggleFavorito(cancionId) {
@@ -205,17 +334,20 @@ document.addEventListener("DOMContentLoaded", function () {
         "X-CSRF-Token": csrfToken,
       },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         return data;
       })
-      .catch(error => {
-        console.error("Error al intentar cambiar el estado de favorito:", error);
+      .catch((error) => {
+        console.error(
+          "Error al intentar cambiar el estado de favorito:",
+          error
+        );
         return { status: "error" };
       });
   }
@@ -259,12 +391,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (songSrc) {
         audio.src = songSrc;
-        audio.play().then(() => {
-          playBtn.style.display = "none";
-          pauseBtn.style.display = "block";
-        }).catch(error => {
-          console.error("Error al intentar reproducir el audio:", error);
-        });
+        audio
+          .play()
+          .then(() => {
+            playBtn.style.display = "none";
+            pauseBtn.style.display = "block";
+          })
+          .catch((error) => {
+            console.error("Error al intentar reproducir el audio:", error);
+          });
 
         const cleanTitle = songTitleText.replace(/\.[^/.]+$/, "");
         songTitle.textContent = cleanTitle;
