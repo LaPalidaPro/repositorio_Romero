@@ -1,0 +1,34 @@
+{# templates/_canciones.html.twig #}
+
+<div class="row" id="contenedorCanciones">
+    {% for cancion in datosCanciones %}
+        <div class="col-md-3 mb-4">
+            <div class="cardBtn">
+                <div class="card" 
+                     data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" 
+                     data-cancion="{{ cancion.titulo }}" 
+                     data-artista="{{ cancion.artista.nombre }}" 
+                     data-id="{{ cancion.id }}" 
+                     data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="{{ cancion.titulo }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cancion.titulo }}</h5>
+                        <p class="card-text">{{ cancion.artista.nombre }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination-container d-flex justify-content-center mt-4 w-100">
+    {% if paginaActual > 1 %}
+        <button class="btn-flecha btn-flecha-prev" data-pagina="{{ paginaActual - 1 }}">
+            <p><i class="fas fa-chevron-left"></i> Anterior</p>
+        </button>
+    {% endif %}
+    {% if paginaActual < totalPaginas %}
+        <button class="btn-flecha btn-flecha-next" data-pagina="{{ paginaActual + 1 }}">
+            <p style="margin-left: 20px;">Siguiente <i class="fas fa-chevron-right"></i></p>
+        </button>
+    {% endif %}
+</div>

@@ -44,7 +44,7 @@ class HomeController extends AbstractController
     {
         return $this->redirectToRoute('app_home');
     }
-
+    
     #[Route('/harmonyhub/principal/{pagina}', name: 'app_home', defaults: ['pagina' => 1])]
     public function index(int $pagina, Request $request): Response
     {
@@ -91,6 +91,42 @@ class HomeController extends AbstractController
             'favoritos' => $favoritos,
             'isSearch' => false,
         ]);
+    }
+
+    #[Route('/harmonyhub/cargar-canciones', name: 'cargar_canciones')]
+    public function cargarCanciones(Request $request): JsonResponse
+    {
+        $pagina = $request->query->get('pagina', 1);
+        $limite = 8;
+        $query = $this->em->getRepository(Cancion::class)
+            ->createQueryBuilder('c')
+            ->setFirstResult(($pagina - 1) * $limite)
+            ->setMaxResults($limite)
+            ->getQuery();
+
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+
+        $totalCanciones = count($paginator);
+        $totalPaginas = ceil($totalCanciones / $limite);
+
+        $favoritos = [];
+        $user = $this->getUser();
+
+        if ($user) {
+            $favoritosEntities = $this->em->getRepository(Favorito::class)->findBy(['usuario' => $user]);
+            foreach ($favoritosEntities as $favorito) {
+                $favoritos[] = $favorito->getCancion()->getId();
+            }
+        }
+
+        $html = $this->renderView('home/_canciones.html.twig', [
+            'datosCanciones' => $paginator,
+            'paginaActual' => $pagina,
+            'totalPaginas' => $totalPaginas,
+            'favoritos' => $favoritos,
+        ]);
+
+        return new JsonResponse(['html' => $html]);
     }
 
     #[Route('/favoritos/toggle/{id}', name: 'toggle_favorito', methods: ['POST'])]
@@ -159,23 +195,16 @@ class HomeController extends AbstractController
         ]);
     }
 
-    private function getUserFavoritos()
+    private function getUserFavoritos(): array
     {
         $user = $this->getUser();
         $favoritos = [];
-
         if ($user) {
-            $favoritos = $this->em->getRepository(Favorito::class)
-                ->createQueryBuilder('f')
-                ->select('IDENTITY(f.cancion) as cancion_id')
-                ->where('f.usuario = :user')
-                ->setParameter('user', $user)
-                ->getQuery()
-                ->getResult();
-
-            $favoritos = array_column($favoritos, 'cancion_id');
+            $favoritosEntities = $this->em->getRepository(Favorito::class)->findBy(['usuario' => $user]);
+            foreach ($favoritosEntities as $favorito) {
+                $favoritos[] = $favorito->getCancion()->getId();
+            }
         }
-
         return $favoritos;
     }
 
@@ -226,33 +255,33 @@ class HomeController extends AbstractController
     }
 
     #[Route('/buscador', name: 'buscar_canciones', methods: ['GET'])]
-    public function buscarCancion(Request $request, CancionRepository $cancionRepository, FavoritoRepository $favoritoRepository): JsonResponse
-    {
-        $query = $request->query->get('query');
+public function buscarCancion(Request $request, CancionRepository $cancionRepository, FavoritoRepository $favoritoRepository): JsonResponse
+{
+    $query = $request->query->get('query');
 
-        if (!$query) {
-            return new JsonResponse(['error' => 'La consulta de búsqueda está vacía'], JsonResponse::HTTP_BAD_REQUEST);
-        }
+    if (!$query) {
+        return new JsonResponse(['error' => 'La consulta de búsqueda está vacía'], JsonResponse::HTTP_BAD_REQUEST);
+    }
 
-        $canciones = $cancionRepository->findByNombre($query);
+    $canciones = $cancionRepository->findByNombre($query);
 
-        if (!$canciones) {
-            return new JsonResponse(['error' => 'No se encontraron canciones'], JsonResponse::HTTP_NOT_FOUND);
-        }
+    if (!$canciones) {
+        return new JsonResponse(['error' => 'No se encontraron canciones'], JsonResponse::HTTP_NOT_FOUND);
+    }
 
-        $usuario = $this->getUser();
-        $favoritos = $usuario ? $favoritoRepository->findBy(['usuario' => $usuario]) : [];
-        $favoritosIds = array_map(function ($favorito) {
-            return $favorito->getCancion()->getId();
-        }, $favoritos);
+    $usuario = $this->getUser();
+    $favoritos = $usuario ? $favoritoRepository->findBy(['usuario' => $usuario]) : [];
+    $favoritosIds = array_map(function ($favorito) {
+        return $favorito->getCancion()->getId();
+    }, $favoritos);
 
-        $html = '';
-        foreach ($canciones as $cancion) {
-            $isFavorito = in_array($cancion->getId(), $favoritosIds) ? 'true' : 'false';
-            $html .= '
+    $html = '<div class="row" id="contenedorCanciones">';
+    foreach ($canciones as $cancion) {
+        $isFavorito = in_array($cancion->getId(), $favoritosIds) ? 'true' : 'false';
+        $html .= '
         <div class="col-md-3 mb-4">
             <div class="cardBtn">
-                <div class="card"  data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
+                <div class="card" data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
                     <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
                     <div class="card-body">
                         <h5 class="card-title">' . $cancion->getTitulo() . '</h5>
@@ -261,10 +290,11 @@ class HomeController extends AbstractController
                 </div>
             </div>
         </div>';
-        }
-
-        return new JsonResponse(['html' => $html]);
     }
+    $html .= '</div>';
+
+    return new JsonResponse(['html' => $html]);
+}
 
 
     #[Route('/sobremi', name: 'app_sobremi')]
@@ -276,8 +306,8 @@ class HomeController extends AbstractController
         
         Me encantaría poder contribuir a proyectos innovadores y continuar creciendo en un entorno profesional. Agradezco tu tiempo y espero podamos conversar pronto.";
         return $this->render('home/sobremi.html.twig', [
-            'image_path' => '/images/perfil/yo.jpg', // Asegúrate de que esta ruta sea correcta
-            'cv_path' => '/ficheros/CV_CeliaRomero.pdf', // Asegúrate de que esta ruta sea correcta
+            'image_path' => '/images/perfil/yo.jpg',
+            'cv_path' => '/ficheros/CV_CeliaRomero.pdf',
             'carta_presentacion' => $cartaPresentacion,
         ]);
     }
