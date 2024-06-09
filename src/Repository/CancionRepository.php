@@ -28,6 +28,23 @@ class CancionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findMostPlayedSongs($limit = 10)
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.numeroReproducciones', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSongsByGenre()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.generoMusical, COUNT(c.id) as count')
+            ->groupBy('c.generoMusical')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Cancion[] Returns an array of Cancion objects

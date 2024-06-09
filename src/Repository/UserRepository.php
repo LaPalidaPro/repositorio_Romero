@@ -37,6 +37,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+    public function findMostActiveUsers($limit = 10)
+    {
+        // Assuming "activity" is defined by the number of favoritos and eventos attended
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.favoritos', 'f')
+            ->leftJoin('u.eventos', 'e')
+            ->groupBy('u.id')
+            ->orderBy('COUNT(f.id) + COUNT(e.id)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return User[] Returns an array of User objects

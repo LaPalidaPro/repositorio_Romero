@@ -75,6 +75,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'usuario')]
     private Collection $favoritos;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Evento $eventos = null;
+
 
     public function getId(): ?int
     {
@@ -277,6 +280,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $favorito->setUsuario(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEventos(): ?Evento
+    {
+        return $this->eventos;
+    }
+
+    public function setEventos(?Evento $eventos): static
+    {
+        $this->eventos = $eventos;
 
         return $this;
     }

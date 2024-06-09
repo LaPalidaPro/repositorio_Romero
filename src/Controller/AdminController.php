@@ -13,6 +13,10 @@ use App\Form\AlbumType;
 use App\Form\ArtistaType;
 use App\Form\PublicidadType;
 use App\Repository\PublicidadRepository;
+use App\Repository\CancionRepository;
+use App\Repository\EventoRepository;
+use App\Repository\UserRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 use getID3;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -559,5 +563,21 @@ class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('app_gestionPublicidad');
+    }
+
+    #[Route('/admin/estadisticas', name: 'app_estadisticas')]
+    public function getEstadisticas(CancionRepository $cancionRepository, EventoRepository $eventoRepository, UserRepository $userRepository): Response
+    {
+        $mostPlayedSongs = $cancionRepository->findMostPlayedSongs();
+        $songsByGenre = $cancionRepository->findSongsByGenre();
+        $mostPopularEvents = $eventoRepository->findMostPopularEvents();
+        $mostActiveUsers = $userRepository->findMostActiveUsers();
+
+        return $this->render('admin/estadisticas.html.twig', [
+            'mostPlayedSongs' => $mostPlayedSongs,
+            'songsByGenre' => $songsByGenre,
+            'mostPopularEvents' => $mostPopularEvents,
+            'mostActiveUsers' => $mostActiveUsers,
+        ]);
     }
 }

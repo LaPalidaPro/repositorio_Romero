@@ -20,6 +20,14 @@ class EventoRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Evento::class);
     }
+    public function findMostPopularEvents($limit = 10)
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.numeroAsistentes', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Evento[] Returns an array of Evento objects
