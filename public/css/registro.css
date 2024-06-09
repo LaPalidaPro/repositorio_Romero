@@ -1,8 +1,11 @@
 #search-form {
   display: none;
 }
+#navbarNav {
+  justify-content: end !important;
+}
 
-li.nav-item:nth-child(1) > a:nth-child(1) {
+li.nav-item:nth-child(2) > a:nth-child(1) {
   display: none;
 }
 
@@ -99,4 +102,12 @@ div.container:nth-child(2) {
   justify-content: end;
   display: flex;
   margin-right: 10px;
+}
+.pie {
+  background-color: #020202e8 !important; /* Color de fondo */
+  color: #fff; /* Color del texto */
+  padding: 20px 0; /* Espaciado interno */
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }

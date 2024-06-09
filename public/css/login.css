@@ -101,3 +101,6 @@ li.nav-item:nth-child(1) > a:nth-child(1) {
   width: 100%;
   bottom: 0;
 }
+#navbarNav {
+  justify-content: end !important;
+}
