@@ -1,0 +1,67 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}
+    {{ 'Vive tu música'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+{% endblock %}
+
+{% block body %}
+    {% include 'nav.html.twig' %}
+    <section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+    <a href="{{ path('app_admin') }}" class="btn btnVolverAdmin">
+                <i class="fas fa-arrow-left"></i> Volver al Menú Administrador
+            </a>
+        <div class="admin-header">
+            <h1>Gestión de contenido</h1>
+            
+        </div>
+        {% include 'mensajesFlash.html.twig' %}
+        <div class="container mt-5">
+            <h2>Añadir Nueva Publicidad</h2>
+            <div class="card mb-5">
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        {{ form_label(form.imagen, 'Selecciona una imagen', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.imagen, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.imagen) }}
+                    </div>
+                    <button class="btn btn-primary mt-3">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <h2 class="mt-5">Lista de Publicidades</h2>
+            <div class="row">
+                {% for publicidad in publicidades %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="/images/publicidad/{{ publicidad.imagen }}" class="card-img-top" alt="Publicidad">
+                            <div class="card-body">
+                                <h5 class="card-title">ID: {{ publicidad.id }}</h5>
+                                <form method="post" action="{{ path('publicidad_delete', {'id': publicidad.id}) }}" style="display:inline-block;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publicidad.id) }}">
+                                    <button class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+{% endblock %}

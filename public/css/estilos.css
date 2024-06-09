@@ -301,3 +301,45 @@ a:hover {
   text-align: center;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
+.btn-danger {
+  background-color: #ff00e3;
+  border-color: #ec01d1;
+}
+
+.btn-danger:hover {
+  background-color: #bd2196;
+  border-color: #b1397d;
+}
+.btnVolverAdmin {
+  display: contents;
+  background-color: transparent;
+  border-color: transparent;
+  display: -webkit-box;
+  justify-content: flex-end;
+  color: white;
+}
+.btnVolverAdmin:hover {
+  color: #bfbfbf;
+  background-color: transparent;
+  border-color: transparent;
+}
+.btnVolverAdmin:not(:disabled):not(.disabled).active,
+.btn-secondary:not(:disabled):not(.disabled):active,
+.show > .btn-secondary.dropdown-toggle {
+  color: #979797;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+
+.btnVolverAdmin:focus {
+  box-shadow: none;
+}
+.btnVolverAdmin.focus
+ {
+  
+  background-color:transparent;
+  border-color:transparent;
+  box-shadow: none;
+  color: #bbb;
+}
