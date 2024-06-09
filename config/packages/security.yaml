@@ -32,6 +32,7 @@ security:
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
+
 when@test:
     security:
         password_hashers:

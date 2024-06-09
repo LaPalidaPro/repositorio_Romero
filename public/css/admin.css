@@ -72,7 +72,6 @@
   color: #fff;
 }
 
-
 #editArtistaModal-1 {
   background-color: #ffffff2e;
 }
@@ -147,7 +146,7 @@
   position: absolute;
   z-index: 2;
   width: 16%;
-  height: calc(1.5em + .75rem + 2px);
+  height: calc(1.5em + 0.75rem + 2px);
   margin: 0;
   opacity: 0;
 }
@@ -183,4 +182,11 @@
   height: 100%;
   object-fit: cover; /* Ajusta la imagen para que cubra el contenedor */
   object-position: center; /* Centra la imagen */
+}
+
+#navbarNav {
+  justify-content: end !important;
+}
+#search-form {
+  display: none;
 }

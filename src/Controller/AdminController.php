@@ -1,7 +1,5 @@
 <?php
 
-// src/Controller/AdminController.php
-
 namespace App\Controller;
 
 use App\Entity\Album;
@@ -234,7 +232,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/crearAlbum', name: 'app_crearAlbum')]
+    #[Route('/harmonyhub/admin/crearAlbum', name: 'app_crearAlbum')]
     public function crearAlbum(Request $request, SluggerInterface $slugger): Response
     {
         $album = new Album();
@@ -320,7 +318,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/upload', name: 'upload', methods: ['POST'])]
+    #[Route('/harmonyhub/admin/upload', name: 'upload', methods: ['POST'])]
     public function upload(Request $request): JsonResponse
     {
         $archivo = $request->files->get('file');
@@ -386,7 +384,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_gestionAlbums', ['id' => $album->getArtista()->getId()]);
     }
 
-    #[Route('/admin/editarAlbum/{id}', name: 'app_editarAlbum', methods: ['GET', 'POST'])]
+    #[Route('/harmonyhub/admin/editarAlbum/{id}', name: 'app_editarAlbum', methods: ['GET', 'POST'])]
     public function editarAlbum(Request $request, int $id, SluggerInterface $slugger): Response
     {
         $album = $this->em->getRepository(Album::class)->find($id);
@@ -476,7 +474,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/removeCancion', name: 'app_remove_cancion', methods: ['POST'])]
+    #[Route('/harmonyhub/admin/removeCancion', name: 'app_remove_cancion', methods: ['POST'])]
     public function removeCancion(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -500,7 +498,7 @@ class AdminController extends AbstractController
         return $this->render('admin/gestionUsuarios.html.twig', compact('datos'));
     }
 
-    #[Route('/harmonyhub/admin/gestionPublicidad/carrusel', name: 'carousel_images')]
+    #[Route('/carrusel', name: 'carousel_images')]
     public function getCarouselImages(PublicidadRepository $publicidadRepository): JsonResponse
     {
         $publicidades = $publicidadRepository->findAll();

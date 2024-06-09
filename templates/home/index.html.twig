@@ -81,7 +81,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('/harmonyhub/admin/gestionPublicidad/carrusel')
+            fetch('/carrusel')
                 .then(response => response.json())
                 .then(images => {
                     const carouselImagesContainer = document.getElementById('carousel-images');
