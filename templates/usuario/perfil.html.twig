@@ -1,0 +1,103 @@
+{% extends 'frontend.html.twig' %}
+
+{% block title %}
+	{{ 'Vive tu música'|trans }}
+{% endblock %}
+
+{% block styles %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/editarPerfil.css') }}">
+
+	<style>
+
+		.login-form {
+
+			padding: 6rem;
+			border-radius: 18px;
+		}
+		.card-img {
+			border-radius: 50%;
+			width: 300px;
+			height: 300px;
+			object-fit: cover;
+			margin-bottom: 1rem;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	{% include 'nav.html.twig' %}
+
+	<section class="container-fluid containerEditar min-vh-100">
+		<div class="containerForm min-vh-100">
+			<div class="login-form text-center">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+						{% if app.user.foto %}
+							<img src="{{ asset('images/perfil/' ~ app.user.foto) }}" class="card-img" alt="Foto de perfil">
+						{% else %}
+							<img src="{{ asset('images/default-profile.png') }}" class="card-img" alt="Foto de perfil">
+						{% endif %}
+					</div>
+					<div class="col-md-8">
+						<div class="card-body">
+							{{ form_start(form) }}
+							<div class="form-group">
+								{{ form_label(form.email) }}
+								{{ form_widget(form.email, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+								{{ form_errors(form.email) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_label(form.nombre) }}
+								{{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.nombre) }}
+							</div>
+
+							<div class="form-group">
+								{{ form_label(form.apellidos) }}
+								{{ form_widget(form.apellidos, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.apellidos) }}
+							</div>
+
+							<div class="form-group">
+
+								{{ form_label(form.foto,'Foto de perfil ', {'label_attr': {'class': 'custom-label-class'}}) }}
+								<i class="fas fa-edit"></i>
+
+								{{ form_widget(form.foto, {'attr': {'class': 'form-control-file custom-file-input'}}) }}
+								{{ form_errors(form.foto) }}
+							</div>
+							<button type="submit" class="btn btn-primary">{{ 'Guardar'|trans }}</button>
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block custom_javascripts %}
+	{{ parent() }}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+var fileInput = document.querySelector('.custom-file-input');
+var imgPreview = document.querySelector('.card-img');
+var fileLabel = document.querySelector('.custom-file-label');
+
+fileInput.addEventListener('change', function () {
+var file = this.files[0];
+if (file) {
+var reader = new FileReader();
+reader.onload = function (e) {
+imgPreview.src = e.target.result;
+}
+reader.readAsDataURL(file);
+fileLabel.textContent = file.name;
+}
+});
+});
+	</script>
+{% endblock %}

@@ -13,12 +13,11 @@
 
 {% block body %}
     {% include 'nav.html.twig' %}
-
+<h1></h1>
     <div class="container">
-        <h1>Registro</h1>
-        {% include 'mensajesFlash.html.twig' %}
         <div class="login-form">
             <h2>Registro</h2>
+                {% include 'mensajesFlash.html.twig' %}
             {{ form_start(form, {'attr': {'class': 'form'}}) }}
             <div class="form-group">
                 <label for="nombre">Nombre</label>

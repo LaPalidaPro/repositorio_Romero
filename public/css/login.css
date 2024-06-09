@@ -92,3 +92,12 @@ li.nav-item:nth-child(1) > a:nth-child(1) {
 .login {
   display: none !important;
 }
+
+.pie {
+  background-color: #020202e8 !important; /* Color de fondo */
+  color: #fff; /* Color del texto */
+  padding: 20px 0; /* Espaciado interno */
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}

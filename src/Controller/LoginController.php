@@ -45,6 +45,17 @@ class LoginController extends AbstractController
             if ($this->isCsrfTokenValid('miToken', $csrfToken)) {
                 $errors = $validator->validate($user);
 
+                // Verificar si el usuario ya existe
+                $existingUser = $this->em->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+
+                if ($existingUser) {
+                    $this->addFlash('error', 'El email ya está registrado.');
+
+                    return $this->render('login/registro.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+
                 if (count($errors) > 0) {
                     foreach ($errors as $error) {
                         $this->addFlash('error', $error->getMessage());
@@ -62,10 +73,9 @@ class LoginController extends AbstractController
                     $this->em->flush();
                     $this->addFlash('success', 'Registro completado con éxito.');
 
-                    return $this->redirectToRoute('app_registro');
+                    return $this->redirectToRoute('app_login');
                 }
             } else {
-
                 $this->addFlash('error', 'Token CSRF no válido.');
 
                 return $this->redirectToRoute('app_registro');
@@ -76,6 +86,7 @@ class LoginController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route('/harmonyhub/logout', name: 'app_logout')]
     public function logout()
     {
