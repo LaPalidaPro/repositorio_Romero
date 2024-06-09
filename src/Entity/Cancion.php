@@ -144,6 +144,11 @@ class Cancion
 
         return $this;
     }
+    public function incrementarNumeroReproducciones(): self
+    {
+        $this->numeroReproducciones++;
+        return $this;
+    }
 
     /**
      * @return Collection<int, Favorito>

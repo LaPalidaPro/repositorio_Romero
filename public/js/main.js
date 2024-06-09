@@ -98,6 +98,9 @@ document.addEventListener("DOMContentLoaded", function () {
     playBtn.style.display = "none";
     pauseBtn.style.display = "block";
 
+    // Establecer el ID de la canción actual para incrementar reproducciones
+    window.setCurrentSongId(songId);
+
     actualizarIconoFavorito(favorito);
 
     actualizarEnlaceDetallesCancion(

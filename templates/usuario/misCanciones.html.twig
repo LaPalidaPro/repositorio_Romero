@@ -9,12 +9,12 @@
 	<link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/favoritos.css') }}">
-<style>
-    .align-items-center {
-        justify-content: center;
-        width: inherit;
-        }
-</style>
+	<style>
+		.align-items-center {
+			justify-content: center;
+			width: inherit;
+		}
+	</style>
 {% endblock %}
 
 {% block body %}
@@ -22,11 +22,12 @@
 	<h1 class="titulo-destacado">{{ 'highlighted_songs'|trans }}</h1>
 	<section class="featured-songs container-fluid">
 		<div class="container-fluid mt-4">
-        <div class="play-all-btn">
-        <button class="btn btn-primary" onclick="playAllSongs()">
-            <i class="fas fa-play"></i> {{ 'Play All'|trans }}
-        </button>
-    </div>
+			<div class="play-all-btn">
+				<button class="btn btn-primary" onclick="playAllSongs()">
+					<i class="fas fa-play"></i>
+					{{ 'Play All'|trans }}
+				</button>
+			</div>
 			<div id="contenedorCanciones">
 				{% for favorito in datosCanciones %}
 					<div class="cardBtn">
@@ -48,8 +49,8 @@
 					</div>
 				{% endfor %}
 			</div>
-	</div>
-</section>
+		</div>
+	</section>
 	{% include 'reproductor.html.twig' with {
         cancion: cancion_actual,
         tiempo: tiempo_actual,
@@ -62,4 +63,5 @@
 
 {% block custom_javascripts %}
 	<script src="{{ asset('js/main2.js') }}"></script>
+	<script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
 {% endblock %}
