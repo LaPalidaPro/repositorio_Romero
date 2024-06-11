@@ -1,87 +1,91 @@
 {# templates/admin/editarAlbum.html.twig #}
 {% extends 'frontend.html.twig' %}
 
-{% block title %}Editar Álbum{% endblock %}
+{% block title %}Editar Álbum
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/editarAlbum.css') }}">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
 {% endblock %}
 
 {% block body %}
-    {% include 'nav.html.twig' %}
-    <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center"
-             style="background-color: #00000091;margin-top: 40px;">
-        <h1 class="text-center mb-4">Editar Álbum</h1>
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="card-title text-center mb-4">Editar Álbum</h1>
-                            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.nombre) }}
-                                    {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.nombre) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.fechaLanzamiento) }}
-                                    {{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.fechaLanzamiento) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.generosMusicales) }}
-                                    <div class="form-check-group">
-                                        {% for generosMusicales in form.generosMusicales %}
-                                            <div class="form-check mb-2">
-                                                {{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
-                                                {{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    {{ form_errors(form.generosMusicales) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.fotoPortada) }}
-                                    {{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.fotoPortada) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.artista) }}
-                                    {{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.artista) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label>Canciones Existentes</label>
-                                    <ol>
-                                        {% for cancion in album.canciones %}
-                                            <li>
-                                                {{ cancion.titulo }} - {{ cancion.duracion }}
-                                                <button type="button" class="btn remove-song" style="color: white;" data-id="{{ cancion.id }}"><i class="fa-solid fa-trash"></i></button>
-                                            </li>
-                                        {% endfor %}
-                                    </ol>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label>Agregar Nuevas Canciones</label>
-                                    <div class="dropzone" id="canciones-dropzone"></div>
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                            {{ form_end(form) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+	{% include 'nav.html.twig' %}
+	<section class="container min-vh-100 d-flex justify-content-center align-items-center text-center" style="background-color: #00000091; margin-top: 40px;">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-body">
+							<h1 class="card-title text-center mb-4">Editar Álbum</h1>
+							{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+							<div class="form-group mb-3">
+								{{ form_label(form.nombre) }}
+								{{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.nombre) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.fechaLanzamiento) }}
+								{{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.fechaLanzamiento) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.generosMusicales) }}
+								<div class="form-check-group">
+									{% for generosMusicales in form.generosMusicales %}
+										<div class="form-check mb-2">
+											{{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
+											{{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
+										</div>
+									{% endfor %}
+								</div>
+								{{ form_errors(form.generosMusicales) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.fotoPortada) }}
+								{{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.fotoPortada) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.artista) }}
+								{{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.artista) }}
+							</div>
+							<div class="form-group mb-3">
+								<label>Canciones Existentes</label>
+								<ol>
+									{% for cancion in album.canciones %}
+										<li>
+											{{ cancion.titulo }}
+											-
+											{{ cancion.duracion }}
+											<button type="button" class="btn remove-song" style="color: white;" data-id="{{ cancion.id }}">
+												<i class="fa-solid fa-trash"></i>
+											</button>
+										</li>
+									{% endfor %}
+								</ol>
+							</div>
+							<div class="form-group mb-3">
+								<label>Agregar Nuevas Canciones</label>
+								<div class="dropzone" id="canciones-dropzone"></div>
+							</div>
+							<button type="submit" class="btn btn-primary mt-3">Guardar</button>
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
-    <script>
+	{{ parent() }}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+	<script>
         Dropzone.autoDiscover = false;
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -94,6 +98,17 @@
                 maxFilesize: 50, // Tamaño máximo del archivo en MB
                 acceptedFiles: "audio/*",
                 addRemoveLinks: true,
+                previewTemplate: `
+                    <div class="dz-preview dz-file-preview">
+                        <div class="dz-details">
+                            <div class="dz-filename"><span data-dz-name></span></div>
+                            <div class="dz-size" data-dz-size></div>
+                        </div>
+                        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                        <button class="dz-remove btn btn-danger" data-dz-remove><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `,
                 init: function() {
                     this.on("sending", function(file, xhr, formData) {
                         formData.append("artista", artistaNombre);

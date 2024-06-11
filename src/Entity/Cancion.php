@@ -42,7 +42,7 @@ class Cancion
     /**
      * @var Collection<int, Favorito>
      */
-    #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'cancion')]
+    #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'cancion', cascade: ['remove'], orphanRemoval: true)]
     private Collection $favoritos;
 
     public function __construct()

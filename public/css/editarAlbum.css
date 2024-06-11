@@ -1,0 +1,44 @@
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.form-control {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+}
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 10px;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.form-check-input {
+    border-radius: 50%;
+}
+.form-check-label {
+    margin-left: 10px;
+}
+.remove-song {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+ol {
+    padding-left: 20px;
+}
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.dropzone {
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f8f9fa;
+}

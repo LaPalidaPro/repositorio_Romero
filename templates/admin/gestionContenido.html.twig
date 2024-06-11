@@ -1,117 +1,124 @@
 {% extends 'frontend.html.twig' %}
 
 {% block title %}
-    Administración
+	Administración
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
-    
-</style>
-    
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<style></style>
+
 {% endblock %}
 
 {% block body %}
-    {% include 'nav.html.twig' %}
-    <section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
-        <a href="{{ path('app_admin') }}" class="btn btnVolverAdmin">
-            <i class="fas fa-arrow-left"></i> Volver al Menú Administrador
-        </a>
-        <h1>Gestión de contenido</h1>
-        {% include 'mensajesFlash.html.twig' %}
-        <div class="container">
-            <form id="searchForm" class="input-group mb-3">
-                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de artista...">
-                <button type="submit" class="btn btn-outline-secondary">
-                    <i class="fas fa-search lupa"></i>
-                </button>
-            </form>
-        </div>
-        <div class="table-responsive">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <caption>
-                    <h2 class="caption">Artistas</h2>
-                </caption>
-                <a href="{{ path('app_crearArtista') }}" class="btn btn-primary">
-                    <i class="fa-solid fa-plus"></i> Crear Artista
-                </a>
-            </div>
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre</th>
-                        <th>Año Debut</th>
-                        <th>País de Origen</th>
-                        <th>Biografía</th>
-                        <th>Imagen del Artista</th>
-                        <th>Álbums</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for dato in datos %}
-                        <tr>
-                            <td>{{ dato.id }}</td>
-                            <td>{{ dato.nombre }}</td>
-                            <td>{{ dato.anoDebut|date('Y') }}</td>
-                            <td>{{ dato.paisOrigen }}</td>
-                            <td>{{ dato.biografia }}</td>
-                            <td>
-                                {% if dato.imgArtista %}
-                                    <img src="{{ asset('images/grupos/' ~ dato.imgArtista) }}" alt="{{ dato.nombre }}" class="img-artista" width="100">
-                                {% else %}
-                                    No image
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ path('app_gestionAlbums', {'id': dato.id}) }}">
-                                    <button type="button" class="btn btn-outline-secondary">
-                                        <i class="fa-regular fa-eye"></i>
-                                    </button>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{{ path('app_editarArtista', {'id': dato.id}) }}">
-                                    <button type="button" class="btn btn-outline-secondary">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                    </button>
-                                </a>
-                                <form action="{{ path('app_borrarArtista', {'id': dato.id}) }}" method="post" style="display:inline;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dato.id) }}">
-                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+	{% include 'nav.html.twig' %}
+	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+		<a href="{{ path('app_admin') }}" class="btn btnVolverAdmin">
+			<i class="fas fa-arrow-left"></i>
+			Volver al Menú Administrador
+		</a>
+		<h1>Gestión de contenido</h1>
+		{% include 'mensajesFlash.html.twig' %}
+		<div class="container">
+			<form id="searchForm" class="input-group mb-3">
+				<input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de artista...">
+				<button type="submit" class="btn btn-outline-secondary">
+					<i class="fas fa-search lupa"></i>
+				</button>
+			</form>
+		</div>
+		<div class="table-responsive">
+			<div class="d-flex justify-content-between align-items-center mb-2">
+				<caption>
+					<h2 class="caption">Artistas</h2>
+				</caption>
+				<div class="botonesCrear">
+					<a href="{{ path('app_crearArtista') }}" class="btn btn-primary">
+						<i class="fa-solid fa-plus"></i>
+						Crear Artista
+					</a>
+					<a href="{{ path('app_crearAlbum') }}" class="btn btn-primary">
+						<i class="fa-solid fa-plus"></i>
+						Crear Album
+					</a>
+				</div>
+
+			</div>
+			<table class="table table-bordered table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Año Debut</th>
+						<th>País de Origen</th>
+						<th>Biografía</th>
+						<th>Imagen del Artista</th>
+						<th>Álbums</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for dato in datos %}
+						<tr>
+							<td>{{ dato.id }}</td>
+							<td>{{ dato.nombre }}</td>
+							<td>{{ dato.anoDebut|date('Y') }}</td>
+							<td>{{ dato.paisOrigen }}</td>
+							<td>{{ dato.biografia }}</td>
+							<td>
+								{% if dato.imgArtista %}
+									<img src="{{ asset('images/grupos/' ~ dato.imgArtista) }}" alt="{{ dato.nombre }}" class="img-artista" width="100">
+								{% else %}
+									No image
+								{% endif %}
+							</td>
+							<td>
+								<a href="{{ path('app_gestionAlbums', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-regular fa-eye"></i>
+									</button>
+								</a>
+							</td>
+							<td>
+								<a href="{{ path('app_editarArtista', {'id': dato.id}) }}">
+									<button type="button" class="btn btn-outline-secondary">
+										<i class="fa-regular fa-pen-to-square"></i>
+									</button>
+								</a>
+								<form action="{{ path('app_borrarArtista', {'id': dato.id}) }}" method="post" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dato.id) }}">
+									<button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+										<i class="fa-solid fa-trash"></i>
+									</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#searchForm').submit(function (event) {
-                event.preventDefault();
-                var searchText = $('#searchInput').val().toLowerCase();
-                $('table tbody tr').each(function () {
-                    var artistName = $(this).find('td:eq(1)').text().toLowerCase();
-                    if (artistName.indexOf(searchText) === -1) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            });
-        });
-    </script>
+	{{ parent() }}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+	<script>
+		$(document).ready(function () {
+$('#searchForm').submit(function (event) {
+event.preventDefault();
+var searchText = $('#searchInput').val().toLowerCase();
+$('table tbody tr').each(function () {
+var artistName = $(this).find('td:eq(1)').text().toLowerCase();
+if (artistName.indexOf(searchText) === -1) {
+$(this).hide();
+} else {
+$(this).show();
+}
+});
+});
+});
+	</script>
 {% endblock %}
