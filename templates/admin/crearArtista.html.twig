@@ -10,48 +10,65 @@
 
 {% block body %}
     {% include 'nav.html.twig' %}
-    <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center" 
-    style="background-color: #00000091;margin-top: 40px;">
-        <h1 class="text-center mb-4">Crear Nuevo Artista</h1>
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
+    <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center"
+    style="background-color: #00000091;margin-top: 40px;display: flow-root !important;">
+    <nav aria-label="breadcrumb" style="margin-top: 70px;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ path('app_gestionContenido') }}">
+                Gestión de Artistas
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Crear Artista
+        </li>
+    </ol>
+</nav>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Crear Nuevo Artista</h1>
                     {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-                        <div class="form-group mb-3">
-                            {{ form_label(form.nombre) }}
-                            {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.nombre, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.nombre, {'attr': {'class': 'form-control', 'placeholder': 'Nombre del Artista'}}) }}
                             {{ form_errors(form.nombre) }}
                         </div>
-                        <div class="form-group mb-3">
-                            {{ form_label(form.anoDebut) }}
-                            {{ form_widget(form.anoDebut, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.anoDebut, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.anoDebut, {'attr': {'class': 'form-control', 'placeholder': 'Año de Debut'}}) }}
                             {{ form_errors(form.anoDebut) }}
                         </div>
-                        <div class="form-group mb-3">
-                            {{ form_label(form.paisOrigen) }}
-                            {{ form_widget(form.paisOrigen, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.paisOrigen, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.paisOrigen, {'attr': {'class': 'form-control', 'placeholder': 'País de Origen'}}) }}
                             {{ form_errors(form.paisOrigen) }}
                         </div>
-                        <div class="form-group mb-3">
-                            {{ form_label(form.biografia) }}
-                            {{ form_widget(form.biografia, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.biografia, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.biografia, {'attr': {'class': 'form-control', 'placeholder': 'Biografía del Artista'}}) }}
                             {{ form_errors(form.biografia) }}
                         </div>
-                        <div class="form-group mb-3">
-                            {{ form_label(form.imgArtista) }}
+                        <div class="form-group">
+                            {{ form_label(form.imgArtista, null, {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(form.imgArtista, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.imgArtista) }}
                         </div>
-                        <div class="form-group mb-3">
-                            {{ form_label(form.user) }}
+                        <div class="form-group">
+                            {{ form_label(form.user, null, {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.user) }}
                         </div>
-                        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
                     {{ form_end(form) }}
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+</section>
 {% endblock %}
