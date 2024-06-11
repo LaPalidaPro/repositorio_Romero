@@ -9,8 +9,7 @@
 {% endblock %}
 
 {% block body %}
-
-
+{% include 'nav.html.twig' %}
 	<section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
 		<a href="{{ path('app_admin') }}" class="btn btnVolverAdmin">
 			<i class="fas fa-arrow-left"></i>
@@ -36,10 +35,6 @@
 						Usuarios
 					</h2>
 				</caption>
-				<a href="{{ path('app_crearArtista') }}" class="btn btn-primary">
-					<i class="fa-solid fa-plus"></i>
-					Crear Usuario
-				</a>
 			</div>
 			<table class="table table-bordered table-striped table-hover">
 				<thead>
@@ -50,7 +45,6 @@
 						<th>Email</th>
 						<th>Fecha Registro</th>
 						<th>Foto</th>
-						<th>Sid</th>
 						<th>Roles</th>
 						<th>Acciones</th>
 					</tr>
@@ -64,7 +58,6 @@
 							<td>{{dato.email}}</td>
 							<td>{{dato.fechaRegistro|date('Y')}}</td>
 							<td>{{dato.foto}}</td>
-							<td>{{dato.sid}}</td>
 							<td>
 								{% for rol in dato.roles %}
 									{{ rol }}
@@ -73,17 +66,11 @@
 								{% endfor %}
 							</td>
 							<td>
-								<a href="{{ path('app_editarArtista', {'id': dato.id}) }}">
+								<a href="{{ path('app_editarUsuarioRoles', {'id': dato.id}) }}">
 									<button type="button" class="btn btn-outline-secondary">
-										<i class="fa-regular fa-pen-to-square"></i>
+										<i class="fa-regular fa-pen-to-square"></i> Gestionar Roles
 									</button>
 								</a>
-								<form action="{{ path('app_borrarArtista', {'id': dato.id}) }}" method="post" style="display:inline;">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dato.id) }}">
-									<button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
-										<i class="fa-solid fa-trash"></i>
-									</button>
-								</form>
 							</td>
 						</tr>
 					{% endfor %}
@@ -94,18 +81,18 @@
 
 	<script>
 		$(document).ready(function () {
-$('#searchForm').submit(function (event) {
-event.preventDefault();
-var searchText = $('#searchInput').val().toLowerCase();
-$('table tbody tr').each(function () {
-var artistName = $(this).find('td:eq(1)').text().toLowerCase();
-if (artistName.indexOf(searchText) === -1) {
-$(this).hide();
-} else {
-$(this).show();
-}
-});
-});
-});
+			$('#searchForm').submit(function (event) {
+				event.preventDefault();
+				var searchText = $('#searchInput').val().toLowerCase();
+				$('table tbody tr').each(function () {
+					var userName = $(this).find('td:eq(1)').text().toLowerCase();
+					if (userName.indexOf(searchText) === -1) {
+						$(this).hide();
+					} else {
+						$(this).show();
+					}
+				});
+			});
+		});
 	</script>
 {% endblock %}

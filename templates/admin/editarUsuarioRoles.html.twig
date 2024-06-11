@@ -1,0 +1,43 @@
+{# templates/admin/editarUsuarioRoles.html.twig #}
+{% extends 'frontend.html.twig' %}
+
+{% block title %}Editar Roles de Usuario
+{% endblock %}
+
+{% block body %}
+	{% include 'nav.html.twig' %}
+	<section class="container min-vh-100 d-flex justify-content-center align-items-center text-center" style="background-color: #00000091;margin-top: 80px;display: flow-root !important;">
+		<nav aria-label="breadcrumb" style="margin-top: 70px;">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item">
+					<a href="{{ path('app_gestionUsuarios') }}">
+						Gestión de Usuarios
+					</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">
+					Gestión de Roles
+				</li>
+			</ol>
+		</nav>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-body">
+							<h1 class="card-title text-center mb-4">Editar Roles de Usuario</h1>
+							{% include 'mensajesFlash.html.twig' %}
+							{{ form_start(form) }}
+							<div class="form-group mb-3">
+								{{ form_label(form.roles) }}
+								{{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.roles) }}
+							</div>
+							<button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
