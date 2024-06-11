@@ -2,6 +2,9 @@
   background-color: #000000d9;
   padding: 129px;
 }
+.container {
+  max-width: initial;
+}
 .tituloCancion {
   margin-top: 20px;
 }

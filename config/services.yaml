@@ -7,7 +7,9 @@ parameters:
     images_directory: '%kernel.project_dir%/public/images/grupos/'
     images_perfil: '%kernel.project_dir%/public/images/perfil'
     images_publi: '%kernel.project_dir%/public/images/publicidad/'
+    images_fijo: '%kernel.project_dir%/public/images'
     audio_directory: '%kernel.project_dir%/public/music'
+    
 services:
     # default configuration for services in *this* file
     _defaults:

@@ -70,17 +70,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const playClick = () => {
-            audio.play().then(() => {
+        audio.play().then(() => {
             console.log("Audio reproducido.");
             playBtn.style.display = "none";
             pauseBtn.style.display = "block";
-            }).catch(error => {
-                console.error("Error al intentar reproducir el audio:", error);
-            });
+        }).catch(error => {
+            console.error("Error al intentar reproducir el audio:", error);
+        });
     };
 
     const pauseClick = () => {
-            audio.pause();
+        audio.pause();
         pauseBtn.style.display = "none";
         playBtn.style.display = "block";
     };
@@ -173,18 +173,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // Cambiar el icono del corazón
     heartIconEmpty.addEventListener("click", function (event) {
         event.preventDefault();
-        heartIconEmpty.style.display = "none";
-        heartIconFull.style.display = "block";
-        console.log("Corazón lleno activado.");
+        toggleFavorito(audio.dataset.cancionId).then(response => {
+            if (response.status === 'added') {
+                heartIconEmpty.style.display = "none";
+                heartIconFull.style.display = "block";
+                console.log("Añadido a favoritos.");
+                mostrarMensaje("Añadido a favoritos.", heartIconEmpty);
+            }
+        });
     });
 
     heartIconFull.addEventListener("click", function (event) {
         event.preventDefault();
-        heartIconFull.style.display = "none";
-        heartIconEmpty.style.display = "block";
-        console.log("Corazón vacío activado.");
+        toggleFavorito(audio.dataset.cancionId).then(response => {
+            if (response.status === 'removed') {
+                heartIconFull.style.display = "none";
+                heartIconEmpty.style.display = "block";
+                console.log("Eliminado de favoritos.");
+                mostrarMensaje("Eliminado de favoritos.", heartIconFull);
+            }
+        });
     });
-    // visibilidad el volumen y el icono del volumen
+
+    // Visibilidad del volumen y el icono del volumen
     volumeIcon.addEventListener("click", function (event) {
         event.preventDefault();
         if (volumeSlider.style.display === "none") {

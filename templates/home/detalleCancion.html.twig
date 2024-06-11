@@ -7,6 +7,11 @@
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset('css/cancion.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
+	<style>
+		#search-form {
+			display: none;
+		}
+	</style>
 {% endblock %}
 
 {% block body %}
@@ -60,8 +65,9 @@
 		</div>
 	</section>
 
-	<audio id="audio" data-tiempo="{{ tiempo }}" data-volumen="{{ volumen }}" data-corazon="{{ corazon }}" src="{{ asset('music/' ~ cancion.titulo) }}" ontimeupdate="actualizarTiempo()"></audio>
-	{% block custom_javascripts %}
-		<script src="{{ asset('js/detalleCancion.js') }}"></script>
-	{% endblock %}
+	<audio id="audio" data-tiempo="{{ tiempo }}" data-volumen="{{ volumen }}" data-corazon="{{ corazon }}" data-cancion-id="{{ cancion.id }}" src="{{ asset('music/' ~ cancion.titulo) }}" ontimeupdate="actualizarTiempo()"></audio>
+{% endblock %}
+
+{% block custom_javascripts %}
+	<script src="{{ asset('js/detalleCancion.js') }}"></script>
 {% endblock %}

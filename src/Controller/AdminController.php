@@ -91,6 +91,8 @@ class AdminController extends AbstractController
             $entityManager->persist($artista);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Artista creado con éxito.');  // 
+
             return $this->redirectToRoute('app_gestionContenido');
         }
 

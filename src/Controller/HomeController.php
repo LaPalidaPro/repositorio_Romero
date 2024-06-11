@@ -311,4 +311,21 @@ public function buscarCancion(Request $request, CancionRepository $cancionReposi
             'carta_presentacion' => $cartaPresentacion,
         ]);
     }
+    
+    #[Route('/harmonyhub/top-canciones', name: 'top_canciones')]
+    public function getTopCanciones(EntityManagerInterface $em): JsonResponse
+    {
+        $canciones = $em->getRepository(Cancion::class)->findBy([], ['numeroReproducciones' => 'DESC'], 10);
+
+        $data = array_map(function(Cancion $cancion) {
+            return [
+                'titulo' => $cancion->getTitulo(),
+                'artista' => $cancion->getArtista()->getNombre(),
+                'audioSrc' => '/music/' . $cancion->getTitulo(),
+                'id' => $cancion->getId(),
+            ];
+        }, $canciones);
+
+        return new JsonResponse($data);
+    }
 }

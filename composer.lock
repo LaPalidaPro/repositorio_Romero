@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2254bb073a04231ba8a060a7ccafa86a",
+    "content-hash": "b620ea1ee3ecfa85ab95ec385c72c90b",
     "packages": [
         {
             "name": "composer/semver",
@@ -8322,16 +8322,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.18",
+            "version": "9.6.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04"
+                "reference": "a1a54a473501ef4cdeaae4e06891674114d79db8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04",
-                "reference": "32c2c2d6580b1d8ab3c10b1e9e4dc263cc69bb04",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a1a54a473501ef4cdeaae4e06891674114d79db8",
+                "reference": "a1a54a473501ef4cdeaae4e06891674114d79db8",
                 "shasum": ""
             },
             "require": {
@@ -8405,7 +8405,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.18"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.19"
             },
             "funding": [
                 {
@@ -8421,7 +8421,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-21T12:07:32+00:00"
+            "time": "2024-04-05T04:35:58+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9754,16 +9754,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v7.0.4",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "54ca13ec990a40411ad978e08d994fca6cdd865f"
+                "reference": "3e1cb8c4dee341cfe96ae9fe29b1acda52a6bb16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/54ca13ec990a40411ad978e08d994fca6cdd865f",
-                "reference": "54ca13ec990a40411ad978e08d994fca6cdd865f",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/3e1cb8c4dee341cfe96ae9fe29b1acda52a6bb16",
+                "reference": "3e1cb8c4dee341cfe96ae9fe29b1acda52a6bb16",
                 "shasum": ""
             },
             "require": {
@@ -9795,7 +9795,8 @@
                     "Symfony\\Bridge\\PhpUnit\\": ""
                 },
                 "exclude-from-classmap": [
-                    "/Tests/"
+                    "/Tests/",
+                    "/bin/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -9815,7 +9816,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v7.0.4"
+                "source": "https://github.com/symfony/phpunit-bridge/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -9831,7 +9832,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T19:22:56+00:00"
+            "time": "2024-06-04T06:50:37+00:00"
         },
         {
             "name": "symfony/web-profiler-bundle",

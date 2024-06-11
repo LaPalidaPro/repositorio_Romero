@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="csrf-token" content="f.ILVj9JkNada5cjzc7pcp20a4uh3fdDEqCXAerYc15kQ.WNQNmq5qEebjBnHomfxZn2v23i-qBH5BUxNo5uB9rDxw_hm3qGkmhNIqaQ"/>
+		<link rel="icon" href="/images/HHLogo.png"/>
+		<link rel="icon" href="/images/HH_logoNegro.png"/>
+		<title>
+			HarmonyHub-
+			    Administración
+		</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+					<link rel="stylesheet" href="/css/admin.css"/>
+			<link rel="stylesheet" href="/css/estilos.css"/>
+			<link rel="stylesheet" href="/css/footer.css"/>
+			</head>
+	<body>
+				    
+<nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container">
+        <a href="/harmonyhub/principal"><img class="imagenLogo" src="/images/HHLogo.png" alt="HHLogo"/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <!-- Barra de búsqueda -->
+            <form id="search-form" class="form-inline my-2 my-lg-0 ml-auto" method="GET" action="/buscador">
+                <input class="form-control mr-sm-2" type="search" name="query" id="search-input" placeholder="Buscar..." aria-label="Buscar" required/>
+                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="/images/perfil/yo.jpg" alt="Usuario" class="user-icon rounded-circle"/>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/perfil/editar">Mi Perfil</a>
+                            <a class="dropdown-item" href="/listaCanciones">Mis Canciones</a>
+                                                            <a class="dropdown-item" href="/harmonyhub/admin">Administrar</a>
+                                                        <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/harmonyhub/logout">
+                                <i class="fa-solid fa-power-off"></i> Cerrar Sesión
+                            </a>
+                        </div>
+                    </li>
+                                <!-- Menú desplegable de cambio de idioma -->
+                <li class="nav-item dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <img src="/images/spanish-flag.png" alt="Español" class="rounded-circle"/>
+                                            </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item change-locale" href="#" data-locale="es">
+                            <img src="/images/spanish-flag.png" alt="Español" class="rounded-circle"/>
+                            Español
+                        </a>
+                        <a class="dropdown-item change-locale" href="#" data-locale="en">
+                            <img src="/images/english-flag.png" alt="Inglés" class="rounded-circle"/>
+                            Inglés
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <section class="container-fluid container-admin min-vh-100 justify-content-center align-items-center text-center">
+        <a href="/harmonyhub/admin" class="btn btnVolverAdmin">
+            <i class="fas fa-arrow-left"></i> Volver al Menú Administrador
+        </a>
+        <h1>Gestión de contenido</h1>
+        	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		Artista creado con éxito.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+        <div class="container">
+            <form id="searchForm" class="input-group mb-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de artista...">
+                <button type="submit" class="btn btn-outline-secondary">
+                    <i class="fas fa-search lupa"></i>
+                </button>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <caption>
+                    <h2 class="caption">Artistas</h2>
+                </caption>
+                <a href="/admin/crearArtista" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i> Crear Artista
+                </a>
+            </div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Año Debut</th>
+                        <th>País de Origen</th>
+                        <th>Biografía</th>
+                        <th>Imagen del Artista</th>
+                        <th>Álbums</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                            <tr>
+                            <td>1</td>
+                            <td>Adelfas</td>
+                            <td>2010</td>
+                            <td>España</td>
+                            <td>Biografía de Artista 1</td>
+                            <td>
+                                                                    <img src="/images/grupos/665b109e77615.jpg" alt="Adelfas" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums1">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/1">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista1" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="327b18.xaXOYilnfETMejLyeLFbEPL7krhJNjaNPN9Psfi4jAo.iJCjVkheCiq1JQvGPfMrQ5ij4PJwfHLcZY0b8LmN622sxqUvbzEvHIVCCg">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>3</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6666d107c906f.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums3">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/3">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista3" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="10d3df78f62a.i5fY22YFv8Kx7b6chBDAZ6gGY80F9ilFrsU_EtDcU38.4s6_6VMwxbfJv__r51vzNsZOUo5KgGM_34ZGQbiMMCbR5r6SP0z3s9Db1Q">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>4</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6666d1958ad7c.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums4">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/4">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista4" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="f7e29d92f98760f4541518ed9576b8._XMVpPuCHXYvnqlXw46le4V9J2ul3jZRR-nR4a7eeYQ.iSll1bTsMD4ZweNn7vftGLwWcRrUjgViKtiZl8KbVOuuRWKclvMuEhfv7A">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>5</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6666d28fc66d7.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums5">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/5">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista5" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="c0852797e86788704b8f34a3943.-mwySLUpjMS5ZDFJlexUl0NbSM3V-1qd3SXlpFknWts.ySNgAeJx6aHfDAQGoKsE9AEcA_SPnivNmEyS1gYWDeONFEgt8nPhlOEXcA">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>6</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6666d3574359d.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums6">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/6">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista6" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="b024c1dadc07bd6.roA8XshljZkn4gt0EO-fRzWpP30b84NGT1ctQSTmc6A.5tpyKbgj6cNJlXs-dKDtI2rdWhtKl8YtfS0cNXCUG_ed1REN5Qu73H-2Rg">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>7</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/66672153e835d.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums7">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/7">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista7" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="3b63614f442.iurH8TJD80Lw1d5J0YOB5CJcqW4C3FuR5dCczO61XHc.4qGBo2ouhXXAorc-t8assWwLnQh4ihOmsYTWi4mMBi7Q0qypZy64B8ahhw">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>8</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/66672261d3ddf.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums8">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/8">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista8" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="0ca51535ffd2892d92dba497e412a.vEBLCArB661mcNSTrn_nCTHEV96Z8CSLQUYLjo-YZyY.-xMzJU2EoONeRoylgymQVlfyYbWrqk7uLjZ5w-vrV17wOA5paKO7-CFJ4A">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>9</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/66672695304e8.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums9">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/9">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista9" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="d500e5151429.C08oAPT82Kf6Geoe2PSDYgb1Aee4csQ1B4GwOLLpqF8.fAdva8OtotDIKJx9i8O3MW2HZq_MJfwMd_bCXcCG-Rx9fHpzrrS-y6hujQ">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>10</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6667269fedb4d.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums10">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/10">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista10" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="d9eb3adb0edd4d5fa29.suEsFYcNzFVAvZVQS4vTistHHkZUqdCstKg2Rb-X3Qc.y4kaeNU_lG0si6Rlf9iGwf4KZhwgx4Hh2vhMJtDvqTfookNg02yJYjPo2A">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>11</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666726d07716b.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums11">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/11">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista11" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="d4c2f899fa5cf7d4e7c703ecc85.uo1bIXdIl1xcaG16kAaLs_C8N0UIvot6gov_TKkqCqQ.2LgdTE4OwTo6OwNN2k3TxZ7jAHdw6Po9xf_LNfNIRZPKw2ppPwf7HTUGGg">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>12</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666727050a808.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums12">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/12">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista12" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="1b65a443f.aCaBr5Hs2B-C8KAgE_OLbNwr304hS9zl5iXwIVHfjl8.P0_E_ceG4FjTvexGfYnhCOpbphh-CKWk02C9WTTu9Gc3aMvN1bPhSsOb8Q">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>13</td>
+                            <td>Artista Editado</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6667279d4ee2a.png" alt="Artista Editado" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums13">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/13">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista13" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="af8adb6d25d88.bHwVoFTfjo2WMIx9BZO1Fhf7rjWdcJmMZ2d_6TxbpqQ.ABFU6gWH5cj-aLsKMMzAISGw1gDFP__oCVE1oEoIxecYLCziMevr4O8DvA">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>2</td>
+                            <td>Artista2</td>
+                            <td>2015</td>
+                            <td>México</td>
+                            <td>Biografía de Artista 2</td>
+                            <td>
+                                                                    <img src="/images/grupos/665b109e77615.jpg" alt="Artista2" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums2">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/2">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista2" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="4a017cd45458ac4fc99d3e0.llXznKnNQYocR1CvLZOkQYogOrkeYlGHOytVcNg-YvQ.owO32uSCDd1dFmTBTOTmKv5GDdB_ISu3bmIRJesOOJXeB6fI-rgE_lszEQ">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>14</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6667281610e5d.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums14">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/14">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista14" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="b3556e56f4587b43c.UNbcKKKKChe5Vgr-Zj5iliPm3l8mVTVGcWYF_SoT_tM.IO-MW-b5WWXKA0yEHl0J-EKprRByB0UQAB83l0ZSx4xkvLt7kvhQfPAnSw">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>15</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/6667288953e69.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums15">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/15">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista15" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="e42.wlhPg1UDg2KJXDV60SQ02W_gmzNfBkG0wEaIYabLoX0.jDoMyW075AjjEkxXp05GrgSSzUQSZ3H38Xf4NuKoljyjMBjwF2z3Jc4fWg">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>16</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666728e64ba5e.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums16">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/16">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista16" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="f5.4Q7yuUlTM9xw0ttvu6o5GkCreSx04-orcEyxUoM74oY.k2mlwDoYbIQ4te1W-utAdyn0G0YRgtxaNA34CMdMh861R7_YHAwAlzentA">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>17</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/66672902257a2.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums17">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/17">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista17" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="bca2a42.Rp8VdntBP3pcN1NkA5nYxhdZq5g0qV8NSaAz6IJH4Ew.cdJTTitwRkgxYR4yW-O1tnNr3apuy2s_BMhCvucwtzwB-H43CxFSIxBWOA">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>18</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666729727f497.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums18">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/18">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista18" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="c4c484d256c6152a80524ce7e5.WViZS6yfOXQx0Ha--GlqkPSWHbm2RJJuP509vPOkxRk.bBvNPc7nABIDhwDNwD4IpMDyeOvlI_gFedQP-oLmtH0LLvsF9O1aJEH9Jw">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>19</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666729c7da1b4.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums19">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/19">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista19" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="e13e5be40.6PqW8BGWQ7DbR9KLsKc1hoHpwZzzdVwT2Upwg334OUk.3q3gqX_nM_OCPuDyyJYGwc24mem-ERYrqi0d5ie0DBmEj8OjcPEP15ojmw">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>20</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/666729ed9ad0b.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums20">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/20">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista20" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="f.ABkNC8o5s62d6zBWXzr3q_KCI2DnI7f_rX5U07Q331w.a3x1WY1d-uzym1JmGE6UkpP3UlWdVNqK4BhmisVEjA5QdmhJ_mP2-NuTZQ">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                            <tr>
+                            <td>21</td>
+                            <td>Nuevo Artista</td>
+                            <td>2020</td>
+                            <td>España</td>
+                            <td>Biografía de prueba</td>
+                            <td>
+                                                                    <img src="/images/grupos/66672c5cd4728.png" alt="Nuevo Artista" class="img-artista" width="100">
+                                                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/gestion/Albums21">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/harmonyhub/admin/editarArtista/21">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </a>
+                                <form action="/harmonyhub/admin/gestion/borrarArtista21" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="12f80abfea7ca6d602d251aee.eFLZ_O1NmmaC76vWHZOQJ8vb7u-4xA0vmapLtJEU0mU.HRCAir8i0TTDo8a_f-TDaILjobrTiFJw8psi1chsvxMvDfSluj_DKteuyA">
+                                    <button type="submit" class="btn btn-outline-secondary" onclick="return confirm('¿Estás seguro de que deseas eliminar este artista?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                                    </tbody>
+            </table>
+        </div>
+    </section>
+					<footer class="pie">
+				<div class="container text-center">
+					<p>&copy; 2023 HarmonyHub.
+						Todos los derechos reservados
+						.</p>
+					<p>Creado por Celia Romero
+						.</p>
+					<ul class="list-inline">
+						<li class="list-inline-item">
+							<a href="/">Inicio</a>
+						</li>
+						<li class="list-inline-item">
+							<a href="/sobremi">Sobre mi</a>
+						</li>
+						<li class="list-inline-item">
+							<a href="https://www.linkedin.com/in/celia-romero-punz%C3%B3n-22a0a1194" target="_blank" rel="noopener noreferrer">
+								<i class="fa-brands fa-linkedin"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</footer>
+			</body>
+	    		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+		<script src="/js/traductor.js"></script>
+			
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#searchForm').submit(function (event) {
+                event.preventDefault();
+                var searchText = $('#searchInput').val().toLowerCase();
+                $('table tbody tr').each(function () {
+                    var artistName = $(this).find('td:eq(1)').text().toLowerCase();
+                    if (artistName.indexOf(searchText) === -1) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        });
+    </script>
+</html>
