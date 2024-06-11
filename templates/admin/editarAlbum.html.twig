@@ -93,7 +93,7 @@
             var albumNombre = "{{ form.nombre.vars.value ? form.nombre.vars.value|e('js') : '' }}";
 
             var cancionesDropzone = new Dropzone("#canciones-dropzone", {
-                url: "{{ path('upload') }}",
+                url: "{{ path('app_upload') }}",
                 paramName: "file",
                 maxFilesize: 50, // Tamaño máximo del archivo en MB
                 acceptedFiles: "audio/*",
