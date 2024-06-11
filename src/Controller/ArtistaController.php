@@ -72,7 +72,6 @@ class ArtistaController extends AbstractController
 
         $form = $this->createForm(ArtistaType::class, $artista);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $imgFile = $form->get('imgArtista')->getData();
             if ($imgFile) {

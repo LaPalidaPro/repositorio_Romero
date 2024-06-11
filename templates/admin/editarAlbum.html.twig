@@ -1,96 +1,92 @@
 {# templates/admin/editarAlbum.html.twig #}
 {% extends 'frontend.html.twig' %}
 
-{% block title %}Editar Álbum
-{% endblock %}
+{% block title %}Editar Álbum{% endblock %}
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/editarAlbum.css') }}">
-
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
 {% endblock %}
 
 {% block body %}
-	{% include 'nav.html.twig' %}
-	<section class="container min-vh-100 d-flex justify-content-center align-items-center text-center" style="background-color: #00000091; margin-top: 40px;">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-8">
-					<div class="card">
-						<div class="card-body">
-							<h1 class="card-title text-center mb-4">Editar Álbum</h1>
-							{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-							<div class="form-group mb-3">
-								{{ form_label(form.nombre) }}
-								{{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
-								{{ form_errors(form.nombre) }}
-							</div>
-							<div class="form-group mb-3">
-								{{ form_label(form.fechaLanzamiento) }}
-								{{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
-								{{ form_errors(form.fechaLanzamiento) }}
-							</div>
-							<div class="form-group mb-3">
-								{{ form_label(form.generosMusicales) }}
-								<div class="form-check-group">
-									{% for generosMusicales in form.generosMusicales %}
-										<div class="form-check mb-2">
-											{{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
-											{{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
-										</div>
-									{% endfor %}
-								</div>
-								{{ form_errors(form.generosMusicales) }}
-							</div>
-							<div class="form-group mb-3">
-								{{ form_label(form.fotoPortada) }}
-								{{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
-								{{ form_errors(form.fotoPortada) }}
-							</div>
-							<div class="form-group mb-3">
-								{{ form_label(form.artista) }}
-								{{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
-								{{ form_errors(form.artista) }}
-							</div>
-							<div class="form-group mb-3">
-								<label>Canciones Existentes</label>
-								<ol>
-									{% for cancion in album.canciones %}
-										<li>
-											{{ cancion.titulo }}
-											-
-											{{ cancion.duracion }}
-											<button type="button" class="btn remove-song" style="color: white;" data-id="{{ cancion.id }}">
-												<i class="fa-solid fa-trash"></i>
-											</button>
-										</li>
-									{% endfor %}
-								</ol>
-							</div>
-							<div class="form-group mb-3">
-								<label>Agregar Nuevas Canciones</label>
-								<div class="dropzone" id="canciones-dropzone"></div>
-							</div>
-							<button type="submit" class="btn btn-primary mt-3">Guardar</button>
-							{{ form_end(form) }}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    {% include 'nav.html.twig' %}
+    <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center"
+             style="background-color: #00000091;margin-top: 40px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title text-center mb-4">Editar Álbum</h1>
+							{% include 'mensajesFlash.html.twig' %}
+                            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'album-form'}}) }}
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.nombre) }}
+                                    {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.nombre) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.fechaLanzamiento) }}
+                                    {{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.fechaLanzamiento) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.generosMusicales) }}
+                                    <div class="form-check-group">
+                                        {% for generosMusicales in form.generosMusicales %}
+                                            <div class="form-check mb-2">
+                                                {{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
+                                                {{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {{ form_errors(form.generosMusicales) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.fotoPortada) }}
+                                    {{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.fotoPortada) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.artista) }}
+                                    {{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.artista) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <div class="dropzone" id="canciones-dropzone"></div>
+                                </div>
+                                <div id="canciones-container"></div> <!-- Contenedor para los inputs ocultos -->
+                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+                            {{ form_end(form) }}
+						<label>Canciones</label>
+							<ul class="list-group mb-3">
+								{% for cancion in canciones %}
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										{{ cancion.titulo }} ({{ cancion.duracion }})
+										<form action="{{ path('app_remove_cancion', {'id': cancion.id}) }}" method="post" class="d-inline-block">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cancion.id) }}">
+											<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+										</form>
+									</li>
+								{% endfor %}
+							</ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
-	<script>
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script>
         Dropzone.autoDiscover = false;
 
         document.addEventListener("DOMContentLoaded", function () {
             var artistaNombre = "{{ form.artista.vars.data ? form.artista.vars.data.nombre|e('js') : '' }}";
-            var albumNombre = "{{ form.nombre.vars.value ? form.nombre.vars.value|e('js') : '' }}";
+            var albumNombre = "{{ form.vars.value.nombre ? form.vars.value.nombre|e('js') : '' }}";
 
             var cancionesDropzone = new Dropzone("#canciones-dropzone", {
                 url: "{{ path('app_upload') }}",
@@ -121,38 +117,13 @@
                         hiddenInput.type = 'hidden';
                         hiddenInput.name = 'canciones[]';
                         hiddenInput.value = response.path;
-                        document.querySelector('form').appendChild(hiddenInput);
+                        document.querySelector('#canciones-container').appendChild(hiddenInput);
                         console.log("Campo oculto añadido: ", hiddenInput);
                     });
                     this.on("error", function(file, response) {
                         console.log("Error al subir el archivo: " + response);
                     });
                 }
-            });
-
-            // Manejar la eliminación de canciones
-            document.querySelectorAll('.remove-song').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var songId = this.getAttribute('data-id');
-                    var csrfToken = "{{ csrf_token('delete') }}";
-                    var csrfField = 'csrf_token_' + songId;
-
-                    fetch("{{ path('app_remove_cancion') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({ id: songId, csrf_token: csrfField })
-                    }).then(response => {
-                        if (response.ok) {
-                            // Eliminar el elemento de la lista
-                            this.closest('li').remove();
-                        } else {
-                            console.error('Error al eliminar la canción');
-                        }
-                    }).catch(error => console.error('Error:', error));
-                });
             });
         });
     </script>

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Album;
@@ -11,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use getID3;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +28,7 @@ class AlbumController extends AbstractController
     {
         $this->em = $em;
         $this->logger = $logger;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     #[Route('/harmonyhub/admin/gestion/Albums{id}', name: 'app_gestionAlbums')]
@@ -187,13 +186,10 @@ class AlbumController extends AbstractController
                 }
             }
 
-            // Depurar el contenido del request
             $allRequestData = $request->request->all();
-            $this->addFlash('info', 'Datos del request: ' . json_encode($allRequestData));
 
             $totalDuration = 0;
-            $numPistas = 0;
-            // Manejar la subida de canciones
+            $numPistas = $album->getNumPistas();
             if (isset($allRequestData['canciones'])) {
                 $cancionesPaths = $allRequestData['canciones'];
                 if (is_array($cancionesPaths) && !empty($cancionesPaths)) {
@@ -203,10 +199,8 @@ class AlbumController extends AbstractController
                         $fileInfo = $getID3->analyze($filePath);
                         $duracionSegundos = isset($fileInfo['playtime_seconds']) ? $fileInfo['playtime_seconds'] : 0;
 
-                        // Verificar la duración en segundos
                         $this->logger->info('Duración de ' . basename($cancionPath) . ': ' . $duracionSegundos . ' segundos');
 
-                        // Formatear la duración
                         $duracionFormateada = $this->formatDuration($duracionSegundos);
                         $totalDuration += $duracionSegundos;
 
@@ -214,57 +208,63 @@ class AlbumController extends AbstractController
                         $cancion->setTitulo(basename($cancionPath));
                         $cancion->setAlbum($album);
                         $cancion->setArtista($album->getArtista());
-                        $cancion->setDuracion($duracionFormateada); // Guardar la duración formateada
-                        $cancion->setFechaLanzamiento(new \DateTime()); // Asigna la fecha de lanzamiento actual
-                        $cancion->setGeneroMusical(implode(',', $album->getGenerosMusicales())); // Asigna un valor predeterminado o usa un valor real
-                        $cancion->setNumeroReproducciones(0); // Asigna un valor predeterminado
+                        $cancion->setDuracion($duracionFormateada);
+                        $cancion->setFechaLanzamiento(new \DateTime());
+                        $cancion->setGeneroMusical(implode(',', $album->getGenerosMusicales()));
+                        $cancion->setNumeroReproducciones(0);
                         $this->em->persist($cancion);
                         $album->addCancion($cancion);
                         $numPistas++;
                     }
                 } else {
-                    $this->addFlash('error', 'No se han recibido canciones. 1');
+                    $this->addFlash('error', 'No se han recibido canciones.');
                 }
             } else {
-                $this->addFlash('error', 'No se han recibido canciones. 2');
+                $this->addFlash('error', 'No se han recibido canciones.');
             }
 
-            // Calcular y establecer la duración total del álbum antes de persistir
-            $album->setDuracionTotal($totalDuration);
+            $album->calculateDuracionTotal();
             $album->setNumPistas($numPistas);
             $this->em->persist($album);
             $this->em->flush();
-
+            $this->addFlash('success', 'Álbum actualizado con éxito.');
             return $this->redirectToRoute('app_gestionContenido');
         }
 
-        // Definir las variables artistaNombre y albumNombre para la vista
-        $artistaNombre = $album->getArtista() ? $album->getArtista()->getNombre() : '';
-        $albumNombre = $album->getNombre() ?: '';
+        $canciones = $album->getCanciones();
 
         return $this->render('admin/editarAlbum.html.twig', [
             'form' => $form->createView(),
             'album' => $album,
-            'artistaNombre' => $artistaNombre,
-            'albumNombre' => $albumNombre,
+            'canciones' => $canciones,
         ]);
     }
 
-    #[Route('/harmonyhub/admin/removeCancion', name: 'app_remove_cancion', methods: ['POST'])]
-    public function removeCancion(Request $request): JsonResponse
+    #[Route('/harmonyhub/admin/removeCancion/{id}', name: 'app_remove_cancion', methods: ['POST'])]
+    public function removeCancion(Request $request, int $id): Response
     {
-        $data = json_decode($request->getContent(), true);
-        $cancionId = $data['id'];
-
-        $cancion = $this->em->getRepository(Cancion::class)->find($cancionId);
-        if ($cancion) {
+        $cancion = $this->em->getRepository(Cancion::class)->find($id);
+        if (!$cancion) {
+            $this->addFlash('error', 'Canción no encontrada.');
+            return $this->redirectToRoute('app_gestionContenido');
+        }
+    
+        $albumId = $cancion->getAlbum()->getId();
+        $album = $cancion->getAlbum();
+        $album->calculateDuracionTotal();
+        $csrfToken = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete' . $cancion->getId(), $csrfToken)) {
+            $album->setNumPistas($album->getNumPistas()-1);
             $this->em->remove($cancion);
             $this->em->flush();
-            return new JsonResponse(['success' => true]);
+            $this->addFlash('success', 'Canción eliminada correctamente.');
+        } else {
+            $this->addFlash('error', 'Token CSRF no válido.');
         }
-
-        return new JsonResponse(['error' => 'Canción no encontrada'], Response::HTTP_NOT_FOUND);
+    
+        return $this->redirectToRoute('app_editarAlbum', ['id' => $albumId]);
     }
+    
 
     private function formatDuration($seconds)
     {
