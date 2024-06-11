@@ -69,6 +69,7 @@ class LoginController extends AbstractController
                         $passwordHasher->hashPassword($user, $user->getPassword())
                     );
 
+                    $user->setFoto('defaultImage.jpg');
                     $this->em->persist($user);
                     $this->em->flush();
                     $this->addFlash('success', 'Registro completado con éxito.');

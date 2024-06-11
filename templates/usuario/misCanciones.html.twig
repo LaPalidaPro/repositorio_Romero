@@ -32,7 +32,7 @@
 				{% for favorito in datosCanciones %}
 					<div class="cardBtn">
 						<div class="card" data-audio-src="{{ asset('music/' ~ favorito.cancion.titulo) }}" data-cancion="{{ favorito.cancion.titulo }}" data-artista="{{ favorito.cancion.artista.nombre }}" data-id="{{ favorito.cancion.id }}" data-favorito="true" onclick="playSelectedSong(this)">
-							<img src="https://via.placeholder.com/100" class="card-img-top" alt="{{ favorito.cancion.titulo }}">
+						<img src="{{ '/images/grupos/' ~ favorito.cancion.album.fotoPortada}}" alt="Canción" class="song-image">
 							<div class="card-body">
 								<h5 class="card-title">{{ favorito.cancion.titulo }}</h5>
 

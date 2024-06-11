@@ -32,14 +32,10 @@ use Symfony\Component\Filesystem\Filesystem;
 class AdminController extends AbstractController
 {
     private $em;
-    private $csrfTokenManager;
-    private $logger;
 
     public function __construct(EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager, LoggerInterface $logger)
     {
         $this->em = $em;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->logger = $logger;
     }
 
     #[Route('/harmonyhub/admin', name: 'app_admin')]

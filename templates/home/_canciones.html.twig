@@ -10,7 +10,7 @@
                      data-artista="{{ cancion.artista.nombre }}" 
                      data-id="{{ cancion.id }}" 
                      data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
-                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="{{ cancion.titulo }}">
+                    <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada}}" class="card-img-top" alt="{{ cancion.titulo }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ cancion.titulo }}</h5>
                         <p class="card-text">{{ cancion.artista.nombre }}</p>

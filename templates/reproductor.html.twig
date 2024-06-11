@@ -4,7 +4,11 @@
             <div class="song-info text-center text-md-start">
                 <div class="song-details d-flex align-items-center">
                     <a id="enlaceDetallesCancion" href="#">
+                    {% if cancion is not null %}
+                        <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada}}" alt="Canción" class="song-image">
+                        {% else %}
                         <img src="https://via.placeholder.com/50" alt="Canción" class="song-image">
+                        {% endif %}
                     </a>
                 </div>
                 <div class="artist-info ms-3">
