@@ -1,97 +1,103 @@
 {# templates/admin/editarAlbum.html.twig #}
 {% extends 'frontend.html.twig' %}
 
-{% block title %}Editar Álbum{% endblock %}
+{% block title %}Editar Álbum
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
-    <style>
-        .dropzone .dz-preview .dz-remove {
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .dropzone .dz-preview .genre-container {
-            margin-top: 10px;
-        }
-    </style>
+	{{ parent() }}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
 {% endblock %}
 
 {% block body %}
-    {% include 'nav.html.twig' %}
-    <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center"
-             style="background-color: #00000091;margin-top: 40px;">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="card-title text-center mb-4">Editar Álbum</h1>
-                            {% include 'mensajesFlash.html.twig' %}
-                            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'album-form'}}) }}
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.nombre) }}
-                                    {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.nombre) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.fechaLanzamiento) }}
-                                    {{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.fechaLanzamiento) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.fotoPortada) }}
-                                    {{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.fotoPortada) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.artista) }}
-                                    {{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(form.artista) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    <div class="dropzone" id="canciones-dropzone"></div>
-                                </div>
-                                <div id="canciones-container"></div> <!-- Contenedor para los inputs ocultos -->
-                                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                            {{ form_end(form) }}
-                            <label style="margin-top: 40px;">Canciones del Album</label>
-                            <ul class="list-group mb-3">
-                                {% for cancion in canciones %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ cancion.titulo }} ({{ cancion.duracion }})- {{ cancion.generoMusical }}
-                                        <form action="{{ path('app_remove_cancion', {'id': cancion.id}) }}" method="post" class="d-inline-block">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cancion.id) }}">
-                                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                        </form>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+	{% include 'nav.html.twig' %}
+	<section class="container min-vh-100 d-flex justify-content-center align-items-center text-center" style="background-color: #00000091;margin-top: 40px;display: flow-root !important;">
+		<nav aria-label="breadcrumb" style="margin-top: 70px;">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item">
+					<a href="{{ path('app_gestionAlbums', { 'id': album.artista.id }) }}">
+						Gestión de Albums
+					</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">
+					Crear Album
+				</li>
+			</ol>
+		</nav>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-body">
+							<h1 class="card-title text-center mb-4" style="margin: 40px;">Editar Álbum</h1>
+							{% include 'mensajesFlash.html.twig' %}
+							{{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'album-form'}}) }}
+							<div class="form-group mb-3">
+								{{ form_label(form.nombre) }}
+								{{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.nombre) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.fechaLanzamiento) }}
+								{{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.fechaLanzamiento) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.fotoPortada) }}
+								{{ form_widget(form.fotoPortada, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.fotoPortada) }}
+							</div>
+							<div class="form-group mb-3">
+								{{ form_label(form.artista) }}
+								{{ form_widget(form.artista, {'attr': {'class': 'form-control'}}) }}
+								{{ form_errors(form.artista) }}
+							</div>
+							<div class="form-group mb-3">
+								<div class="dropzone" id="canciones-dropzone"></div>
+							</div>
+							<div id="canciones-container"></div>
+							<!-- Contenedor para los inputs ocultos -->
+							<button type="submit" class="btn btn-primary mt-3">Guardar</button>
+							{{ form_end(form) }}
+							<label style="margin-top: 40px;">Canciones del Album</label>
+							<ul class="list-group mb-3">
+								{% for cancion in canciones %}
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										{{ cancion.titulo }}
+										({{ cancion.duracion }})-
+										{{ cancion.generoMusical }}
+										<form action="{{ path('app_remove_cancion', {'id': cancion.id}) }}" method="post" class="d-inline-block">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cancion.id) }}">
+											<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+										</form>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
-    <script>
-        Dropzone.autoDiscover = false;
+	{{ parent() }}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+	<script>
+		Dropzone.autoDiscover = false;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var artistaNombre = "{{ form.artista.vars.data ? form.artista.vars.data.nombre|e('js') : '' }}";
-            var albumNombre = "{{ form.vars.value.nombre ? form.vars.value.nombre|e('js') : '' }}";
+document.addEventListener("DOMContentLoaded", function () {
+var artistaNombre = "{{ form.artista.vars.data ? form.artista.vars.data.nombre|e('js') : '' }}";
+var albumNombre = "{{ form.vars.value.nombre ? form.vars.value.nombre|e('js') : '' }}";
 
-            var cancionesDropzone = new Dropzone("#canciones-dropzone", {
-                url: "{{ path('app_upload') }}",
-                paramName: "file",
-                maxFilesize: 50, // Tamaño máximo del archivo en MB
-                acceptedFiles: "audio/*",
-                addRemoveLinks: true,
-                previewTemplate: `
+var cancionesDropzone = new Dropzone("#canciones-dropzone", {
+url: "{{ path('app_upload') }}",
+paramName: "file",
+maxFilesize: 50, // Tamaño máximo del archivo en MB
+acceptedFiles: "audio/*",
+addRemoveLinks: true,
+previewTemplate: `
                     <div class="dz-preview dz-file-preview">
                         <div class="dz-details">
                             <div class="dz-filename"><span data-dz-name></span></div>
@@ -113,51 +119,51 @@
                         </div>
                     </div>
                 `,
-                init: function() {
-                    this.on("sending", function(file, xhr, formData) {
-                        formData.append("artista", artistaNombre);
-                        formData.append("album", albumNombre);
-                    });
-                    this.on("success", function(file, response) {
-                        console.log("Archivo subido con éxito: " + response.path);
-                        var hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'canciones[]';
-                        hiddenInput.value = response.path;
-                        hiddenInput.dataset.genre = file.previewElement.querySelector('.genre-select').value;
-                        document.querySelector('#canciones-container').appendChild(hiddenInput);
-                        console.log("Campo oculto añadido: ", hiddenInput);
+init: function () {
+this.on("sending", function (file, xhr, formData) {
+formData.append("artista", artistaNombre);
+formData.append("album", albumNombre);
+});
+this.on("success", function (file, response) {
+console.log("Archivo subido con éxito: " + response.path);
+var hiddenInput = document.createElement('input');
+hiddenInput.type = 'hidden';
+hiddenInput.name = 'canciones[]';
+hiddenInput.value = response.path;
+hiddenInput.dataset.genre = file.previewElement.querySelector('.genre-select').value;
+document.querySelector('#canciones-container').appendChild(hiddenInput);
+console.log("Campo oculto añadido: ", hiddenInput);
 
-                        file.previewElement.querySelector('.genre-select').addEventListener('change', function() {
-                            hiddenInput.dataset.genre = this.value;
-                        });
-                    });
-                    this.on("removedfile", function(file) {
-                        var hiddenInputs = document.querySelectorAll('#canciones-container input');
-                        hiddenInputs.forEach(function(input) {
-                            if (input.value === file.upload.path) {
-                                input.remove();
-                            }
-                        });
-                    });
-                    this.on("error", function(file, response) {
-                        console.log("Error al subir el archivo: " + response);
-                    });
-                }
-            });
+file.previewElement.querySelector('.genre-select').addEventListener('change', function () {
+hiddenInput.dataset.genre = this.value;
+});
+});
+this.on("removedfile", function (file) {
+var hiddenInputs = document.querySelectorAll('#canciones-container input');
+hiddenInputs.forEach(function (input) {
+if (input.value === file.upload.path) {
+input.remove();
+}
+});
+});
+this.on("error", function (file, response) {
+console.log("Error al subir el archivo: " + response);
+});
+}
+});
 
-            document.querySelector('#album-form').addEventListener('submit', function(event) {
-                var hiddenInputs = document.querySelectorAll('#canciones-container input');
-                hiddenInputs.forEach(function(input) {
-                    if (input.dataset.genre) {
-                        var genreHiddenInput = document.createElement('input');
-                        genreHiddenInput.type = 'hidden';
-                        genreHiddenInput.name = 'canciones_generos[]';
-                        genreHiddenInput.value = input.dataset.genre;
-                        document.querySelector('#canciones-container').appendChild(genreHiddenInput);
-                    }
-                });
-            });
-        });
-    </script>
+document.querySelector('#album-form').addEventListener('submit', function (event) {
+var hiddenInputs = document.querySelectorAll('#canciones-container input');
+hiddenInputs.forEach(function (input) {
+if (input.dataset.genre) {
+var genreHiddenInput = document.createElement('input');
+genreHiddenInput.type = 'hidden';
+genreHiddenInput.name = 'canciones_generos[]';
+genreHiddenInput.value = input.dataset.genre;
+document.querySelector('#canciones-container').appendChild(genreHiddenInput);
+}
+});
+});
+});
+	</script>
 {% endblock %}

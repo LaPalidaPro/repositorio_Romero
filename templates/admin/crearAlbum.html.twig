@@ -6,14 +6,35 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+<style>
+    
+
+section.container > nav:nth-child(1) {
+margin-top: 70px;
+}
+.d-flex {
+display: flex !important;
+display: flow-root;
+}
+</style>
 {% endblock %}
 
 {% block body %}
     {% include 'nav.html.twig' %}
     <section class="container min-vh-100 d-flex justify-content-center align-items-center text-center"
-             style="background-color: #00000091;margin-top: 40px;">
-        <h1 class="text-center mb-4">Crear Nuevo Álbum</h1>
-
+             style="background-color: #00000091;margin-top: 40px;display: flow-root !important;">
+             <nav	aria-label="breadcrumb" style="margin-top: 70px;">
+					<ol	class="breadcrumb">
+						<li	class="breadcrumb-item">
+							<a	href="{{ path('app_gestionContenido') }}">
+								Gestión de Artistas
+							</a>
+						</li>
+						<li	class="breadcrumb-item active"	aria-current="page">
+							Crear Album
+						</li>
+					</ol>
+				</nav>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -30,18 +51,6 @@
                                     {{ form_label(form.fechaLanzamiento) }}
                                     {{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
                                     {{ form_errors(form.fechaLanzamiento) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.generosMusicales) }}
-                                    <div class="form-check-group">
-                                        {% for generosMusicales in form.generosMusicales %}
-                                            <div class="form-check mb-2">
-                                                {{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
-                                                {{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    {{ form_errors(form.generosMusicales) }}
                                 </div>
                                 <div class="form-group mb-3">
                                     {{ form_label(form.fotoPortada) }}
@@ -93,6 +102,17 @@
                         <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                         <div class="dz-error-message"><span data-dz-errormessage></span></div>
                         <button class="dz-remove btn btn-danger" data-dz-remove><i class="fas fa-trash-alt"></i></button>
+                        <div class="form-group mt-2">
+                            <label for="genre-select" class="form-label">Género:</label>
+                            <select name="generos[]" class="form-control genre-select">
+                                <option value="rock">Rock</option>
+                                <option value="pop">Pop</option>
+                                <option value="jazz">Jazz</option>
+                                <option value="hiphop">Hip Hop</option>
+                                <option value="classical">Classical</option>
+                                <!-- Añade más opciones de género aquí -->
+                            </select>
+                        </div>
                     </div>
                 `,
                 init: function() {
@@ -109,6 +129,17 @@
                         hiddenInput.value = response.path;
                         document.querySelector('#canciones-container').appendChild(hiddenInput);
                         console.log("Campo oculto añadido: ", hiddenInput);
+
+                        // Añade un campo oculto para el género de la canción
+                        var genreSelect = file.previewElement.querySelector('.genre-select');
+                        genreSelect.addEventListener('change', function() {
+                            var genreHiddenInput = document.createElement('input');
+                            genreHiddenInput.type = 'hidden';
+                            genreHiddenInput.name = 'canciones_generos[]';
+                            genreHiddenInput.value = genreSelect.value;
+                            document.querySelector('#canciones-container').appendChild(genreHiddenInput);
+                            console.log("Campo de género oculto añadido: ", genreHiddenInput);
+                        });
                     });
                     this.on("error", function(file, response) {
                         console.log("Error al subir el archivo: " + response);
