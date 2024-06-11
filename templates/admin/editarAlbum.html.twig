@@ -6,6 +6,15 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+    <style>
+        .dropzone .dz-preview .dz-remove {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .dropzone .dz-preview .genre-container {
+            margin-top: 10px;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -18,7 +27,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h1 class="card-title text-center mb-4">Editar Álbum</h1>
-							{% include 'mensajesFlash.html.twig' %}
+                            {% include 'mensajesFlash.html.twig' %}
                             {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'album-form'}}) }}
                                 <div class="form-group mb-3">
                                     {{ form_label(form.nombre) }}
@@ -29,18 +38,6 @@
                                     {{ form_label(form.fechaLanzamiento) }}
                                     {{ form_widget(form.fechaLanzamiento, {'attr': {'class': 'form-control'}}) }}
                                     {{ form_errors(form.fechaLanzamiento) }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form_label(form.generosMusicales) }}
-                                    <div class="form-check-group">
-                                        {% for generosMusicales in form.generosMusicales %}
-                                            <div class="form-check mb-2">
-                                                {{ form_widget(generosMusicales, {'attr': {'class': 'form-check-input'}}) }}
-                                                {{ form_label(generosMusicales, null, {'attr': {'class': 'form-check-label'}}) }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    {{ form_errors(form.generosMusicales) }}
                                 </div>
                                 <div class="form-group mb-3">
                                     {{ form_label(form.fotoPortada) }}
@@ -58,18 +55,18 @@
                                 <div id="canciones-container"></div> <!-- Contenedor para los inputs ocultos -->
                                 <button type="submit" class="btn btn-primary mt-3">Guardar</button>
                             {{ form_end(form) }}
-						<label>Canciones</label>
-							<ul class="list-group mb-3">
-								{% for cancion in canciones %}
-									<li class="list-group-item d-flex justify-content-between align-items-center">
-										{{ cancion.titulo }} ({{ cancion.duracion }})
-										<form action="{{ path('app_remove_cancion', {'id': cancion.id}) }}" method="post" class="d-inline-block">
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cancion.id) }}">
-											<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-										</form>
-									</li>
-								{% endfor %}
-							</ul>
+                            <label style="margin-top: 40px;">Canciones del Album</label>
+                            <ul class="list-group mb-3">
+                                {% for cancion in canciones %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ cancion.titulo }} ({{ cancion.duracion }})- {{ cancion.generoMusical }}
+                                        <form action="{{ path('app_remove_cancion', {'id': cancion.id}) }}" method="post" class="d-inline-block">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cancion.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -103,6 +100,17 @@
                         <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                         <div class="dz-error-message"><span data-dz-errormessage></span></div>
                         <button class="dz-remove btn btn-danger" data-dz-remove><i class="fas fa-trash-alt"></i></button>
+                        <div class="form-group mt-2 genre-container">
+                            <label for="genre-select" class="form-label">Género:</label>
+                            <select name="generos[]" class="form-control genre-select">
+                                <option value="rock">Rock</option>
+                                <option value="pop">Pop</option>
+                                <option value="jazz">Jazz</option>
+                                <option value="hiphop">Hip Hop</option>
+                                <option value="classical">Classical</option>
+                                <!-- Añade más opciones de género aquí -->
+                            </select>
+                        </div>
                     </div>
                 `,
                 init: function() {
@@ -112,18 +120,43 @@
                     });
                     this.on("success", function(file, response) {
                         console.log("Archivo subido con éxito: " + response.path);
-                        // Añade un campo oculto con la ruta del archivo para enviarlo junto con el formulario
                         var hiddenInput = document.createElement('input');
                         hiddenInput.type = 'hidden';
                         hiddenInput.name = 'canciones[]';
                         hiddenInput.value = response.path;
+                        hiddenInput.dataset.genre = file.previewElement.querySelector('.genre-select').value;
                         document.querySelector('#canciones-container').appendChild(hiddenInput);
                         console.log("Campo oculto añadido: ", hiddenInput);
+
+                        file.previewElement.querySelector('.genre-select').addEventListener('change', function() {
+                            hiddenInput.dataset.genre = this.value;
+                        });
+                    });
+                    this.on("removedfile", function(file) {
+                        var hiddenInputs = document.querySelectorAll('#canciones-container input');
+                        hiddenInputs.forEach(function(input) {
+                            if (input.value === file.upload.path) {
+                                input.remove();
+                            }
+                        });
                     });
                     this.on("error", function(file, response) {
                         console.log("Error al subir el archivo: " + response);
                     });
                 }
+            });
+
+            document.querySelector('#album-form').addEventListener('submit', function(event) {
+                var hiddenInputs = document.querySelectorAll('#canciones-container input');
+                hiddenInputs.forEach(function(input) {
+                    if (input.dataset.genre) {
+                        var genreHiddenInput = document.createElement('input');
+                        genreHiddenInput.type = 'hidden';
+                        genreHiddenInput.name = 'canciones_generos[]';
+                        genreHiddenInput.value = input.dataset.genre;
+                        document.querySelector('#canciones-container').appendChild(genreHiddenInput);
+                    }
+                });
             });
         });
     </script>
