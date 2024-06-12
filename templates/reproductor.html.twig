@@ -5,16 +5,18 @@
                 <div class="song-details d-flex align-items-center">
                     <a id="enlaceDetallesCancion" href="#">
                     {% if cancion is not null %}
-                        <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada}}" alt="Canción" class="song-image">
-                        {% else %}
-                        <img src="https://via.placeholder.com/50" alt="Canción" class="song-image">
-                        {% endif %}
+                        <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada }}" alt="Canción" class="song-image">
+
+                    {% else %}
+                        <img src="https://via.placeholder.com/50" alt="Canción" class="song-image" id="song-image">
+                    {% endif %}
                     </a>
                 </div>
                 <div class="artist-info ms-3">
                     <div class="now-playing" id="nowPlaying">
                         {% if cancion is not null %}
-                            <span id="songTitle">{{ cancion.titulo }}</span>
+                            {% set titulo_sin_extension = cancion.titulo|split('.')[0] %}
+                            <span id="songTitle">{{ titulo_sin_extension }}</span>
                         {% else %}
                             <span id="songTitle">No song selected</span>
                         {% endif %}
@@ -69,4 +71,3 @@
     </div>
 </div>
 <audio id="audio" data-tiempo="{{ tiempo }}" data-volumen="{{ volumen }}" data-corazon="{{ corazon }}" ontimeupdate="updateTime()"></audio>
-

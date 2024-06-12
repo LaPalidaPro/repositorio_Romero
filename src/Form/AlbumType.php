@@ -30,23 +30,7 @@ class AlbumType extends AbstractType
                 'label' => 'Fecha de Lanzamiento',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('generosMusicales', ChoiceType::class, [
-                'label' => 'Géneros Musicales',
-                'choices'  => [
-                    'Rock' => 'rock',
-                    'Pop' => 'pop',
-                    'Jazz' => 'jazz',
-                    'Blues' => 'blues',
-                    'Clásica' => 'clasica',
-                    'Reggaeton' => 'reggaeton',
-                    'Hip Hop' => 'hip_hop',
-                    'Electrónica' => 'electronica',
-                    'Otro' => 'otro'
-                ],
-                'multiple' => true,
-                'expanded' => true,
-                'attr' => ['class' => 'form-check']
-            ])
+           
             ->add('fotoPortada', FileType::class, [
                 'label' => 'Foto de Portada',
                 'mapped' => false,

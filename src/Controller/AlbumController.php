@@ -134,29 +134,31 @@ class AlbumController extends AbstractController
     #[Route('/harmonyhub/admin/eliminarAlbum/{id}', name: 'app_eliminarAlbum', methods: ['POST'])]
     public function eliminarAlbum(int $id, Request $request): Response
     {
+        $album = $this->em->getRepository(Album::class)->find($id);
+
+        if (!$album) {
+            $this->addFlash('error', 'El álbum no existe.');
+            return $this->redirectToRoute('app_gestionAlbums', ['id' => 1]); // ID de un artista predeterminado
+        }
+
         $csrfToken = $request->request->get('_token');
 
         if ($this->csrfTokenManager->isTokenValid(new CsrfToken('delete' . $id, $csrfToken))) {
-            $album = $this->em->getRepository(Album::class)->find($id);
-
-            if ($album) {
-                foreach ($album->getCanciones() as $cancion) {
-                    $this->em->remove($cancion);
-                }
-
-                $this->em->remove($album);
-                $this->em->flush();
-
-                $this->addFlash('success', 'Álbum eliminado correctamente.');
-            } else {
-                $this->addFlash('error', 'El álbum no existe.');
+            foreach ($album->getCanciones() as $cancion) {
+                $this->em->remove($cancion);
             }
+
+            $this->em->remove($album);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Álbum eliminado correctamente.');
         } else {
             $this->addFlash('error', 'Token CSRF no válido.');
         }
 
         return $this->redirectToRoute('app_gestionAlbums', ['id' => $album->getArtista()->getId()]);
     }
+
 
     #[Route('/harmonyhub/admin/editarAlbum/{id}', name: 'app_editarAlbum', methods: ['GET', 'POST'])]
     public function editarAlbum(Request $request, int $id, SluggerInterface $slugger): Response

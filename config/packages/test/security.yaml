@@ -1,0 +1,7 @@
+security:
+    firewalls:
+        main:
+            form_login:
+                enable_csrf: false # Desactiva CSRF en el entorno de pruebas
+            logout:
+                enable_csrf: false # Desactiva CSRF en el entorno de pruebas

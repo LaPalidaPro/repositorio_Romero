@@ -1,67 +1,69 @@
 {% extends 'frontend.html.twig' %}
 
 {% block title %}
-	{{ 'Vive tu música'|trans }}
+    {{ 'Vive tu música'|trans }}
 {% endblock %}
 
 {% block styles %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/favoritos.css') }}">
-	<style>
-		.align-items-center {
-			justify-content: center;
-			width: inherit;
-		}
-	</style>
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/favoritos.css') }}">
+    <style>
+        .align-items-center {
+            justify-content: center;
+            width: inherit;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-	{% include 'nav.html.twig' %}
-	<h1 class="titulo-destacado">{{ 'highlighted_songs'|trans }}</h1>
-	<section class="featured-songs container-fluid">
-		<div class="container-fluid mt-4">
-			<div class="play-all-btn">
-				<button class="btn btn-primary" onclick="playAllSongs()">
-					<i class="fas fa-play"></i>
-					{{ 'Play All'|trans }}
-				</button>
-			</div>
-			<div id="contenedorCanciones">
-				{% for favorito in datosCanciones %}
+    {% include 'nav.html.twig' %}
+    <h1 class="titulo-destacado">{{ 'highlighted_songs'|trans }}</h1>
+    <section class="featured-songs container-fluid">
+        <div class="container-fluid mt-4">
+            {% if datosCanciones is empty %}
+                <p class="text-center">{{ 'Aún no tienes ninguna canción en tu lista. Añade alguna en la ' }} <a href="{{ path('app_home') }}">{{ 'página principal'|trans }}</a>.</p>
+            {% else %}
+                <div class="play-all-btn">
+                    <button class="btn btn-primary" onclick="playAllSongs()">
+                        <i class="fas fa-play"></i>
+                        {{ 'Play All'|trans }}
+                    </button>
+                </div>
+                <div id="contenedorCanciones">
+                    {% for favorito in datosCanciones %}
 					<div class="cardBtn">
-						<div class="card" data-audio-src="{{ asset('music/' ~ favorito.cancion.titulo) }}" data-cancion="{{ favorito.cancion.titulo }}" data-artista="{{ favorito.cancion.artista.nombre }}" data-id="{{ favorito.cancion.id }}" data-favorito="true" onclick="playSelectedSong(this)">
-						<img src="{{ '/images/grupos/' ~ favorito.cancion.album.fotoPortada}}" alt="Canción" class="song-image">
-							<div class="card-body">
-								<h5 class="card-title">{{ favorito.cancion.titulo }}</h5>
+					<div class="card" data-audio-src="{{ asset('music/' ~ favorito.cancion.titulo) }}" data-cancion="{{ favorito.cancion.titulo }}" data-artista="{{ favorito.cancion.artista.nombre }}" data-id="{{ favorito.cancion.id }}" data-favorito="true" onclick="playSelectedSong(this)">
+					<img src="{{ '/images/grupos/' ~ favorito.cancion.album.fotoPortada}}" alt="Canción" class="song-image">
+						<div class="card-body">
+							<h5 class="card-title">{{ favorito.cancion.titulo }}</h5>
 
-							</div>
-							<div class="card-body">
-								<h5 class="card-title">{{ favorito.cancion.artista.nombre }}</h5>
-								<p class="card-text">{{ favorito.cancion.duracion }}</p>
-							</div>
-							<div class="card-body">
+						</div>
+						<div class="card-body">
+							<h5 class="card-title">{{ favorito.cancion.artista.nombre }}</h5>
+							<p class="card-text">{{ favorito.cancion.duracion }}</p>
+						</div>
+						<div class="card-body">
 
-								<p class="card-text">{{ favorito.cancion.duracion }}</p>
-							</div>
+							<p class="card-text">{{ favorito.cancion.duracion }}</p>
 						</div>
 					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</section>
-	{% include 'reproductor.html.twig' with {
+				</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    {% include 'reproductor.html.twig' with {
         cancion: cancion_actual,
         tiempo: tiempo_actual,
         volumen: volumen_actual,
         corazon: corazon_actual
     } only %}
-
 {% endblock %}
 
-
 {% block custom_javascripts %}
-	<script src="{{ asset('js/main2.js') }}"></script>
-	<script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
+    <script src="{{ asset('js/main2.js') }}"></script>
+    <script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
 {% endblock %}

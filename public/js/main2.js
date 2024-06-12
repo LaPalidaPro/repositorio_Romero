@@ -18,9 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnForward = document.getElementById("btnForward");
   const songTitle = document.getElementById("songTitle");
   const artistName = document.getElementById("artistName");
-  const enlaceDetallesCancion = document.getElementById(
-    "enlaceDetallesCancion"
-  );
+  const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
   let currentSongId = null;
 
   const playAllBtn = document.querySelector(".play-all-btn button");
@@ -115,7 +113,9 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.load();
     audio.play();
 
-    songTitle.innerText = titulo;
+    // Quitar la extensión del título
+    var tituloSinExtension = titulo.split('.')[0];
+    songTitle.innerText = tituloSinExtension;
     artistName.innerText = artista;
 
     playBtn.style.display = "none";
@@ -144,12 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function actualizarEnlaceDetallesCancion(id, tiempo, volumen, corazon) {
-    var enlaceDetallesCancion = document.getElementById(
-      "enlaceDetallesCancion"
-    );
-    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${
-      corazon ? 1 : 0
-    }`;
+    var enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
+    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${corazon ? 1 : 0}`;
   }
 
   function togglePlayPause(player) {
@@ -161,9 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = csrfTokenElement
-    ? csrfTokenElement.getAttribute("content")
-    : null;
+  const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute("content") : null;
 
   if (!csrfToken) {
     console.error("Token CSRF no encontrado");
@@ -438,7 +432,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentSongIndex < allSongs.length) {
       const song = allSongs[currentSongIndex];
       audio.src = song.src;
-      songTitle.textContent = song.cancion;
+      var tituloSinExtension = song.cancion.split('.')[0];
+      songTitle.textContent = tituloSinExtension;
       artistName.textContent = song.artista;
       currentSongId = song.id;
 

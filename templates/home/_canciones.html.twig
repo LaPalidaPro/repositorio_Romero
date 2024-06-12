@@ -2,6 +2,7 @@
 
 <div class="row" id="contenedorCanciones">
     {% for cancion in datosCanciones %}
+        {% set nombre_sin_extension = cancion.titulo|split('.')[0] %}
         <div class="col-md-3 mb-4">
             <div class="cardBtn">
                 <div class="card" 
@@ -10,9 +11,9 @@
                      data-artista="{{ cancion.artista.nombre }}" 
                      data-id="{{ cancion.id }}" 
                      data-favorito="{{ cancion.id in favoritos ? 'true' : 'false' }}">
-                    <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada}}" class="card-img-top" alt="{{ cancion.titulo }}">
+                    <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada }}" class="card-img-top" alt="{{ cancion.titulo }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ cancion.titulo }}</h5>
+                        <h5 class="card-title">{{ nombre_sin_extension }}</h5>
                         <p class="card-text">{{ cancion.artista.nombre }}</p>
                     </div>
                 </div>

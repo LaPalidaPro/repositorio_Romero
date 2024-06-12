@@ -1,5 +1,4 @@
 {% extends 'frontend.html.twig' %}
-
 {% block title %}
     {{ 'Vive tu música'|trans }}
 {% endblock %}
@@ -10,14 +9,21 @@
     <link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
     <style>
         .carousel-item img {
-            width: 40%; 
-            height: 100%; 
-            object-fit: cover; 
-            object-position: center; 
+            width: 40%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
-    
+
         .carousel-inner {
-            height: 300px; 
+            height: 300px;
+        }
+        .generosSelector {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            background-color: #000000a1;
+            border: 1px solid #00000017;
+            color: white;
         }
     </style>
 {% endblock %}
@@ -25,38 +31,46 @@
 {% block body %}
     {% include 'nav.html.twig' %}
     <section class="hero">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1>{{ 'discover_new_music'|trans }}</h1>
-                <p>{{ 'find_next_song'|trans }}</p>
-                <a href="#" class="btn-play" id="discover-music">
-                    <i class="fas fa-play"></i>
-                </a>
-            </div>
-            <div class="col-md-6">
-                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner" id="carousel-images">
-                        <!-- Las imágenes se insertarán aquí dinámicamente -->
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>{{ 'discover_new_music'|trans }}</h1>
+                    <p>{{ 'find_next_song'|trans }}</p>
+                    <a href="#" class="btn-play" id="discover-music">
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div
+                            class="carousel-inner" id="carousel-images"><!-- Las imágenes se insertarán aquí dinámicamente -->
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Siguiente</span>
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
 
     <h1 class="titulo-destacado">{{ 'highlighted_songs'|trans }}</h1>
     <section class="featured-songs container-fluid">
         <div class="container" style="padding: 100px; padding-top: 0;">
+            <div class="genre-selection mb-4">
+                <label for="genero-select">{{ 'select_genre'|trans }}</label>
+                <select id="genero-select" class="form-control generosSelector" onchange="filterByGenre()">
+                    <option value="">{{ 'Todos'|trans }}</option>
+                    {% for genero in generos %}
+                        <option value="{{ genero }}" {% if genero_seleccionado == genero %} selected {% endif %}>{{ genero|trans }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div id="contenedorCanciones">
                 {% include 'home/_canciones.html.twig' with {
                     'datosCanciones': datosCanciones,
@@ -80,4 +94,54 @@
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
     <script src="{{ asset('js/carruselPubli.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById('audio');
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const songTitle = document.getElementById('songTitle');
+            const artistName = document.getElementById('artistName');
+            const heartIcon = document.getElementById('heart-icon');
+            const songImage = document.querySelector(".song-image");
+            const reproductorEmergente = document.querySelector(".reproductor");
+
+            // Obtener los datos del localStorage
+            const audioData = JSON.parse(localStorage.getItem('audioData'));
+
+            if (audioData) {
+                // Establecer los datos de la canción
+                audio.src = audioData.src;
+                audio.currentTime = audioData.currentTime;
+                audio.volume = audioData.volume;
+                songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
+                artistName.innerText = audioData.artista;
+                songImage.src = audioData.imagen;
+                audio.dataset.cancionId = audioData.id; // Asignar el ID de la canción al dataset del elemento audio
+
+                if (parseInt(audioData.corazon) === 1) {
+                    heartIcon.classList.remove("far");
+                    heartIcon.classList.add("fas", "text-custom");
+                }
+
+                // Reproducir el audio
+                audio.play().then(() => {
+                    playBtn.style.display = "none";
+                    pauseBtn.style.display = "block";
+                }).catch(error => console.error("Error al intentar reproducir el audio:", error));
+
+                // Mostrar el reproductor
+                reproductorEmergente.style.display = "block";
+
+                // Limpiar el localStorage después de cargar
+                localStorage.removeItem('audioData');
+            }
+        });
+
+        function filterByGenre() {
+            const genero = document.getElementById('genero-select').value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('genero', genero);
+            window.location.href = url.toString();
+        }
+    </script>
 {% endblock %}

@@ -25,11 +25,13 @@ class HomeController extends AbstractController
 {
     private $em;
     private $csrfTokenManager;
+    private $cancionRepository;
 
     public function __construct(EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager)
     {
         $this->em = $em;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->cancionRepository = $em->getRepository(Cancion::class);
     }
 
     #[Route('/harmonyhub/cambioIdioma/{locale}', name: 'cambio_idioma')]
@@ -44,19 +46,25 @@ class HomeController extends AbstractController
     {
         return $this->redirectToRoute('app_home');
     }
-    
+
     #[Route('/harmonyhub/principal/{pagina}', name: 'app_home', defaults: ['pagina' => 1])]
     public function index(int $pagina, Request $request): Response
     {
         $limite = 8;
-        $query = $this->em->getRepository(Cancion::class)
-            ->createQueryBuilder('c')
-            ->setFirstResult(($pagina - 1) * $limite)
-            ->setMaxResults($limite)
-            ->getQuery();
 
-        $paginator = new Paginator($query, $fetchJoinCollection = true);
+        // Obtener el género seleccionado de la solicitud
+        $generoSeleccionado = $request->query->get('genero');
 
+        // Construir la consulta en base al género seleccionado
+        $queryBuilder = $this->cancionRepository->createQueryBuilder('c');
+        if ($generoSeleccionado) {
+            $queryBuilder->where('c.generoMusical = :genero')
+                ->setParameter('genero', $generoSeleccionado);
+        }
+        $queryBuilder->setFirstResult(($pagina - 1) * $limite)
+            ->setMaxResults($limite);
+
+        $paginator = new Paginator($queryBuilder->getQuery(), $fetchJoinCollection = true);
         $totalCanciones = count($paginator);
         $totalPaginas = ceil($totalCanciones / $limite);
 
@@ -80,6 +88,15 @@ class HomeController extends AbstractController
         $volumen = $request->query->get('volumen', 1);
         $corazon = $request->query->get('corazon', 0);
 
+        // Obtener géneros únicos de la base de datos
+        $generos = $this->cancionRepository->createQueryBuilder('c')
+            ->select('DISTINCT c.generoMusical')
+            ->getQuery()
+            ->getArrayResult();
+
+        // Convertir resultados a un array simple
+        $generos = array_column($generos, 'generoMusical');
+
         return $this->render("home/index.html.twig", [
             'datosCanciones' => $paginator,
             'paginaActual' => $pagina,
@@ -90,6 +107,8 @@ class HomeController extends AbstractController
             'corazon_actual' => $corazon,
             'favoritos' => $favoritos,
             'isSearch' => false,
+            'generos' => $generos,
+            'genero_seleccionado' => $generoSeleccionado,
         ]);
     }
 
@@ -220,13 +239,16 @@ class HomeController extends AbstractController
         }
 
         $songDetails = [
-            'audioSrc' => '/music/' . $cancion->getNombre(),
+            'id' => $cancion->getId(),
+            'audioSrc' => '/music/' . $cancion->getTitulo(),
             'titulo' => $cancion->getTitulo(),
             'artista' => $cancion->getArtista()->getNombre(),
+            'imagen' => '/images/grupos/' . $cancion->getAlbum()->getFotoPortada(),
         ];
 
         return new JsonResponse($songDetails);
     }
+
 
     #[Route('/harmonyhub/cancion/{id}', name: 'app_cancion')]
     public function mostrarCancion(int $id, Request $request): Response
@@ -255,46 +277,47 @@ class HomeController extends AbstractController
     }
 
     #[Route('/buscador', name: 'buscar_canciones', methods: ['GET'])]
-public function buscarCancion(Request $request, CancionRepository $cancionRepository, FavoritoRepository $favoritoRepository): JsonResponse
-{
-    $query = $request->query->get('query');
+    public function buscarCancion(Request $request, CancionRepository $cancionRepository, FavoritoRepository $favoritoRepository): JsonResponse
+    {
+        $query = $request->query->get('query');
 
-    if (!$query) {
-        return new JsonResponse(['error' => 'La consulta de búsqueda está vacía'], JsonResponse::HTTP_BAD_REQUEST);
-    }
+        if (!$query) {
+            return new JsonResponse(['error' => 'La consulta de búsqueda está vacía'], JsonResponse::HTTP_BAD_REQUEST);
+        }
 
-    $canciones = $cancionRepository->findByNombre($query);
+        $canciones = $cancionRepository->findByNombre($query);
 
-    if (!$canciones) {
-        return new JsonResponse(['error' => 'No se encontraron canciones'], JsonResponse::HTTP_NOT_FOUND);
-    }
+        if (!$canciones) {
+            return new JsonResponse(['error' => 'No se encontraron canciones'], JsonResponse::HTTP_NOT_FOUND);
+        }
 
-    $usuario = $this->getUser();
-    $favoritos = $usuario ? $favoritoRepository->findBy(['usuario' => $usuario]) : [];
-    $favoritosIds = array_map(function ($favorito) {
-        return $favorito->getCancion()->getId();
-    }, $favoritos);
+        $usuario = $this->getUser();
+        $favoritos = $usuario ? $favoritoRepository->findBy(['usuario' => $usuario]) : [];
+        $favoritosIds = array_map(function ($favorito) {
+            return $favorito->getCancion()->getId();
+        }, $favoritos);
 
-    $html = '<div class="row" id="contenedorCanciones">';
-    foreach ($canciones as $cancion) {
-        $isFavorito = in_array($cancion->getId(), $favoritosIds) ? 'true' : 'false';
-        $html .= '
+        $html = '<div class="row" id="contenedorCanciones">';
+        foreach ($canciones as $cancion) {
+            $tituloSinExtension = pathinfo($cancion->getTitulo(), PATHINFO_FILENAME);
+            $isFavorito = in_array($cancion->getId(), $favoritosIds) ? 'true' : 'false';
+            $html .= '
         <div class="col-md-3 mb-4">
             <div class="cardBtn">
-                <div class="card" data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $cancion->getTitulo() . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
-                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Canción">
+                <div class="card" data-audio-src="/music/' . $cancion->getTitulo() . '" data-cancion="' . $tituloSinExtension . '" data-artista="' . $cancion->getArtista()->getNombre() . '" data-id="' . $cancion->getId() . '" data-favorito="' . $isFavorito . '">
+                    <img src="/images/grupos/' . $cancion->getAlbum()->getFotoPortada() . '" class="card-img-top" alt="' . $tituloSinExtension . '">
                     <div class="card-body">
-                        <h5 class="card-title">' . $cancion->getTitulo() . '</h5>
+                        <h5 class="card-title">' . $tituloSinExtension . '</h5>
                         <p class="card-text">' . $cancion->getArtista()->getNombre() . '</p>
                     </div>
                 </div>
             </div>
         </div>';
-    }
-    $html .= '</div>';
+        }
+        $html .= '</div>';
 
-    return new JsonResponse(['html' => $html]);
-}
+        return new JsonResponse(['html' => $html]);
+    }
 
 
     #[Route('/sobremi', name: 'app_sobremi')]
@@ -311,14 +334,15 @@ public function buscarCancion(Request $request, CancionRepository $cancionReposi
             'carta_presentacion' => $cartaPresentacion,
         ]);
     }
-    
+
     #[Route('/harmonyhub/top-canciones', name: 'top_canciones')]
     public function getTopCanciones(EntityManagerInterface $em): JsonResponse
     {
         $canciones = $em->getRepository(Cancion::class)->findBy([], ['numeroReproducciones' => 'DESC'], 10);
 
-        $data = array_map(function(Cancion $cancion) {
+        $data = array_map(function (Cancion $cancion) {
             return [
+                'imagen' => '/images/grupos/' . $cancion->getAlbum()->getFotoPortada(),
                 'titulo' => $cancion->getTitulo(),
                 'artista' => $cancion->getArtista()->getNombre(),
                 'audioSrc' => '/music/' . $cancion->getTitulo(),
