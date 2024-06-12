@@ -33,23 +33,22 @@
                 </div>
                 <div id="contenedorCanciones">
                     {% for favorito in datosCanciones %}
-					<div class="cardBtn">
-					<div class="card" data-audio-src="{{ asset('music/' ~ favorito.cancion.titulo) }}" data-cancion="{{ favorito.cancion.titulo }}" data-artista="{{ favorito.cancion.artista.nombre }}" data-id="{{ favorito.cancion.id }}" data-favorito="true" onclick="playSelectedSong(this)">
-					<img src="{{ '/images/grupos/' ~ favorito.cancion.album.fotoPortada}}" alt="Canción" class="song-image">
-						<div class="card-body">
-							<h5 class="card-title">{{ favorito.cancion.titulo }}</h5>
-
-						</div>
-						<div class="card-body">
-							<h5 class="card-title">{{ favorito.cancion.artista.nombre }}</h5>
-							<p class="card-text">{{ favorito.cancion.duracion }}</p>
-						</div>
-						<div class="card-body">
-
-							<p class="card-text">{{ favorito.cancion.duracion }}</p>
-						</div>
-					</div>
-				</div>
+                        {% set titulo_sin_extension = favorito.cancion.titulo|split('.')[0] %}
+                        <div class="cardBtn">
+                            <div class="card" data-audio-src="{{ asset('music/' ~ favorito.cancion.titulo) }}" data-cancion="{{ favorito.cancion.titulo }}" data-artista="{{ favorito.cancion.artista.nombre }}" data-id="{{ favorito.cancion.id }}" data-favorito="true" onclick="playSelectedSong(this)">
+                                <img src="{{ '/images/grupos/' ~ favorito.cancion.album.fotoPortada }}" alt="Canción" class="song-image">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ titulo_sin_extension }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ favorito.cancion.artista.nombre }}</h5>
+                                    <p class="card-text">{{ favorito.cancion.album.nombre }}</p>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ favorito.cancion.duracion }}</p>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}

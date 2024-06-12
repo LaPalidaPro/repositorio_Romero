@@ -293,6 +293,39 @@ class AlbumController extends AbstractController
 
         return $this->redirectToRoute('app_editarAlbum', ['id' => $albumId]);
     }
+    
+    #[Route('/harmonyhub/verAlbum/{id}', name: 'app_verAlbum', methods: ['GET'])]
+    public function verAlbum(int $id): Response
+    {
+        $album = $this->em->getRepository(Album::class)->find($id);
+
+        if (!$album) {
+            throw $this->createNotFoundException('El álbum no existe');
+        }
+
+        $canciones = $album->getCanciones();
+        
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $cancionId = $request->query->get('cancion_id', null);
+        $cancion = null;
+
+        if ($cancionId) {
+            $cancion = $this->em->getRepository(Cancion::class)->find($cancionId);
+        }
+
+        $tiempo = $request->query->get('tiempo', 0);
+        $volumen = $request->query->get('volumen', 1);
+        $corazon = $request->query->get('corazon', 0);
+
+        return $this->render('album/verAlbum.html.twig', [
+            'album' => $album,
+            'canciones' => $canciones,
+            'cancion_actual' => $cancion,
+            'tiempo_actual' => $tiempo,
+            'volumen_actual' => $volumen,
+            'corazon_actual' => $corazon,
+        ]);
+    }
 
 
     private function formatDuration($seconds)

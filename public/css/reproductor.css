@@ -210,9 +210,9 @@
 }
 
 .reproductor .song-details .song-image {
-  width: 50px;
-  height: auto;
-}
+  height: 50px;
+  height: 50px;
+  }
 
 .reproductor .text-info {
   display: flex;
@@ -305,4 +305,9 @@
   background-color: transparent;
   border-color: transparent;
   }
-
+  .song-image {
+    width: 50px; /* Ajusta el ancho según tus necesidades */
+    height: 50px; /* Ajusta la altura según tus necesidades */
+    object-fit: cover; /* Recorta y rellena la imagen, manteniendo las proporciones */
+    
+}

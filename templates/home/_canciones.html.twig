@@ -4,7 +4,7 @@
     {% for cancion in datosCanciones %}
         {% set nombre_sin_extension = cancion.titulo|split('.')[0] %}
         <div class="col-md-3 mb-4">
-            <div class="cardBtn">
+            <div class="cardBtn song-card">
                 <div class="card" 
                      data-audio-src="{{ asset('music/' ~ cancion.titulo) }}" 
                      data-cancion="{{ cancion.titulo }}" 

@@ -29,6 +29,13 @@
                 <img src="{{ '/images/grupos/' ~ cancion.album.fotoPortada }}" alt="Canción" class="song-image">
                 <h2 class="tituloCancion mb-3">{{ cancion.titulo|split('.')[0] }}</h2>
                 <p class="mb-4">{{ cancion.artista.nombre }}</p>
+                
+                <!-- Enlace para ver el álbum -->
+                <p class="mb-4">
+                    <a href="{{ path('app_verAlbum', { 'id': cancion.album.id }) }}">
+                        {{ cancion.album.nombre }}
+                    </a>
+                </p>
 
                 <div class="container utiles d-flex justify-content-end justify-content-md-end align-items-end">
                     <div class="volume-bar d-flex align-items-center">
