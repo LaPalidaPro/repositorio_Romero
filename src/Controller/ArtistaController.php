@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use App\Entity\Artista;
 use App\Form\ArtistaType;
+use App\Repository\CancionRepository;
+use App\Repository\EventoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -177,5 +179,15 @@ class ArtistaController extends AbstractController
         }
 
         return $this->redirectToRoute('app_gestionContenido');
+    }
+
+    #[Route('/artista/estadisticas', name: 'app_artista_estadisticas')]
+    public function getEstadisticas(): Response
+    {
+        // Agregar un mensaje flash
+        $this->addFlash('info', 'Estamos trabajando en tus estadísticas.');
+
+        // Redirigir a la página principal o a cualquier otra página
+        return $this->redirectToRoute('app_home');
     }
 }

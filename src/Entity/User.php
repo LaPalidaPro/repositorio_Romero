@@ -296,4 +296,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function esArtista(): bool
+    {
+        return !$this->artistas->isEmpty();
+    }
+
 }

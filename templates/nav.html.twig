@@ -26,6 +26,9 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a class="dropdown-item" href="{{ path('app_admin') }}">Administrar</a>
                             {% endif %}
+                            {% if app.user.esArtista() %}
+                                <a class="dropdown-item" href="{{ path('app_artista_estadisticas') }}">Artista</a>
+                            {% endif %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ path('app_logout') }}">
                                 <i class="fa-solid fa-power-off"></i> Cerrar Sesión

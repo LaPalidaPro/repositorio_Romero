@@ -507,7 +507,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         audio.addEventListener("ended", playNextSong);
-
         btnForward.addEventListener("click", playNextSong);
         btnBackward.addEventListener("click", playPreviousSong);
 

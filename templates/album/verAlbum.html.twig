@@ -9,64 +9,7 @@
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset('css/reproductor.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/navUsuario.css') }}">
-	<link rel="stylesheet" href="{{ asset('css/album.css') }}">
-	<style>
-		.album-image {
-			width: 300px;
-			height: 300px;
-			object-fit: cover;
-			border-radius: 50%;
-			margin-top: 40px;
-		}
-		.song-card {
-			cursor: pointer;
-		}
-		.song-card img {
-			width: 100%;
-			height: 300px;
-			object-fit: cover;
-		}
-		.card-title {
-			overflow: hidden;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-		}
-		.featured-songs {
-			margin-top: 0;
-			margin-top: -11px;
-		}
-		.pie {
-			background-color: #020202e8 !important; /* Color de fondo */
-			color: #fff; /* Color del texto */
-			padding: 20px 0; /* Espaciado interno */
-
-		}
-		.btn:not(:disabled):not(.disabled) {
-			margin: 40px;
-		}
-		.text-left {
-			margin-top: 144px;
-		}
-		.album-image {
-			margin-top: 40px;
-			margin-top: 98px;
-		}
-		.song-card {
-			cursor: pointer;
-			transition: transform 0.3s ease, box-shadow 0.3s ease;
-		}
-
-		.song-card:hover {
-			transform: scale(1.05);
-			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-		}
-		.align-items-center {
-			height: 89px;
-		}
-		.justify-content-center {
-			height: 88px;
-		}
-	</style>
+    <link rel="stylesheet" href="{{ asset('css/album.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -132,29 +75,5 @@
 {% block custom_javascripts %}
 	<script src="{{ asset('js/main2.js') }}"></script>
 	<script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
-	<script>
-		function playSelectedSong(element) {
-const audioSrc = element.getAttribute('data-audio-src');
-const audio = document.getElementById('audio');
-const songTitle = document.getElementById('songTitle');
-const artistName = document.getElementById('artistName');
-const songImage = document.getElementById('song-image');
-
-audio.src = audioSrc;
-songTitle.textContent = element.querySelector('.card-title').textContent;
-artistName.textContent = element.getAttribute('data-artista');
-songImage.src = element.querySelector('img').src;
-audio.play();
-
-// Mostrar el botón de pausa y ocultar el de reproducir
-document.getElementById('playBtn').style.display = 'none';
-document.getElementById('pauseBtn').style.display = 'block';
-}
-
-// Evento para actualizar el tiempo de reproducción
-document.getElementById('audio').ontimeupdate = function () {
-const currentTime = document.getElementById('audio').currentTime;
-document.getElementById('currentTime').textContent = new Date(currentTime * 1000).toISOString().substr(11, 8);
-};
-	</script>
+	
 {% endblock %}
