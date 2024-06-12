@@ -32,8 +32,8 @@
                 
                 <!-- Enlace para ver el álbum -->
                 <p class="mb-4">
-                    <a href="{{ path('app_verAlbum', { 'id': cancion.album.id }) }}">
-                        {{ cancion.album.nombre }}
+                    <a id="albumEnlace" href="{{ path('app_verAlbum', { 'id': cancion.album.id }) }}">
+                        <i class="fa-regular fa-eye"></i> {{ cancion.album.nombre }}
                     </a>
                 </p>
 
@@ -95,13 +95,14 @@
         document.addEventListener("DOMContentLoaded", function () {
             const volverPrincipalBtn = document.getElementById("volverPrincipal");
             const irAMisCancionesBtn = document.getElementById("irAMisCanciones");
+            const albumEnlace = document.getElementById("albumEnlace");
             const audio = document.getElementById("audio");
             const heartIconEmpty = document.getElementById("heart-icon-empty");
             const heartIconFull = document.getElementById("heart-icon-full");
             const artistName = document.querySelector(".tituloCancion + p");
             const songImage = document.querySelector(".song-image");
 
-            if (!volverPrincipalBtn || !irAMisCancionesBtn || !audio || !heartIconEmpty || !heartIconFull || !artistName || !songImage) {
+            if (!volverPrincipalBtn || !irAMisCancionesBtn || !albumEnlace || !audio || !heartIconEmpty || !heartIconFull || !artistName || !songImage) {
                 console.error("Algunos elementos del DOM no fueron encontrados");
                 return;
             }
@@ -136,6 +137,11 @@
             irAMisCancionesBtn.addEventListener("click", function (event) {
                 event.preventDefault();
                 saveAudioDataAndRedirect("{{ path('app_misCanciones') }}");
+            });
+
+            albumEnlace.addEventListener("click", function (event) {
+                event.preventDefault();
+                saveAudioDataAndRedirect("{{ path('app_verAlbum', { 'id': cancion.album.id }) }}");
             });
         });
     </script>
