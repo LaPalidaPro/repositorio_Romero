@@ -95,48 +95,6 @@
     <script src="{{ asset('js/incrementarReproduccion.js') }}"></script>
     <script src="{{ asset('js/carruselPubli.js') }}"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const audio = document.getElementById('audio');
-            const playBtn = document.getElementById('playBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            const songTitle = document.getElementById('songTitle');
-            const artistName = document.getElementById('artistName');
-            const heartIcon = document.getElementById('heart-icon');
-            const songImage = document.querySelector(".song-image");
-            const reproductorEmergente = document.querySelector(".reproductor");
-
-            // Obtener los datos del localStorage
-            const audioData = JSON.parse(localStorage.getItem('audioData'));
-
-            if (audioData) {
-                // Establecer los datos de la canción
-                audio.src = audioData.src;
-                audio.currentTime = audioData.currentTime;
-                audio.volume = audioData.volume;
-                songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
-                artistName.innerText = audioData.artista;
-                songImage.src = audioData.imagen;
-                audio.dataset.cancionId = audioData.id; // Asignar el ID de la canción al dataset del elemento audio
-
-                if (parseInt(audioData.corazon) === 1) {
-                    heartIcon.classList.remove("far");
-                    heartIcon.classList.add("fas", "text-custom");
-                }
-
-                // Reproducir el audio
-                audio.play().then(() => {
-                    playBtn.style.display = "none";
-                    pauseBtn.style.display = "block";
-                }).catch(error => console.error("Error al intentar reproducir el audio:", error));
-
-                // Mostrar el reproductor
-                reproductorEmergente.style.display = "block";
-
-                // Limpiar el localStorage después de cargar
-                localStorage.removeItem('audioData');
-            }
-        });
-
         function filterByGenre() {
             const genero = document.getElementById('genero-select').value;
             const url = new URL(window.location.href);

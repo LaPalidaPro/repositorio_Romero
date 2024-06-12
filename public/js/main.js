@@ -46,36 +46,35 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-     // Obtener los datos del localStorage
-     const audioData = JSON.parse(localStorage.getItem('audioData'));
+  // Obtener los datos del localStorage
+  const audioData = JSON.parse(localStorage.getItem("audioData"));
 
-     if (audioData) {
-         // Establecer los datos de la canción
-         audio.src = audioData.src;
-         audio.currentTime = audioData.currentTime;
-         audio.volume = audioData.volume;
-         songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
-         artistName.innerText = audioData.artista;
-         songImage.src = audioData.imagen;
-         currentSongId = audioData.id;
- 
-         if (parseInt(audioData.corazon) === 1) {
-             heartIcon.querySelector("i").classList.remove("far");
-             heartIcon.querySelector("i").classList.add("fas", "text-custom");
-         }
- 
-         // Reproducir el audio
-         audio.play().then(() => {
-             playBtn.style.display = "none";
-             pauseBtn.style.display = "block";
-         }).catch(error => console.error("Error al intentar reproducir el audio:", error));
-         // Mostrar el reproductor
-         var reproductorEmergente = document.querySelector(".reproductor");
-         reproductorEmergente.style.display = "block";
- 
-         // Limpiar el localStorage después de cargar
-         localStorage.removeItem('audioData');
-     } 
+  if (audioData) {
+    // Establecer los datos de la canción
+    audio.src = audioData.src;
+    audio.currentTime = audioData.currentTime; // Aplicar currentTime después de que el audio se haya cargado
+    audio.volume = audioData.volume;
+    songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
+    artistName.innerText = audioData.artista;
+    songImage.src = audioData.imagen;
+    currentSongId = audioData.id;
+
+
+
+    actualizarIconoFavorito(parseInt(audioData.corazon));
+
+    // Reproducir el audio desde el punto guardado
+    audio.play().then(() => {
+        audio.currentTime = audioData.currentTime; // Establecer currentTime después de que el audio haya comenzado a reproducirse
+        playBtn.style.display = "none";
+        pauseBtn.style.display = "block";
+        var reproductorEmergente = document.querySelector(".reproductor");
+        reproductorEmergente.style.display = "block"; // Mostrar el reproductor
+    }).catch(error => console.error("Error al intentar reproducir el audio:", error));
+
+    // Limpiar el localStorage después de cargar
+    localStorage.removeItem('audioData');
+}
 
   if (searchForm && searchInput && contenedorCanciones) {
     searchForm.addEventListener("submit", function (event) {
@@ -441,80 +440,85 @@ document.addEventListener("DOMContentLoaded", function () {
   attachCardEventListeners();
 
   // Logica para "Descubrir nueva música"
-discoverMusicBtn.addEventListener('click', function (event) {
+  discoverMusicBtn.addEventListener("click", function (event) {
     event.preventDefault();
-    fetch('/harmonyhub/top-canciones')
-        .then(response => response.json())
-        .then(canciones => {
-            let currentIndex = 0;
+    fetch("/harmonyhub/top-canciones")
+      .then((response) => response.json())
+      .then((canciones) => {
+        let currentIndex = 0;
 
-            function playNextSong() {
-                if (currentIndex < canciones.length) {
-                    let cancion = canciones[currentIndex];
-                    audio.src = cancion.audioSrc;
-                    document.getElementById('song-image').innerText = cancion.imagen;
-                    // Quitar la extensión del título
-                    let tituloSinExtension = cancion.titulo.split('.')[0];
-                    document.getElementById('songTitle').innerText = tituloSinExtension;
-                    document.getElementById('artistName').innerText = cancion.artista;
-                    document.getElementById('enlaceDetallesCancion').querySelector('img').src = cancion.imagen;
-                    currentSongId = cancion.id;
-                    // Actualiza el estado del icono del corazón
-                    actualizarIconoFavorito(cancion.favorito);
-                    audio.play();
-                    currentIndex++;
-                } else {
-                    currentIndex = 0; // Repetir desde el principio si se desea
-                }
-                actualizarEnlaceDetallesCancion();
-            }
+        function playNextSong() {
+          if (currentIndex < canciones.length) {
+            let cancion = canciones[currentIndex];
+            audio.src = cancion.audioSrc;
+            document.getElementById("song-image").innerText = cancion.imagen;
+            // Quitar la extensión del título
+            let tituloSinExtension = cancion.titulo.split(".")[0];
+            document.getElementById("songTitle").innerText = tituloSinExtension;
+            document.getElementById("artistName").innerText = cancion.artista;
+            document
+              .getElementById("enlaceDetallesCancion")
+              .querySelector("img").src = cancion.imagen;
+            currentSongId = cancion.id;
+            // Actualiza el estado del icono del corazón
+            actualizarIconoFavorito(cancion.favorito);
+            audio.play();
+            currentIndex++;
+          } else {
+            currentIndex = 0; // Repetir desde el principio si se desea
+          }
+          actualizarEnlaceDetallesCancion();
+        }
 
-            function playPreviousSong() {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    let cancion = canciones[currentIndex];
-                    audio.src = cancion.audioSrc;
-                    document.getElementById('song-image').innerText = cancion.imagen;
-                    // Quitar la extensión del título
-                    let tituloSinExtension = cancion.titulo.split('.')[0];
-                    document.getElementById('songTitle').innerText = tituloSinExtension;
-                    document.getElementById('artistName').innerText = cancion.artista;
-                    document.getElementById('enlaceDetallesCancion').querySelector('img').src = cancion.imagen;
-                    currentSongId = cancion.id;
-                    // Actualiza el estado del icono del corazón
-                    actualizarIconoFavorito(cancion.favorito);
-                    audio.play();
-                } else {
-                    currentIndex = canciones.length - 1; // Ir al final si estamos al inicio
-                    let cancion = canciones[currentIndex];
-                    audio.src = cancion.audioSrc;
-                    // Quitar la extensión del título
-                    let tituloSinExtension = cancion.titulo.split('.')[0];
-                    document.getElementById('songTitle').innerText = tituloSinExtension;
-                    document.getElementById('artistName').innerText = cancion.artista;
-                    document.getElementById('enlaceDetallesCancion').querySelector('img').src = cancion.imagen;
-                    currentSongId = cancion.id;
-                    // Actualiza el estado del icono del corazón
-                    actualizarIconoFavorito(cancion.favorito);
-                    audio.play();
-                }
-                actualizarEnlaceDetallesCancion();
-            }
+        function playPreviousSong() {
+          if (currentIndex > 0) {
+            currentIndex--;
+            let cancion = canciones[currentIndex];
+            audio.src = cancion.audioSrc;
+            document.getElementById("song-image").innerText = cancion.imagen;
+            // Quitar la extensión del título
+            let tituloSinExtension = cancion.titulo.split(".")[0];
+            document.getElementById("songTitle").innerText = tituloSinExtension;
+            document.getElementById("artistName").innerText = cancion.artista;
+            document
+              .getElementById("enlaceDetallesCancion")
+              .querySelector("img").src = cancion.imagen;
+            currentSongId = cancion.id;
+            // Actualiza el estado del icono del corazón
+            actualizarIconoFavorito(cancion.favorito);
+            audio.play();
+          } else {
+            currentIndex = canciones.length - 1; // Ir al final si estamos al inicio
+            let cancion = canciones[currentIndex];
+            audio.src = cancion.audioSrc;
+            // Quitar la extensión del título
+            let tituloSinExtension = cancion.titulo.split(".")[0];
+            document.getElementById("songTitle").innerText = tituloSinExtension;
+            document.getElementById("artistName").innerText = cancion.artista;
+            document
+              .getElementById("enlaceDetallesCancion")
+              .querySelector("img").src = cancion.imagen;
+            currentSongId = cancion.id;
+            // Actualiza el estado del icono del corazón
+            actualizarIconoFavorito(cancion.favorito);
+            audio.play();
+          }
+          actualizarEnlaceDetallesCancion();
+        }
 
-            audio.addEventListener('ended', playNextSong);
+        audio.addEventListener("ended", playNextSong);
 
-            btnForward.addEventListener('click', playNextSong);
-            btnBackward.addEventListener('click', playPreviousSong);
+        btnForward.addEventListener("click", playNextSong);
+        btnBackward.addEventListener("click", playPreviousSong);
 
-            playNextSong();
+        playNextSong();
 
-            // Mostrar el reproductor
-            var reproductorEmergente = document.querySelector(".reproductor");
-            reproductorEmergente.style.display = "block";
+        // Mostrar el reproductor
+        var reproductorEmergente = document.querySelector(".reproductor");
+        reproductorEmergente.style.display = "block";
 
-            actualizarEnlaceDetallesCancion();
-        })
-        .catch(error => console.error('Error fetching top songs:', error));
-});
-
+        actualizarEnlaceDetallesCancion();
+      })
+      .catch((error) => console.error("Error fetching top songs:", error));
+  });
 });

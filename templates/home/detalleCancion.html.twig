@@ -71,6 +71,10 @@
                 <a href="{{ path('app_home') }}" id="volverPrincipal" class="btn btn-primary mt-4">
                     Volver a Principal
                 </a>
+                <!-- Botón para ir a mis canciones -->
+                <a href="{{ path('app_misCanciones') }}" id="irAMisCanciones" class="btn btn-secondary mt-4">
+                    Ir a Mis Canciones
+                </a>
             </div>
         </div>
     </section>
@@ -80,43 +84,52 @@
 
 {% block custom_javascripts %}
     <script src="{{ asset('js/detalleCancion.js') }}"></script>
-	<script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
-    const volverPrincipalBtn = document.getElementById("volverPrincipal");
-    const audio = document.getElementById("audio");
-    const heartIconEmpty = document.getElementById("heart-icon-empty");
-    const heartIconFull = document.getElementById("heart-icon-full");
-    const artistName = document.querySelector(".tituloCancion + p");
-    const songImage = document.querySelector(".song-image");
+            const volverPrincipalBtn = document.getElementById("volverPrincipal");
+            const irAMisCancionesBtn = document.getElementById("irAMisCanciones");
+            const audio = document.getElementById("audio");
+            const heartIconEmpty = document.getElementById("heart-icon-empty");
+            const heartIconFull = document.getElementById("heart-icon-full");
+            const artistName = document.querySelector(".tituloCancion + p");
+            const songImage = document.querySelector(".song-image");
 
-    if (!volverPrincipalBtn || !audio || !heartIconEmpty || !heartIconFull || !artistName || !songImage) {
-        console.error("Algunos elementos del DOM no fueron encontrados");
-        return;
-    }
+            if (!volverPrincipalBtn || !irAMisCancionesBtn || !audio || !heartIconEmpty || !heartIconFull || !artistName || !songImage) {
+                console.error("Algunos elementos del DOM no fueron encontrados");
+                return;
+            }
 
-    volverPrincipalBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        const isHearted = heartIconFull.style.display === "block";
-        const currentTime = audio.currentTime;
-        const volume = audio.volume;
-        const corazon = isHearted ? 1 : 0;
+            function saveAudioDataAndRedirect(redirectUrl) {
+                const isHearted = heartIconFull.style.display === "block";
+                const currentTime = audio.currentTime;
+                const volume = audio.volume;
+                const corazon = isHearted ? 1 : 0;
 
-        // Guardar datos en localStorage
-        const audioData = {
-            id: audio.dataset.cancionId,
-            src: audio.src,
-            currentTime: currentTime,
-            volume: volume,
-            corazon: corazon,
-            artista: artistName.innerText,
-            imagen: songImage.src
-        };
-        localStorage.setItem("audioData", JSON.stringify(audioData));
+                // Guardar datos en localStorage
+                const audioData = {
+                    id: audio.dataset.cancionId,
+                    src: audio.src,
+                    currentTime: currentTime,
+                    volume: volume,
+                    corazon: corazon,
+                    artista: artistName.innerText,
+                    imagen: songImage.src
+                };
+                localStorage.setItem("audioData", JSON.stringify(audioData));
 
-        // Redirigir a la página principal
-        window.location.href = "{{ path('app_home') }}";
-    });
-});
+                // Redirigir a la página correspondiente
+                window.location.href = redirectUrl;
+            }
 
+            volverPrincipalBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+                saveAudioDataAndRedirect("{{ path('app_home') }}");
+            });
+
+            irAMisCancionesBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+                saveAudioDataAndRedirect("{{ path('app_misCanciones') }}");
+            });
+        });
     </script>
 {% endblock %}

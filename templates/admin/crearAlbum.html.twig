@@ -82,11 +82,11 @@ display: flow-root;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
     <script>
         Dropzone.autoDiscover = false;
-
+    
         document.addEventListener("DOMContentLoaded", function () {
             var artistaNombre = "{{ form.artista.vars.value ? form.artista.vars.value.nombre|e('js') : '' }}";
             var albumNombre = "{{ form.nombre.vars.value ? form.nombre.vars.value|e('js') : '' }}";
-
+    
             var cancionesDropzone = new Dropzone("#canciones-dropzone", {
                 url: "{{ path('app_upload') }}",
                 paramName: "file",
@@ -122,6 +122,7 @@ display: flow-root;
                     });
                     this.on("success", function(file, response) {
                         console.log("Archivo subido con éxito: " + response.path);
+                        
                         // Añade un campo oculto con la ruta del archivo para enviarlo junto con el formulario
                         var hiddenInput = document.createElement('input');
                         hiddenInput.type = 'hidden';
@@ -129,16 +130,19 @@ display: flow-root;
                         hiddenInput.value = response.path;
                         document.querySelector('#canciones-container').appendChild(hiddenInput);
                         console.log("Campo oculto añadido: ", hiddenInput);
-
+    
                         // Añade un campo oculto para el género de la canción
                         var genreSelect = file.previewElement.querySelector('.genre-select');
+                        var genreHiddenInput = document.createElement('input');
+                        genreHiddenInput.type = 'hidden';
+                        genreHiddenInput.name = 'canciones_generos[]';
+                        genreHiddenInput.value = genreSelect.value;
+                        document.querySelector('#canciones-container').appendChild(genreHiddenInput);
+                        console.log("Campo de género oculto añadido: ", genreHiddenInput);
+    
+                        // Actualiza el valor del campo oculto cuando se cambia el género
                         genreSelect.addEventListener('change', function() {
-                            var genreHiddenInput = document.createElement('input');
-                            genreHiddenInput.type = 'hidden';
-                            genreHiddenInput.name = 'canciones_generos[]';
                             genreHiddenInput.value = genreSelect.value;
-                            document.querySelector('#canciones-container').appendChild(genreHiddenInput);
-                            console.log("Campo de género oculto añadido: ", genreHiddenInput);
                         });
                     });
                     this.on("error", function(file, response) {
@@ -148,4 +152,5 @@ display: flow-root;
             });
         });
     </script>
+    
 {% endblock %}

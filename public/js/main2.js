@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnBackward = document.getElementById("btnBackward");
   const btnForward = document.getElementById("btnForward");
   const songTitle = document.getElementById("songTitle");
+  const songImage = document.getElementById("song-image");
   const artistName = document.getElementById("artistName");
   const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
   let currentSongId = null;
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const playAllBtn = document.querySelector(".play-all-btn button");
   let allSongs = [];
   let currentSongIndex = 0;
-  const reproductor = document.querySelector(".reproductor"); // Asegurarse de que el reproductor esté definido
+  const reproductor = document.querySelector(".reproductor");
 
   if (
     !audio ||
@@ -46,6 +47,31 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Algunos elementos del DOM no fueron encontrados");
     return;
   }
+  // Obtener los datos del localStorage
+  const audioData = JSON.parse(localStorage.getItem("audioData"));
+
+  if (audioData) {
+    // Establecer los datos de la canción
+    audio.src = audioData.src;
+    audio.currentTime = audioData.currentTime; // Aplicar currentTime después de que el audio se haya cargado
+    audio.volume = audioData.volume;
+    songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
+    artistName.innerText = audioData.artista;
+    songImage.src = audioData.imagen;
+    currentSongId = audioData.id;
+    actualizarIconoFavorito(parseInt(audioData.corazon));
+    // Reproducir el audio desde el punto guardado
+    audio.play().then(() => {
+        audio.currentTime = audioData.currentTime; // Establecer currentTime después de que el audio haya comenzado a reproducirse
+        playBtn.style.display = "none";
+        pauseBtn.style.display = "block";
+        var reproductorEmergente = document.querySelector(".reproductor");
+        reproductorEmergente.style.display = "block"; // Mostrar el reproductor
+    }).catch(error => console.error("Error al intentar reproducir el audio:", error));
+
+    // Limpiar el localStorage después de cargar
+    localStorage.removeItem('audioData');
+}
 
   if (searchForm && searchInput && contenedorCanciones) {
     searchForm.addEventListener("submit", function (event) {
@@ -104,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var titulo = cardElement.getAttribute("data-cancion");
     var artista = cardElement.getAttribute("data-artista");
     var favorito = cardElement.getAttribute("data-favorito") === "true";
+    var imgSrc = cardElement.querySelector("img").src;
     const songId = cardElement.getAttribute("data-id");
     currentSongId = songId;
 
@@ -114,12 +141,13 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.play();
 
     // Quitar la extensión del título
-    var tituloSinExtension = titulo.split('.')[0];
-    songTitle.innerText = tituloSinExtension;
+    var tituloSinExtension = titulo.split(".")[0];
+    songTitle.innerText = decodeURIComponent(tituloSinExtension);
     artistName.innerText = artista;
 
     playBtn.style.display = "none";
     pauseBtn.style.display = "block";
+    songImage.src = imgSrc;
 
     // Establecer el ID de la canción actual para incrementar reproducciones
     actualizarIconoFavorito(favorito);
@@ -433,8 +461,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const song = allSongs[currentSongIndex];
       audio.src = song.src;
       var tituloSinExtension = song.cancion.split('.')[0];
-      songTitle.textContent = tituloSinExtension;
+      songTitle.textContent = decodeURIComponent(tituloSinExtension);
       artistName.textContent = song.artista;
+      songImage.src = song.element.querySelector("img").src; // Mostrar la imagen de la canción
       currentSongId = song.id;
 
       // Actualizar el icono de favorito
