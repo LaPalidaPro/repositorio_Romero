@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
         $usuario1->setNombre('Nombre1');
         $usuario1->setApellidos('Apellidos1');
         $usuario1->setFechaRegistro(new \DateTime());
-        $usuario1->setFoto('yo.jpg'); // Puedes asignar una foto si tienes una ruta específica
+        $usuario1->setFoto('defaultImage.jpg'); 
         $usuario1->setSid(bin2hex(random_bytes(16)));
 
         // Crear el segundo usuario
@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         $usuario2->setNombre('Nombre2');
         $usuario2->setApellidos('Apellidos2');
         $usuario2->setFechaRegistro(new \DateTime());
-        $usuario2->setFoto('yo.jpg'); // Puedes asignar una foto si tienes una ruta específica
+        $usuario2->setFoto('defaultImage.jpg'); // Puedes asignar una foto si tienes una ruta específica
         $usuario2->setSid(bin2hex(random_bytes(16)));
 
         // Persistir los usuarios
@@ -62,7 +62,7 @@ class AppFixtures extends Fixture
                  ->setAnoDebut(new \DateTime('2010-01-01'))
                  ->setPaisOrigen('España')
                  ->setBiografia('Biografía de Artista 1')
-                 ->setImgArtista('665b109e77615.jpg')
+                 ->setImgArtista('defaultImage.jpg')
                  ->setUser($usuario1);
         $manager->persist($artista1);
 
@@ -82,7 +82,7 @@ class AppFixtures extends Fixture
                ->setGenerosMusicales(['Rock', 'Indie'])
                ->setNumPistas(10)
                ->setDuracionTotal('45:30')
-               ->setFotoPortada('665b109e77615.jpg')
+               ->setFotoPortada('defaultImage.jpg')
                ->setArtista($artista1);
         $manager->persist($album1);
 
@@ -92,7 +92,7 @@ class AppFixtures extends Fixture
                ->setGenerosMusicales(['Pop', 'Dance'])
                ->setNumPistas(12)
                ->setDuracionTotal('50:45')
-               ->setFotoPortada('665b109e77615.jpg')
+               ->setFotoPortada('defaultImage.jpg')
                ->setArtista($artista2);
         $manager->persist($album2);
 
