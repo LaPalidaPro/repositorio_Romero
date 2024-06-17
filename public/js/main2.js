@@ -209,8 +209,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  audio.currentTime = parseFloat(audio.dataset.tiempo) || 0;
-  audio.volume = parseFloat(audio.dataset.volumen) || 1;
+  if (!audio.currentTime) {
+    audio.currentTime = parseFloat(audio.dataset.tiempo) || 0;
+  }
+
+  if (!audio.volume) {
+    audio.volume = parseFloat(audio.dataset.volumen) || 1;
+  }
+
   actualizarIconoVolumen(audio.volume);
   volumeSlider.value = audio.volume;
 

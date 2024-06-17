@@ -107,5 +107,7 @@ div.container:nth-child(2) {
   background-color: #020202e8 !important; /* Color de fondo */
   color: #fff; /* Color del texto */
   padding: 20px 0; /* Espaciado interno */
-
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
