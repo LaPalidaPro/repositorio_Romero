@@ -23,6 +23,14 @@
 			object-fit: cover;
 			margin-bottom: 1rem;
 		}
+		.containerForm {
+			margin-top 60px: ;
+			margin-top\ 60px: ;
+			margin-top: 100px;
+		}
+		.alert-success {
+			width: 375px;
+		}
 	</style>
 {% endblock %}
 
@@ -30,8 +38,11 @@
 	{% include 'nav.html.twig' %}
 
 	<section class="container-fluid containerEditar min-vh-100">
+
 		<div class="containerForm min-vh-100">
+			{% include 'mensajesFlash.html.twig' %}
 			<div class="login-form text-center">
+				{% include 'mensajesFlash.html.twig' %}
 				<div class="row no-gutters">
 					<div class="col-md-4">
 						{% if app.user.foto %}
@@ -76,6 +87,7 @@
 				</div>
 			</div>
 		</div>
+
 	</section>
 {% endblock %}
 

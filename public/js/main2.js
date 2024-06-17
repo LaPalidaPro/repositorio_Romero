@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const songTitle = document.getElementById("songTitle");
   const songImage = document.getElementById("song-image");
   const artistName = document.getElementById("artistName");
-  const enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
+  const enlaceDetallesCancion = document.getElementById(
+    "enlaceDetallesCancion"
+  );
   let currentSongId = null;
 
   const playAllBtn = document.querySelector(".play-all-btn button");
@@ -55,23 +57,32 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.src = audioData.src;
     audio.currentTime = audioData.currentTime; // Aplicar currentTime después de que el audio se haya cargado
     audio.volume = audioData.volume;
-    songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
+    songTitle.innerText = decodeURIComponent(
+      audioData.src.split("/").pop().split(".")[0]
+    ); // Quitar extensión y decodificar URI
     artistName.innerText = audioData.artista;
     songImage.src = audioData.imagen;
     currentSongId = audioData.id;
     actualizarIconoFavorito(parseInt(audioData.corazon));
     // Reproducir el audio desde el punto guardado
-    audio.play().then(() => {
+    audio
+      .play()
+      .then(() => {
         audio.currentTime = audioData.currentTime; // Establecer currentTime después de que el audio haya comenzado a reproducirse
         playBtn.style.display = "none";
         pauseBtn.style.display = "block";
         var reproductorEmergente = document.querySelector(".reproductor");
         reproductorEmergente.style.display = "block"; // Mostrar el reproductor
-    }).catch(error => console.error("Error al intentar reproducir el audio:", error));
+      })
+      .catch((error) =>
+        console.error("Error al intentar reproducir el audio:", error)
+      );
 
     // Limpiar el localStorage después de cargar
-    localStorage.removeItem('audioData');
-}
+    localStorage.removeItem("audioData");
+  } else {
+    actualizarIconoFavorito(parseInt(audio.dataset.corazon) === 1);
+  }
 
   if (searchForm && searchInput && contenedorCanciones) {
     searchForm.addEventListener("submit", function (event) {
@@ -172,8 +183,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function actualizarEnlaceDetallesCancion(id, tiempo, volumen, corazon) {
-    var enlaceDetallesCancion = document.getElementById("enlaceDetallesCancion");
-    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${corazon ? 1 : 0}`;
+    var enlaceDetallesCancion = document.getElementById(
+      "enlaceDetallesCancion"
+    );
+    enlaceDetallesCancion.href = `/harmonyhub/cancion/${id}?tiempo=${tiempo}&volumen=${volumen}&corazon=${
+      corazon ? 1 : 0
+    }`;
   }
 
   function togglePlayPause(player) {
@@ -185,7 +200,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = csrfTokenElement ? csrfTokenElement.getAttribute("content") : null;
+  const csrfToken = csrfTokenElement
+    ? csrfTokenElement.getAttribute("content")
+    : null;
 
   if (!csrfToken) {
     console.error("Token CSRF no encontrado");
@@ -196,8 +213,6 @@ document.addEventListener("DOMContentLoaded", function () {
   audio.volume = parseFloat(audio.dataset.volumen) || 1;
   actualizarIconoVolumen(audio.volume);
   volumeSlider.value = audio.volume;
-
-  actualizarIconoFavorito(parseInt(audio.dataset.corazon) === 1);
 
   playBtn.addEventListener("click", function () {
     audio
@@ -460,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentSongIndex < allSongs.length) {
       const song = allSongs[currentSongIndex];
       audio.src = song.src;
-      var tituloSinExtension = song.cancion.split('.')[0];
+      var tituloSinExtension = song.cancion.split(".")[0];
       songTitle.textContent = decodeURIComponent(tituloSinExtension);
       artistName.textContent = song.artista;
       songImage.src = song.element.querySelector("img").src; // Mostrar la imagen de la canción

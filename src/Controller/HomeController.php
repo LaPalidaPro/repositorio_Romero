@@ -340,12 +340,21 @@ class HomeController extends AbstractController
     {
         $canciones = $em->getRepository(Cancion::class)->findBy([], ['numeroReproducciones' => 'DESC'], 10);
 
+
         $data = array_map(function (Cancion $cancion) {
+            $usuario = $this->getUser();
+            $favoritos = $usuario ? $this->em->getRepository(Favorito::class)->findBy(['usuario' => $usuario]) : [];
+            $favoritosIds = array_map(function ($favorito) {
+                return $favorito->getCancion()->getId();
+            }, $favoritos);
+            $isFavorito = in_array($cancion->getId(), $favoritosIds) ? true : false;
+
             return [
                 'imagen' => '/images/grupos/' . $cancion->getAlbum()->getFotoPortada(),
                 'titulo' => $cancion->getTitulo(),
                 'artista' => $cancion->getArtista()->getNombre(),
                 'audioSrc' => '/music/' . $cancion->getTitulo(),
+                'favorito' => $isFavorito,
                 'id' => $cancion->getId(),
             ];
         }, $canciones);

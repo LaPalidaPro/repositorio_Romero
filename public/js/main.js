@@ -54,27 +54,34 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.src = audioData.src;
     audio.currentTime = audioData.currentTime; // Aplicar currentTime después de que el audio se haya cargado
     audio.volume = audioData.volume;
-    songTitle.innerText = decodeURIComponent(audioData.src.split('/').pop().split('.')[0]); // Quitar extensión y decodificar URI
+    songTitle.innerText = decodeURIComponent(
+      audioData.src.split("/").pop().split(".")[0]
+    ); // Quitar extensión y decodificar URI
     artistName.innerText = audioData.artista;
     songImage.src = audioData.imagen;
     currentSongId = audioData.id;
 
-
-
-    actualizarIconoFavorito(parseInt(audioData.corazon));
+    actualizarIconoFavorito(parseInt(audioData.corazon) === 1);
 
     // Reproducir el audio desde el punto guardado
-    audio.play().then(() => {
+    audio
+      .play()
+      .then(() => {
         audio.currentTime = audioData.currentTime; // Establecer currentTime después de que el audio haya comenzado a reproducirse
         playBtn.style.display = "none";
         pauseBtn.style.display = "block";
         var reproductorEmergente = document.querySelector(".reproductor");
         reproductorEmergente.style.display = "block"; // Mostrar el reproductor
-    }).catch(error => console.error("Error al intentar reproducir el audio:", error));
+      })
+      .catch((error) =>
+        console.error("Error al intentar reproducir el audio:", error)
+      );
 
     // Limpiar el localStorage después de cargar
-    localStorage.removeItem('audioData');
-}
+    localStorage.removeItem("audioData");
+  } else {
+    actualizarIconoFavorito(parseInt(audio.dataset.corazon) === 1);
+  }
 
   if (searchForm && searchInput && contenedorCanciones) {
     searchForm.addEventListener("submit", function (event) {
@@ -203,8 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
   audio.volume = parseFloat(audio.dataset.volumen) || 1;
   actualizarIconoVolumen(audio.volume);
   volumeSlider.value = audio.volume;
-
-  actualizarIconoFavorito(parseInt(audio.dataset.corazon) === 1);
 
   playBtn.addEventListener("click", function () {
     audio
@@ -507,6 +512,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         audio.addEventListener("ended", playNextSong);
+
         btnForward.addEventListener("click", playNextSong);
         btnBackward.addEventListener("click", playPreviousSong);
 
