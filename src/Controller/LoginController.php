@@ -6,33 +6,56 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UserType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class LoginController extends AbstractController
 {
     private $em;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
+
     #[Route('/harmonyhub/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
         $error = $authenticationUtils->getLastAuthenticationError();
-        // Último nombre de usuario ingresado por el usuario
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        // Verificar si el usuario está autenticado
+        /** @var UserInterface $user */
+        $user = $this->getUser();
+        if ($user) {
+            // Usuario autenticado, establecer la cookie con el SID
+            $response = $this->redirectToRoute('home');
+
+            // Crear la cookie con el SID del usuario
+            $response->headers->setCookie(new Cookie(
+                'session_id',          // Nombre de la cookie
+                $user->getSid(),       // Valor de la cookie (SID del usuario)
+                strtotime('now + 1 hour'),  // Fecha de expiración
+                '/',                   // Ruta
+                null,                  // Dominio
+                true,                  // Sólo HTTPS
+                true                   // HttpOnly
+            ));
+
+            return $response;
+        }
 
         return $this->render('login/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
     }
+
     #[Route('/harmonyhub/registro', name: 'app_registro')]
     public function registro(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -45,7 +68,6 @@ class LoginController extends AbstractController
             if ($this->isCsrfTokenValid('miToken', $csrfToken)) {
                 $errors = $validator->validate($user);
 
-                // Verificar si el usuario ya existe
                 $existingUser = $this->em->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
 
                 if ($existingUser) {
@@ -91,5 +113,6 @@ class LoginController extends AbstractController
     #[Route('/harmonyhub/logout', name: 'app_logout')]
     public function logout()
     {
+        // El controlador de logout puede estar vacío
     }
 }
